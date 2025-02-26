@@ -60,7 +60,7 @@ router.post('/', authenticate, authorize('admin'), async (req, res) => {
 });
 
 // Uppdatera en produkt (endast admin)
-router.put('/:id', authenticate, authorize('admin'), async (req, res) => {
+router.put('/:id', authenticate, authorize('admin', 'staff'), async (req, res) => {
   try {
     const { id } = req.params;
     const updatedProduct = req.body;

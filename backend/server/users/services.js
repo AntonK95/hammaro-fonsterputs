@@ -38,7 +38,39 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-router.post('/', async (req, res) => { 
+// En fristående route för att registrera en anändare som kund
+router.post('/register', async (req, res) => { 
+  try {
+    const { email, password, firstname, lastname, phone, address, type } = req.body;
+
+    if (!email || !password || !firstname || !lastname || !phone || !address || !type) {
+      return res.status(400).json({ error: 'Alla fält måste fyllas i' });
+    }
+
+    // Skapa användaren i Firebase Authentication
+    const userRecord = await getAuth().createUser({ email, password });
+
+    const userData = {
+      email,
+      role: 'customer',  // Endast customer kan registrera sig
+      firstname,
+      lastname,
+      phone,
+      address,
+      type,
+    };
+
+    await db.collection('users').doc(userRecord.uid).set(userData);
+
+    res.status(201).json({ message: 'Användare skapad', id: userRecord.uid, ...userData });
+  } catch (error) {
+    console.error("Fel vid skapande av användare:", error);
+    res.status(500).json({ error: 'Något gick fel vid skapande av användare', message: error.message });
+  }
+});
+
+
+router.post('/', authenticate, async (req, res) => { 
   try {
     const { email, password, firstname, lastname, phone, address, type, role } = req.body;
 
@@ -46,6 +78,10 @@ router.post('/', async (req, res) => {
       return res.status(400).json({ error: 'Alla fält måste fyllas i' });
     }
 
+    // Om användaren inte är inloggad och inte har rollen admin
+    if(!req.user &&  req.user.role !== 'admin') {
+      return res.status(403).json({ error: 'Accenss denied - endast admin kan skapa användare med rollen staff'})
+    }
     // Skapa användaren i Firebase Authentication
     const userRecord = await getAuth().createUser({
       email,
