@@ -55,7 +55,7 @@ router.post('/', async (req, res) => {
 });
 
 // Radera en bokning (skyddad rutt)
-router.delete('/bookings/:id', authenticate, authorize('admin'), async (req, res) => {
+router.delete('/bookings/:id', authenticate, authorize('admin', 'staff'), async (req, res) => {
   try {
     const { id } = req.params;
     await db.collection('bookings').doc(id).delete();
@@ -67,7 +67,7 @@ router.delete('/bookings/:id', authenticate, authorize('admin'), async (req, res
 });
 
 // Uppdatera en bokning (skyddad rutt)
-router.put('/:id', authenticate, authorize('admin'), async (req, res) => {
+router.put('/:id', authenticate, authorize('admin', 'staff'), async (req, res) => {
   console.log("Uppdatera bokning med ID: ", req.params.id);
   console.log("Data som skickas:", req.body);
   console.log("Token: ", req.headers.authorization);
