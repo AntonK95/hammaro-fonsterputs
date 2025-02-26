@@ -3,6 +3,7 @@ import cors from 'cors';
 import bookingsRouter from './server/bookings/services.js';
 import usersRouter from './server/users/services.js';
 import authRouter from './server/middlewares/authUser.js';
+import productsRouter from './server/products/services.js';
 import { authenticate } from './server/middlewares/authMiddleware.js';
 
 const app = express();
@@ -13,6 +14,7 @@ app.use(express.json());
 
 app.use('/bookings', bookingsRouter);
 app.use('/users', usersRouter);
+app.use('/products', productsRouter);
 app.use('/auth', authRouter);
 
 
