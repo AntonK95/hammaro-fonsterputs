@@ -1,41 +1,32 @@
-import 'dotenv/config';
+
 import express from 'express';
-import cors from 'cors';
-import { initializeApp, cert } from 'firebase-admin/app';
-import { getFirestore } from 'firebase-admin/firestore';
-import fs from 'fs';
+import { db } from '../db.js';
+import { authenticate, authorize } from '../middlewares/authMiddleware.js';
+import userRouter from '../users/services.js';
+import authRouter from '../middlewares/authUser.js';
 
-// Läs Firebase-nyckeln
-const serviceAccount = JSON.parse(fs.readFileSync('./firebase-key.json', 'utf8'));
+const router = express.Router();
 
-// Initiera Firebase
-initializeApp({
-  credential: cert(serviceAccount),
-});
-
-const db = getFirestore();
-const app = express();
-const PORT = process.env.PORT || 3000;
-
-app.use(cors());
-app.use(express.json());
+// Använd använderrutter
+router.use('/users', userRouter);
+router.use('/auth', authRouter);
+router.use(express.json());
 
 // Hämta alla bokningar
-
-app.get('/bookings', async (req, res) => {
+router.get('/', async (req, res) => { 
   try {
     const snapshot = await db.collection('bookings').get();
     const bookings = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
-    console.log("Hämtade bookings:", bookings); // Lägg till denna rad
+    console.log("Hämtade bookings:", bookings); 
     res.json(bookings);
   } catch (error) {
-    console.error("Fel vid hämtning:", error); // Logga fel
+    console.error("Fel vid hämtning:", error);
     res.status(500).json({ error: 'Något gick fel' });
   }
 });
 
-//  Hämta en specifik bokning baserat på ID
-app.get('/bookings/:id', async (req, res) => {
+// Hämta en specifik bokning
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await db.collection('bookings').doc(id).get();
@@ -51,10 +42,10 @@ app.get('/bookings/:id', async (req, res) => {
   }
 });
 
-//  Lägg till en ny bokning
-app.post('/bookings', async (req, res) => {
+// Lägg till en ny bokning
+router.post('/', async (req, res) => { 
   try {
-    const newBooking = req.body; // Tar emot JSON från frontend/Insomnia
+    const newBooking = req.body;
     const docRef = await db.collection('bookings').add(newBooking);
     res.json({ id: docRef.id, ...newBooking });
   } catch (error) {
@@ -63,8 +54,8 @@ app.post('/bookings', async (req, res) => {
   }
 });
 
-//  Radera en bokning
-app.delete('/bookings/:id', async (req, res) => {
+// Radera en bokning (skyddad rutt)
+router.delete('/bookings/:id', authenticate, authorize('admin'), async (req, res) => {
   try {
     const { id } = req.params;
     await db.collection('bookings').doc(id).delete();
@@ -75,8 +66,11 @@ app.delete('/bookings/:id', async (req, res) => {
   }
 });
 
-//  Uppdatera en bokning
-app.put('/bookings/:id', async (req, res) => {
+// Uppdatera en bokning (skyddad rutt)
+router.put('/:id', authenticate, authorize('admin'), async (req, res) => {
+  console.log("Uppdatera bokning med ID: ", req.params.id);
+  console.log("Data som skickas:", req.body);
+  console.log("Token: ", req.headers.authorization);
   try {
     const { id } = req.params;
     const updatedBooking = req.body;
@@ -88,7 +82,4 @@ app.put('/bookings/:id', async (req, res) => {
   }
 });
 
-
-app.listen(PORT, () => {
-  console.log(`Servern körs på http://localhost:${PORT}`);
-});
+export default router;
