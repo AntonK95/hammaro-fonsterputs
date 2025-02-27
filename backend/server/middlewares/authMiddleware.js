@@ -7,8 +7,12 @@ const authenticate = async (req, res, next) => {
     try {
     const idToken = req.headers.authorization?.split('Bearer ')[1];
     console.log("Received token: ", idToken);
+
     if (!idToken) {
-      return res.status(401).json({ error: 'Unauthorized - ingen token' });
+        // Om ingen token finns, req.user = null och gå vidare
+        req.user = null; // Detta är så att gäster skall kunna lägga beställningar
+        return next();
+    //   return res.status(401).json({ error: 'Unauthorized - ingen token' });
     }
   
       const decodedToken = await getAuth().verifyIdToken(idToken);
