@@ -3,6 +3,8 @@ import express from 'express';
 import { db } from '../db.js';
 import { getAuth } from 'firebase-admin/auth';
 import { authenticate, authorize } from '../middlewares/authMiddleware.js';
+import validateUser from '../middlewares/validateUser.js';
+import { validationResult } from 'express-validator';
 
 const router = express.Router();
 
@@ -30,7 +32,7 @@ router.get('/:id', async (req, res) => {
     if (!doc.exists) {
       return res.status(404).json({ error: `Ingen användre hittades med id ${id}` });
     }
-
+    
     res.json({ id: doc.id, ...doc.data() });
   } catch (error) {
     console.error("Fel vid hämtning av användre:", error);
@@ -39,10 +41,15 @@ router.get('/:id', async (req, res) => {
 });
 
 // En fristående route för att registrera en anändare som kund
-router.post('/register', async (req, res) => { 
+router.post('/register', validateUser, async (req, res) => { 
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array()});
+  }
   try {
     const { email, password, firstname, lastname, phone, address, type } = req.body;
-
+    
+    // Kanske inte behöver denna if sats då vi nu har validateUSer
     if (!email || !password || !firstname || !lastname || !phone || !address || !type) {
       return res.status(400).json({ error: 'Alla fält måste fyllas i' });
     }
@@ -70,16 +77,22 @@ router.post('/register', async (req, res) => {
 });
 
 
-router.post('/', authenticate, async (req, res) => { 
+router.post('/', authenticate, authorize('admin'), validateUser, async (req, res) => { 
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array()});
+  }
   try {
     const { email, password, firstname, lastname, phone, address, type, role } = req.body;
 
+    // Kanske inte behöver denna if sats då vi nu har validateUSer
     if (!email || !password || !firstname || !lastname || !phone || !address || !type || !role) {
       return res.status(400).json({ error: 'Alla fält måste fyllas i' });
     }
 
     // Om användaren inte är inloggad och inte har rollen admin
-    if(!req.user &&  req.user.role !== 'admin') {
+    // Kanske inte behöver detta då vi har authorize('admin') på detta anrop.
+    if(!req.user ||  req.user.role !== 'admin') {
       return res.status(403).json({ error: 'Accenss denied - endast admin kan skapa användare med rollen staff'})
     }
     // Skapa användaren i Firebase Authentication
@@ -120,17 +133,43 @@ router.delete('/:id', authenticate, authorize('admin'), async (req, res) => {
 });
 
 // Uppdatera en användre
-router.put('/:id', authenticate, authorize('admin'), async (req, res) => {
+router.put('/:id', authenticate, validateUser, async (req, res) => {
+  const errors = validationResult(req);
+  if(!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array()});
+  }
   try {
     const { id } = req.params;
     const updatedUser = req.body;
 
-    const userDoc = await db.collection('users').doc(id).get();
-    if(!userDoc.exists) {
-      return res.status(404).json({ error: `Ingen användare med id ${id} hittades i databasen`});
+    console.log("Inloggad användare UID:", req.user.uid);
+    console.log("Försöker uppdatera användare med ID:", id);
+
+    if (req.user.role !== "admin" && req.user.uid !== id) {
+      return res
+        .status(403)
+        .json({
+          error:
+            "Access denied - Du har inte rättigheter att uppdatera användaren",
+        });
     }
-    
-    await db.collection('users').doc(id).update(updatedUser);
+
+    const userDoc = await db.collection("users").doc(id).get();
+    if (!userDoc.exists) {
+      return res
+        .status(404)
+        .json({ error: `Ingen användare med id ${id} hittades i databasen` });
+    }
+
+    // Om e-postadress har ändrats
+    // Detta måste göras så att mail uppdateras både i Firebase Authentication och i Firestore
+    if (updatedUser.email && updatedUser.email !== userDoc.data().email) {
+      await getAuth().updateUser(id, {
+        email: updatedUser.email,
+      });
+    }
+
+    await db.collection("users").doc(id).update(updatedUser);
     res.json({ id, ...updatedUser });
   } catch (error) {
     console.error("Fel vid uppdatering:", error);

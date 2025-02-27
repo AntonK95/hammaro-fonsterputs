@@ -1,6 +1,7 @@
 import express from 'express';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { initializeApp } from 'firebase/app';
+import { db } from "../db.js";
 import dotenv from 'dotenv';
 
 dotenv.config();
@@ -24,14 +25,24 @@ const auth = getAuth(app);
 // Inloggningsrutt
 router.post('/login', async (req, res) => {
   const { email, password } = req.body;
+  console.log("Försöker logga in med:", { email, password });
 
   try {
     const userCredential = await signInWithEmailAndPassword(auth, email, password);
     const idToken = await userCredential.user.getIdToken();
-    res.json({ idToken });
+
+    const userDock = await db.collection('users').doc(userCredential.user.uid).get();
+    if (!userDock.exists) {
+      return res.status(403).json({ error: 'Användaren finns inte i databasen' });
+    }
+    console.log("Firebase UID vid inloggning: ", userCredential.user.uid);
+
+    const userData = userDock.data();
+
+    res.json({ idToken, user: userData });
   } catch (error) {
-    console.error('Fel vid inloggning:', error);
-    res.status(401).json({ error: 'Inloggning misslyckades' });
+    console.error('Fel vid inloggning:', error, error.code, error.message);
+    res.status(401).json({ error: 'Inloggning misslyckades', details: error.message });
   }
 });
 
