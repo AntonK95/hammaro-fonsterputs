@@ -12,7 +12,7 @@ const authenticate = async (req, res, next) => {
     }
   
       const decodedToken = await getAuth().verifyIdToken(idToken);
-      req.user = decodedToken;
+      req.user = { uid: decodedToken.uid, role: null};
       console.log("Decoded token: ", decodedToken); // Loggar decoded token
   
       // Hämta användarens roll från Firestore
@@ -24,13 +24,13 @@ const authenticate = async (req, res, next) => {
   
       const userRole = userDoc.data().role;
       console.log("User role: ", userRole, "Type:", typeof userRole);
-      if(userRole !== 'admin' && userRole !== 'staff') {
-        console.log("Access denied - user role is: ", userRole);
-        return res.status(403).json({ error: 'Access denied - Användaren har inte rättigheter'});
-      }
+    //   if(userRole !== 'admin' && userRole !== 'staff') {
+    //     console.log("Access denied - user role is: ", userRole);
+    //     return res.status(403).json({ error: 'Access denied - Användaren har inte rättigheter'});
+    //   }
 
       req.user.role = userRole; // Lägg till roll i req.user
-      console.log("User role: ", req.user.role);
+      console.log("authenticate User role: ", req.user.role);
       next();
     } catch (error) {
       console.error('Fel vid autentisering:', error);
@@ -40,7 +40,7 @@ const authenticate = async (req, res, next) => {
   
 const authorize = (...allowedRoles) => {
     return (req, res, next) => {
-        console.log("User role: ", req.user.role);
+        console.log("authorize User role: ", req.user.role);
         if (!allowedRoles.includes(req.user.role)) {
             return res.status(403).json({ error: 'Access denied' });
         }
