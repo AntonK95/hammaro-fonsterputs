@@ -1,0 +1,33 @@
+<h2>Alla bokningar</h2>
+<ul *ngIf="bookings.length > 0; else noBookings">
+  <li *ngFor="let booking of bookings">
+    <strong>{{ booking.firstName || 'Okänd' }} {{ booking.lastName || '' }}</strong><br>
+    <span *ngIf="booking.email">Email: {{ booking.email }}</span><br>
+    <span *ngIf="booking.phone">Telefon: {{ booking.phone }}</span><br>
+    <span>Status: {{ booking.status }}</span><br>
+    <span *ngIf="booking.address">Address: {{ booking.address }}</span><br>
+    <span>Önskat datum: {{ booking.requestedDate | date:'yyyy-MM-dd HH:mm' }}</span><br>
+    <span *ngIf="booking.confirmedDate">Bekräftat datum: {{ booking.confirmedDate | date:'yyyy-MM-dd HH:mm' }}</span><br>
+    <span>Skapad: {{ booking.createdAt | date:'yyyy-MM-dd HH:mm' }}</span><br>
+    <span *ngIf="booking.notes">Anteckningar: {{ booking.notes }}</span><br>
+    
+    <h3>Tjänster:</h3>
+    <ul>
+      <li *ngFor="let item of booking.items">
+        <strong>{{ item.serviceName }}</strong><br>
+        <span>Beskrivning: {{ item.description }}</span><br>
+        <span>Tid per enhet: {{ item.timePerUnit }} min</span><br>
+        <span>Antal: {{ item.quantity }}</span><br>
+        <span>Pris: {{ item.price }} kr</span><br>
+      </li>
+    </ul>
+    
+    <strong>Total tid: {{ booking.totalDuration }} min</strong><br>
+    <strong>Totalpris: {{ booking.totalPrice }} kr</strong><br>
+    <hr>
+  </li>
+</ul>
+
+<ng-template #noBookings>
+  <p>Inga bokningar hittades.</p>
+</ng-template>
