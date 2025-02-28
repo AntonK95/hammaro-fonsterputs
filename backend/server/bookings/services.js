@@ -12,6 +12,30 @@ router.use('/users', userRouter);
 router.use('/auth', authRouter);
 router.use(express.json());
 
+// **Hämta alla bekräftade bokningar (status: confirmed)**
+router.get('/calendar', async (req, res) => {
+  try {
+    // Hämta alla bokningar som är bekräftade/ har status confirmed
+    const snapshot = await db.collection('bookings')
+      .where("status", "==", "confirmed").get();
+
+    if (snapshot.empty) {
+      return res.json([]);
+    }
+
+    const confirmedBookings = snapshot.docs.map(doc => ({
+      id: doc.id,
+      confirmedDate: doc.data().confirmedDate,
+      duration: doc.data().totalDuration
+    }));
+
+    res.json(confirmedBookings);
+  } catch (error) {
+    console.error("Fel vid hämtning av bekräftade bokningar:", error);
+    res.status(500).json({ error: 'Något gick fel' });
+  }
+});
+
 // Hämta alla bokningar
 router.get('/', async (req, res) => { 
   try {
@@ -42,17 +66,89 @@ router.get('/:id', async (req, res) => {
   }
 });
 
-// Lägg till en ny bokning
-router.post('/', async (req, res) => { 
+// Lägg till en ny bokning (både gäster och inloggade användare)
+router.post('/', authenticate, async (req, res) => { 
   try {
-    const newBooking = req.body;
+    const { requestedDate, items, notes } = req.body;
+
+    // Kontrollera att items finns
+    if (!items || items.length === 0) {
+      return res.status(400).json({ error: 'Minst en produkt/tjänst måste väljas' });
+    }
+
+    // Hämta customerId och användarinformation från inloggad användare
+    let userInfo = {};
+    console.log("req.user :", req.user);
+    if (req.user) {
+      const userDoc = await db.collection('users').doc(req.user.uid).get();
+      console.log("userDoc: ", userDoc.data());
+      if (userDoc.exists) {
+        userInfo = userDoc.data();
+        console.log("userInfo: ", userInfo);
+      } else {
+        return res.status(403).json({ error: 'Access denied - Användaren finns inte i databasen' });
+      }
+    }
+
+    // Om användaren är inloggad, använd deras information. Annars, använd det som skickas från frontend
+    const firstname = userInfo.firstname || req.body.firstname;
+    const lastname = userInfo.lastname || req.body.lastname;
+    const email = userInfo.email || req.body.email;
+    const phone = userInfo.phone || req.body.phone;
+    const address = userInfo.address || req.body.address;
+
+    // Kontrollera att vi har alla nödvändiga fält
+    if (!firstname || !lastname || !email || !phone || !address) {
+      console.error("userInfo: ", userInfo, { firstname, lastname, email, phone, address });
+      return res.status(400).json({ error: 'Alla kontaktuppgifter måste vara ifyllda' });
+    }
+
+    const newBooking = { 
+      firstname,
+      lastname,
+      email,
+      phone,
+      address,
+      customerId: req.user ? req.user.uid : null, // Använd customerId från token eller sätt till null
+      requestedDate, // Kundens önskade datum
+      confirmedDate: null, // Bekräftat datum sätts när personal godkänner
+      items, // Produkter/tjänster
+      totalDuration: calculateTotalDuration(items), // Totalt antal minuter för uppdraget
+      totalPrice: calculateTotalPrice(items), // Totalt pris
+      status: 'pending', // Default status
+      notes: notes || "", // Eventuella anteckningar
+      createdAt: new Date().toISOString() // Timestamp när bokningen skapades
+    };
+
+    // Spara bokningen i Firestore
     const docRef = await db.collection('bookings').add(newBooking);
+
     res.json({ id: docRef.id, ...newBooking });
   } catch (error) {
     console.error("Fel vid tillägg:", error);
     res.status(500).json({ error: 'Något gick fel vid tillägg av bokning' });
   }
 });
+
+// Hjälpfunktioner för att beräkna total duration och price
+const calculateTotalDuration = (items) => {
+  return items.reduce((total, item) => {
+    if (item.timePerUnit && item.quantity) {
+      return total + item.timePerUnit * item.quantity;
+    }
+    return total;
+  }, 0);
+};
+
+const calculateTotalPrice = (items) => {
+  return items.reduce((total, item) => {
+    if (item.price) {
+      return total + item.price;
+    }
+    return total;
+  }, 0);
+};
+
 
 // Radera en bokning (skyddad rutt)
 router.delete('/bookings/:id', authenticate, authorize('admin', 'staff'), async (req, res) => {
