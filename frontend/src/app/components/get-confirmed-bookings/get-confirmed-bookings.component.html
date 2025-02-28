@@ -2,9 +2,9 @@
 
 <ul *ngIf="confirmedBookings.length > 0; else noConfirmedBookings">
   <li *ngFor="let booking of confirmedBookings">
-    <!-- <span>Boknings ID: {{booking.id}}</span> -->
-    <span>Tid: {{booking.duration}}</span>
-    <!-- <span>Bekräftat datum: {{booking.confirmedDate}}</span> -->
+    <span>Boknings ID: {{booking.id}}</span><br>
+    <span>Tid: {{booking.duration}}</span><br>
+    <span>Bekräftat datum: {{booking.confirmedDate}}</span><br>
   </li>
 </ul>
 
