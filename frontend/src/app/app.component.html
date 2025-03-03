@@ -1,4 +1,5 @@
 
-<app-get-bookings></app-get-bookings>
-
+<app-get-bookings (bookingsList)="handleBookingsList($event)"></app-get-bookings>
+<app-calendar [bookings]="bookings"></app-calendar>
 <app-get-confirmed-bookings></app-get-confirmed-bookings>
+<!-- <app-calendar [bookings]="confirmedBookings"></app-calendar> -->

@@ -1,0 +1,75 @@
+<div class="calendar-container">
+    <!-- Lista med "pending" bokningar -->
+    <div class="pending-list">
+      <h3>Ej schemalagda bokningar</h3>
+      <ul id="external-events" class="booking-list">
+        <li *ngFor="let booking of pendingBookings" class="draggable-booking"
+            [attr.data-title]="booking.address">
+            <p>{{ booking.customerId }}</p>
+            <p>{{ booking.firstname || booking.firstName || 'Gäst' }}</p>
+            <p>{{ booking.lastname || booking.lastName || '' }}</p>
+            <p>{{ booking.address }}</p>
+            <p>{{ booking.createdAt }}</p>
+            <p>{{ booking.email }}</p> 
+            <p>Önskat datum: {{ booking.requestedDate }}</p>
+            <ul>
+                <li *ngFor="let item of booking.items">
+                    <p>{{ item.serviceName }}</p>
+                    <p>Beskrivning: {{ item.description }}</p>
+                    <p>Antal: {{ item.quantity }}st</p>
+                    <p>Tid per enhet: {{ item.timePerUnit }}min</p>
+                    <p>Price: {{ item.price}}kr</p>
+                </li>
+            </ul>
+            <p>{{ booking.note }}</p> 
+            <p>{{ booking.status }}</p>
+            <p>Uppskattad total tid: {{ booking.totalDuration }}min</p>
+            <p>Uppskattat total pris: {{ booking.totalPrice }}sek</p>
+            <!-- {{ booking.date }}  -->
+            <!-- {{ booking.name }}  -->
+        </li>
+      </ul>
+
+      <!-- <ng-template #noData>
+        <p>Inga bokningar hittades.</p>
+      </ng-template> -->
+    </div>
+    <!-- <ul *ngIf="bookings.length > 0; else noBookings">
+        <li *ngFor="let booking of pendingBookings">
+          <strong>{{ booking.firstName || 'Okänd' }} {{ booking.lastName || '' }}</strong><br>
+          <span *ngIf="booking.email">Email: {{ booking.email }}</span><br>
+          <span *ngIf="booking.phone">Telefon: {{ booking.phone }}</span><br>
+          <span>Status: {{ booking.status }}</span><br>
+          <span *ngIf="booking.address">Address: {{ booking.address }}</span><br>
+          <span>Önskat datum: {{ booking.requestedDate | date:'yyyy-MM-dd HH:mm' }}</span><br>
+          <span *ngIf="booking.confirmedDate">Bekräftat datum: {{ booking.confirmedDate | date:'yyyy-MM-dd HH:mm' }}</span><br>
+          <span>Skapad: {{ booking.createdAt | date:'yyyy-MM-dd HH:mm' }}</span><br>
+          <span *ngIf="booking.notes">Anteckningar: {{ booking.notes }}</span><br>
+          
+          <h3>Tjänster:</h3>
+          <ul>
+            <li *ngFor="let item of booking.items">
+              <strong>{{ item.serviceName }}</strong><br>
+              <span>Beskrivning: {{ item.description }}</span><br>
+              <span>Tid per enhet: {{ item.timePerUnit }} min</span><br>
+              <span>Antal: {{ item.quantity }}</span><br>
+              <span>Pris: {{ item.price }} kr</span><br>
+            </li>
+          </ul>
+          
+          <strong>Total tid: {{ booking.totalDuration }} min</strong><br>
+          <strong>Totalpris: {{ booking.totalPrice }} kr</strong><br>
+          <hr>
+        </li>
+      </ul>
+
+      <ng-template #noBookings>
+        <p>Inga bokningar hittades.</p>
+      </ng-template> -->
+  
+    <!-- FullCalendar -->
+    <div class="calendar">
+      <full-calendar [options]="calendarOptions"></full-calendar>
+    </div>
+  </div>
+  
