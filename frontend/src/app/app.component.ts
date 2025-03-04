@@ -4,15 +4,17 @@ import { GetBookingsComponent } from "./services/get-bookings/get-bookings.compo
 import { GetConfirmedBookingsComponent } from "./services/get-confirmed-bookings/get-confirmed-bookings.component";
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { BookingService } from './services/booking.service';
+import { BookingFormComponent } from "./components/booking-form/booking-form.component";
 
 @Component({
   selector: 'app-root',
   imports: [
     // RouterOutlet, 
-    GetBookingsComponent, 
+    GetBookingsComponent,
     GetConfirmedBookingsComponent,
-    CalendarComponent
-  ],
+    CalendarComponent,
+    BookingFormComponent
+],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -24,6 +26,10 @@ export class AppComponent implements OnInit {
 
   handleBookingsList(bookings: any[]) {
     this.bookings = bookings;
+  }
+
+  handleNewBooking(booking: any) {
+    console.log("Bokning skickad:", booking);
   }
 
   ngOnInit(): void {
