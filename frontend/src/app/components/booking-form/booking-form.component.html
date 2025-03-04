@@ -14,8 +14,9 @@
       <label>Telefon</label>
       <input type="text" formControlName="phone" required />
   
-      <label>Datum</label>
-      <input type="date" formControlName="date" required />
+      <!-- <label>Datum</label>
+      <input type="date" formControlName="date" required /> -->
+      <app-calendar [bookings]="confirmedBookings" (dateSelected)="onDateSelected($event)"></app-calendar>
   
       <label>Produkt</label>
       <select formControlName="product">

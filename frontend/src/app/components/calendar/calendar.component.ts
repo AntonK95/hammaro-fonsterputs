@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, PLATFORM_ID, ViewEncapsulation, OnChanges, SimpleChange, SimpleChanges } from '@angular/core';
+import { Component, Inject, Input, OnInit, PLATFORM_ID, ViewEncapsulation, OnChanges, SimpleChange, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CommonModule } from '@angular/common';
 import { CalendarOptions, EventInput } from '@fullcalendar/core';
@@ -18,6 +18,7 @@ import { BookingService } from '../../services/booking.service';
 })
 export class CalendarComponent implements OnInit {
   @Input() bookings: any[] = [];
+  @Output() dateSelected = new EventEmitter<any>(); // emittar datum
   pendingBookings: any[] = [];
   calendarOptions!: CalendarOptions;
 
@@ -57,13 +58,18 @@ export class CalendarComponent implements OnInit {
 
         // Uppdatera bokningens status i Firestore
         // this.updateBookingStatus(eventInfo.event.title, "confirmed", eventInfo.event.start);
-      }
+      },
+      dateClick: (info) => this.handleDateClick(info),
     };
 
     // Aktivera draggable om i browser
     if (isPlatformBrowser(this.platformID)) {
       this.enableDraggable();
     }
+  }
+
+  handleDateClick(info: any) {
+    this.dateSelected.emit(info.date);
   }
 
   enableDraggable() {
