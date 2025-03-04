@@ -1,6 +1,6 @@
 <div class="calendar-container">
     <!-- Lista med "pending" bokningar -->
-    <div class="pending-list">
+    <!-- <div class="pending-list">
       <h3>Ej schemalagda bokningar</h3>
       <ul id="external-events" class="booking-list" *ngIf="bookings.length > 0; else noData">
         <li *ngFor="let booking of pendingBookings" class="draggable-booking"
@@ -25,16 +25,16 @@
             <p>{{ booking.status }}</p>
             <p>Uppskattad total tid: {{ booking.totalDuration }}min</p>
             <p>Uppskattat total pris: {{ booking.totalPrice }}sek</p>
-            <!-- {{ booking.date }}  -->
+             {{ booking.date }}  -->
             <!-- {{ booking.name }}  -->
-        </li>
+        <!--</li>
       </ul>
 
       <ng-template #noData>
         <p>Inga bokningar hittades.</p>
       </ng-template>
-    </div>
- 
+    </div> -->
+    <app-get-pending-bookings [pendingBookings]="pendingBookings"></app-get-pending-bookings>
     <!-- FullCalendar -->
     <div class="calendar">
       <full-calendar [options]="calendarOptions"></full-calendar>

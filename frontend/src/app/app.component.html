@@ -1,6 +1,7 @@
 
 <app-booking-form (newBooking)="handleNewBooking($event)"></app-booking-form>
-<app-get-bookings (bookingsList)="handleBookingsList($event)"></app-get-bookings>
+<app-get-bookings (bookingsList)="handleBookingsList($event)" (pendingBookingsList)="handlePendingBookings($event)"></app-get-bookings>
 <app-calendar [bookings]="bookings"></app-calendar>
 <app-get-confirmed-bookings></app-get-confirmed-bookings>
+<app-get-pending-bookings [pendingBookings]="pendingBookings"></app-get-pending-bookings>
 <!-- <app-calendar [bookings]="confirmedBookings"></app-calendar> -->

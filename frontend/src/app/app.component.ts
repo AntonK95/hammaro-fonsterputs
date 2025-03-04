@@ -5,6 +5,7 @@ import { GetConfirmedBookingsComponent } from "./services/get-confirmed-bookings
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { BookingService } from './services/booking.service';
 import { BookingFormComponent } from "./components/booking-form/booking-form.component";
+import { GetPendingBookingsComponent } from './services/get-pending-bookings/get-pending-bookings.component'
 
 @Component({
   selector: 'app-root',
@@ -13,7 +14,8 @@ import { BookingFormComponent } from "./components/booking-form/booking-form.com
     GetBookingsComponent,
     GetConfirmedBookingsComponent,
     CalendarComponent,
-    BookingFormComponent
+    BookingFormComponent,
+    GetPendingBookingsComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -21,6 +23,7 @@ import { BookingFormComponent } from "./components/booking-form/booking-form.com
 export class AppComponent implements OnInit {
   title = 'frontend';
   bookings: any[] = [];
+  pendingBookings: any[] = [];
 
   constructor( private bookingService: BookingService ) {}
 
@@ -30,6 +33,16 @@ export class AppComponent implements OnInit {
 
   handleNewBooking(booking: any) {
     console.log("Bokning skickad:", booking);
+  }
+
+  handlePendingBookings(pendingBookings: any) {
+    this.pendingBookings = pendingBookings;
+    console.log("handlePendingBookings:", this.pendingBookings);
+  }
+
+  handlePendingBookingsTest() {
+    console.log(this.handlePendingBookingsTest);
+    return this.bookings.filter(booking => booking.status === 'pending');
   }
 
   ngOnInit(): void {

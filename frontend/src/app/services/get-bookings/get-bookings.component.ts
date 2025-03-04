@@ -15,15 +15,22 @@ import { EventEmitter } from '@angular/core';
 
 export class GetBookingsComponent implements OnInit {
   bookings: any[] = [];
+  pendingBookings: any[] = [];
   @Output() bookingsList = new EventEmitter<any[]>(); // Skickar bokningarna till AppComponent
+  // @Output() pendingBookingsList = new EventEmitter<any[]>();
 
   constructor( private bookingService: BookingService ) {}
   
   
   ngOnInit(): void {
-    this.bookingService.getAllBookings().subscribe( bookings => 
+    this.bookingService.getAllBookings().subscribe( bookings => {
+     this.bookings = bookings; // Lagra alla bokningar 
       this.bookingsList.emit(bookings) // Skickar bokningar uppåt
-    )
+
+      // Filtrera ut bokningar med status 'pending'
+      // this.pendingBookings = bookings.filter((booking: { status: string; }) => booking.status === 'pending');
+      // this.pendingBookingsList.emit(this.pendingBookings);
+    })
     // this.getAllBookings();
   }
 

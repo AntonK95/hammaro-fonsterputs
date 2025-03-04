@@ -15,6 +15,7 @@ export class BookingFormComponent implements OnInit {
   @Output() newBooking = new EventEmitter<any>(); // Skickar bokningen till föräldern
 
   bookingForm!: FormGroup;
+  isExpanded = false;
 
   constructor(private fb: FormBuilder) {}
 
@@ -30,8 +31,15 @@ export class BookingFormComponent implements OnInit {
     console.log("Confirmed bookings: ", this.confirmedBookings);
   }
 
-  onDateSelected(date: string) {
-    this.bookingForm.patchValue({ date: date });
+  toggleForm() {
+    this.isExpanded = !this.isExpanded;
+    console.log(this.isExpanded);
+  }
+
+  onDateSelected(date: Date) {
+    const formattedDate = date.toLocaleDateString('sv-SE'); // Svenskt datum format
+    this.bookingForm.patchValue({ date: formattedDate });
+    console.log("Valt datum: ", this.bookingForm.value.date)
   }
 
   submitBooking() {

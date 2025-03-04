@@ -7,10 +7,12 @@ import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { isPlatformBrowser } from '@angular/common';
 import { BookingService } from '../../services/booking.service';
+import { GetPendingBookingsComponent } from '../../services/get-pending-bookings/get-pending-bookings.component';
+import { info } from 'console';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, FullCalendarModule],
+  imports: [CommonModule, FullCalendarModule, GetPendingBookingsComponent],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   standalone: true,
@@ -18,8 +20,9 @@ import { BookingService } from '../../services/booking.service';
 })
 export class CalendarComponent implements OnInit {
   @Input() bookings: any[] = [];
+  @Input() pendingBookings: any[] = [];
   @Output() dateSelected = new EventEmitter<any>(); // emittar datum
-  pendingBookings: any[] = [];
+  // pendingBookings: any[] = [];
   calendarOptions!: CalendarOptions;
 
   constructor(@Inject(PLATFORM_ID) private platformID: Object, private bookingService: BookingService) {}
@@ -44,6 +47,8 @@ export class CalendarComponent implements OnInit {
       },
       editable: true,
       droppable: true, // Möjliggör drag-and-drop
+      selectable: true, 
+      selectMirror: true,
       events: this.bookings.map(booking => ({
         title: booking.name,
         start: booking.date,
