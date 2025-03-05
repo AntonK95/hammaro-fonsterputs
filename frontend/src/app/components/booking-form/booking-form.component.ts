@@ -2,6 +2,7 @@ import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-booking-form',
@@ -11,8 +12,8 @@ import { CalendarComponent } from '../calendar/calendar.component';
   imports: [ReactiveFormsModule, CommonModule, CalendarComponent],
 })
 export class BookingFormComponent implements OnInit {
-  @Input() confirmedBookings: any[] = [];
-  @Output() newBooking = new EventEmitter<any>(); // Skickar bokningen till föräldern
+  @Input() confirmedBookings: Booking[] = [];
+  @Output() newBooking = new EventEmitter<Booking>(); // Skickar bokningen till föräldern
 
   bookingForm!: FormGroup;
   isExpanded = false;

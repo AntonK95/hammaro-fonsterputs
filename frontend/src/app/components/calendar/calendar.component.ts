@@ -9,6 +9,7 @@ import { isPlatformBrowser } from '@angular/common';
 import { BookingService } from '../../services/booking.service';
 import { GetPendingBookingsComponent } from '../../services/get-pending-bookings/get-pending-bookings.component';
 import { info } from 'console';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-calendar',
@@ -19,8 +20,8 @@ import { info } from 'console';
   encapsulation: ViewEncapsulation.None
 })
 export class CalendarComponent implements OnInit {
-  @Input() bookings: any[] = [];
-  @Input() pendingBookings: any[] = [];
+  @Input() bookings: Booking[] = [];
+  @Input() pendingBookings: Booking[] = [];
   @Output() dateSelected = new EventEmitter<any>(); // emittar datum
   // pendingBookings: any[] = [];
   calendarOptions!: CalendarOptions;
@@ -29,10 +30,11 @@ export class CalendarComponent implements OnInit {
 
   ngOnInit(): void {
     console.log("Alla bokningar: ", this.bookings);
+    console.log("pendingBookings till calendern: ", this.pendingBookings)
 
     // Filtrera ut alla bokningar med statusen 'pending'
-    this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
-    console.log("Pending bokningar: ", this.pendingBookings); // Loggar de som har status pending
+    // this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
+    // console.log("Pending bokningar: ", this.pendingBookings); // Loggar de som har status pending
   
   
 
@@ -50,8 +52,8 @@ export class CalendarComponent implements OnInit {
       selectable: true, 
       selectMirror: true,
       events: this.bookings.map(booking => ({
-        title: booking.name,
-        start: booking.date,
+        title: booking.address,
+        start: booking.requestedDate,
         extendedProps: {
           email: booking.email,
           phone: booking.phone
@@ -102,10 +104,16 @@ export class CalendarComponent implements OnInit {
     alert(`Bokning: ${info.event.title} \nEmail: ${info.event.extendedProps.email}`);
   }
   ngOnChanges(changes: SimpleChanges) {
-    if(changes['bookings'] && this.bookings.length > 0){
-      this.pendingBookings = this.bookings.filter(booking => 
-        booking.status === 'pending');
-        console.log("Pending bookings in calendar: ", this.pendingBookings);
+  //   if(changes['bookings'] && this.bookings.length > 0){
+  //     this.pendingBookings = this.bookings.filter(booking => 
+  //       booking.status === 'pending');
+  //       console.log("Pending bookings in calendar: ", this.pendingBookings);
+  //   }
+    if(changes['pendingBookings']) {
+      console.log("pendingBookings uppdaterat i calendar.component:", this.pendingBookings)
+    }
+    if(changes['bookings']) {
+      console.log("bookings uppdaterat i calendar.component:", this.bookings)
     }
   }
 }

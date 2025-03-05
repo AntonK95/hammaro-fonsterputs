@@ -3,6 +3,7 @@ import { BookingService } from '../booking.service';
 import { CommonModule } from '@angular/common';
 // import { EventEmitter } from 'stream';
 import { EventEmitter } from '@angular/core';
+import { Booking } from '../../models/booking.model';
 
 
 @Component({
@@ -14,10 +15,10 @@ import { EventEmitter } from '@angular/core';
 })
 
 export class GetBookingsComponent implements OnInit {
-  bookings: any[] = [];
-  pendingBookings: any[] = [];
-  @Output() bookingsList = new EventEmitter<any[]>(); // Skickar bokningarna till AppComponent
-  // @Output() pendingBookingsList = new EventEmitter<any[]>();
+  bookings: Booking[] = [];
+  pendingBookings: Booking[] = [];
+  @Output() bookingsList = new EventEmitter<Booking[]>(); // Skickar bokningarna till AppComponent
+  @Output() pendingBookingsList = new EventEmitter<any[]>();
 
   constructor( private bookingService: BookingService ) {}
   
@@ -28,8 +29,9 @@ export class GetBookingsComponent implements OnInit {
       this.bookingsList.emit(bookings) // Skickar bokningar uppåt
 
       // Filtrera ut bokningar med status 'pending'
-      // this.pendingBookings = bookings.filter((booking: { status: string; }) => booking.status === 'pending');
-      // this.pendingBookingsList.emit(this.pendingBookings);
+      this.pendingBookings = bookings.filter((booking: { status: string; }) => booking.status === 'pending');
+      this.pendingBookingsList.emit(this.pendingBookings);
+      console.log("pendingBookings from get-bookings.component:", this.pendingBookings)
     })
     // this.getAllBookings();
   }

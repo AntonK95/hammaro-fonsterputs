@@ -1,7 +1,7 @@
 <h2>Alla bokningar</h2>
 <ul *ngIf="bookings.length > 0; else noBookings">
   <li *ngFor="let booking of bookings">
-    <strong>{{ booking.firstName || 'Okänd' }} {{ booking.lastName || '' }}</strong><br>
+    <strong>{{ booking.firstname || 'Okänd' }} {{ booking.lastname || '' }}</strong><br>
     <span *ngIf="booking.email">Email: {{ booking.email }}</span><br>
     <span *ngIf="booking.phone">Telefon: {{ booking.phone }}</span><br>
     <span>Status: {{ booking.status }}</span><br>
@@ -29,5 +29,5 @@
 </ul>
 
 <ng-template #noBookings>
-  <p>Inga bokningar hittades.</p>
+  <p>Inga bokningar hittades. (app-get-bookings)</p>
 </ng-template>

@@ -6,6 +6,7 @@ import { CalendarComponent } from './components/calendar/calendar.component';
 import { BookingService } from './services/booking.service';
 import { BookingFormComponent } from "./components/booking-form/booking-form.component";
 import { GetPendingBookingsComponent } from './services/get-pending-bookings/get-pending-bookings.component'
+import { Booking } from './models/booking.model';
 
 @Component({
   selector: 'app-root',
@@ -22,30 +23,36 @@ import { GetPendingBookingsComponent } from './services/get-pending-bookings/get
 })
 export class AppComponent implements OnInit {
   title = 'frontend';
-  bookings: any[] = [];
-  pendingBookings: any[] = [];
+  bookings: Booking[] = [];
+  pendingBookings: Booking[] = [];
 
   constructor( private bookingService: BookingService ) {}
 
-  handleBookingsList(bookings: any[]) {
+  handleBookingsList(bookings: Booking[]) {
     this.bookings = bookings;
   }
 
-  handleNewBooking(booking: any) {
+  handleNewBooking(booking: Booking) {
     console.log("Bokning skickad:", booking);
   }
 
-  handlePendingBookings(pendingBookings: any) {
-    this.pendingBookings = pendingBookings;
-    console.log("handlePendingBookings:", this.pendingBookings);
+  handlePendingBookings(pendingBookings: Booking[]) {
+      console.log("handlePendingBookings", pendingBookings)
+      this.pendingBookings = pendingBookings;
+      console.log("handlePendingBookings this.pendingBookings:", this.pendingBookings);
   }
 
-  handlePendingBookingsTest() {
-    console.log(this.handlePendingBookingsTest);
-    return this.bookings.filter(booking => booking.status === 'pending');
-  }
+  // handlePendingBookingsFilter() {
+  //   console.log(this.handlePendingBookingsFilter);
+  //   console.log("handlePendingBookingsFilter anropad!")
+  //   console.log("handlePendingBookingsFilter: ", this.pendingBookings);
+  //   return this.bookings.filter(booking => booking.status === 'pending');
+  // }
 
   ngOnInit(): void {
     // this.getAllBookings();
+    // setInterval(() => {
+    //   console.log("Live-status av pendingBookings: ", this.pendingBookings);
+    // }, 3000);
   }
 }

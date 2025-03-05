@@ -28,8 +28,11 @@
           <!-- {{ booking.name }}  -->
       </li>
     </ul>
+    <p *ngIf="!pendingBookings || pendingBookings.length === 0">Inga bokningar hittades. (get-pending-bookings) 🚨</p>
+    <p *ngIf="pendingBookings.length > 0">✅ Hittade {{ pendingBookings.length }} bokningar!</p>
+
 
     <ng-template #noData>
-      <p>Inga bokningar hittades.</p>
+      <p>Inga bokningar hittades. (get-pending-bookings)</p>
     </ng-template>
   </div>

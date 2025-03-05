@@ -11,4 +11,8 @@ import { Component, Input } from '@angular/core';
 export class GetPendingBookingsComponent {
   @Input() pendingBookings: any[] = [];
 
+  
+  ngOnInit() {
+    console.log("GetPendingBookingsComponent: ", this.pendingBookings);
+  }
 }
