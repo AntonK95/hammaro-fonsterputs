@@ -10,6 +10,7 @@ import { BookingService } from '../../services/booking.service';
 import { GetPendingBookingsComponent } from '../../services/get-pending-bookings/get-pending-bookings.component';
 import { info } from 'console';
 import { Booking } from '../../models/booking.model';
+import { start } from 'repl';
 
 @Component({
   selector: 'app-calendar',
@@ -42,6 +43,7 @@ export class CalendarComponent implements OnInit {
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
+      firstDay: 1,
       headerToolbar: {
         left: 'prev,next today',
         center: 'title',
@@ -51,14 +53,29 @@ export class CalendarComponent implements OnInit {
       droppable: true, // Möjliggör drag-and-drop
       selectable: true, 
       selectMirror: true,
-      events: this.bookings.map(booking => ({
-        title: booking.address,
-        start: booking.requestedDate,
-        extendedProps: {
-          email: booking.email,
-          phone: booking.phone
+      selectAllow: (selectInfo) => {
+        const day = new Date(selectInfo.start).getDay(); // 0 = Söndag, 6 = Lördag
+        return day !== 0 && day !== 6; // Tillåter endast vardagar
+      },
+      businessHours: [
+        {
+          daysOfWeek: [1, 2, 3, 4, 5], // Måndag–Fredag
+          startTime: '00:00', // Starttid (behövs för att markera dagarna)
+          endTime: '17:00',   // Sluttid
         }
-      })),
+      ],
+      validRange: {
+        start: new Date().toISOString().split('T')[0], // Förhindrar val av tidigare datum
+      },
+      events: this.getFilteredEvents(),
+      // this.bookings.map(booking => ({
+      //   title: booking.address,
+      //   start: booking.requestedDate,
+      //   extendedProps: {
+      //     email: booking.email,
+      //     phone: booking.phone
+      //   }
+      // })),
       eventReceive: (eventInfo: any) => {
         console.log(`Bokning lagd i kalendern:`, eventInfo.event);
         alert(`Bokningen "${eventInfo.event.title}" har lagts till i kalendern!`);
@@ -67,6 +84,7 @@ export class CalendarComponent implements OnInit {
         // this.updateBookingStatus(eventInfo.event.title, "confirmed", eventInfo.event.start);
       },
       dateClick: (info) => this.handleDateClick(info),
+      
     };
 
     // Aktivera draggable om i browser
@@ -75,8 +93,24 @@ export class CalendarComponent implements OnInit {
     }
   }
 
+  getFilteredEvents() {
+    return this.bookings.map(booking => ({
+      title: booking.address,
+      start: booking.requestedDate,
+      extendedProps: {
+        email: booking.email,
+        phone: booking.phone
+      }
+    }));
+  }
+
   handleDateClick(info: any) {
     this.dateSelected.emit(info.date);
+    const day = new Date(info.date).getDay();
+    if (day === 0 || day === 6) {
+      alert('Du kan inte boka på helger!');
+      return;
+    }
   }
 
   enableDraggable() {

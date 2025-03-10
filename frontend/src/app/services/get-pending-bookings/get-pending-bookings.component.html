@@ -1,12 +1,12 @@
 
 <div class="pending-list">
     <h3>Ej schemalagda bokningar</h3> <!-- denna titel kan vi ta bort från komponenten och lägga i den container som skall hålla listan senare-->
-    <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noData">
+    <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
       <li *ngFor="let booking of pendingBookings" class="draggable-booking"
           [attr.data-title]="booking.address">
           <p>{{ booking.customerId }}</p>
-          <p>{{ booking.firstname || booking.firstName || 'Gäst' }}</p>
-          <p>{{ booking.lastname || booking.lastName || '' }}</p>
+          <p>{{ booking.firstname || 'Gäst' }}</p>
+          <p>{{ booking.lastname || '' }}</p>
           <p>{{ booking.address }}</p>
           <p>{{ booking.createdAt }}</p>
           <p>{{ booking.email }}</p> 
@@ -29,10 +29,10 @@
       </li>
     </ul>
     <p *ngIf="!pendingBookings || pendingBookings.length === 0">Inga bokningar hittades. (get-pending-bookings) 🚨</p>
-    <p *ngIf="pendingBookings.length > 0">✅ Hittade {{ pendingBookings.length }} bokningar!</p>
+    <p *ngIf="pendingBookings.length > 0">✅ Hittade {{ pendingBookings.length }} bokningar! (get-pending-bookings)</p>
 
 
-    <ng-template #noData>
+    <ng-template #noPendingBookings>
       <p>Inga bokningar hittades. (get-pending-bookings)</p>
     </ng-template>
   </div>

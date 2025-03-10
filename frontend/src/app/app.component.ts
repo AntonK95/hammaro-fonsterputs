@@ -25,6 +25,7 @@ export class AppComponent implements OnInit {
   title = 'frontend';
   bookings: Booking[] = [];
   pendingBookings: Booking[] = [];
+  confirmedBookings: Booking[] = [];
 
   constructor( private bookingService: BookingService ) {}
 
@@ -42,6 +43,11 @@ export class AppComponent implements OnInit {
       console.log("handlePendingBookings this.pendingBookings:", this.pendingBookings);
   }
 
+  onDateSelected(dateSelected: Date) {
+    console.log("Valt datum från kalender: ", dateSelected);
+    
+  }
+
   // handlePendingBookingsFilter() {
   //   console.log(this.handlePendingBookingsFilter);
   //   console.log("handlePendingBookingsFilter anropad!")
@@ -49,7 +55,29 @@ export class AppComponent implements OnInit {
   //   return this.bookings.filter(booking => booking.status === 'pending');
   // }
 
+  loadBookings(): void {
+    this.bookingService.getAllBookings().subscribe(bookings => {
+      this.bookings = bookings;
+      this.confirmedBookings = bookings.filter((booking: Booking) => booking.status === 'confirmed');
+      console.log("Confirmed bookings: ", this.confirmedBookings);
+      this.pendingBookings = bookings.filter((booking: Booking) => booking.status === 'pending');
+      console.log("PendingBookings: ", this.pendingBookings);
+    })
+  }
+
+  handelNewBooking(booking: Booking) {
+    console.log("Ny bokning mottagen: ", booking);
+    this.bookings.push(booking);
+
+    if(booking.status === 'confirmed') {
+      this.confirmedBookings.push(booking);
+    } else {
+      this.pendingBookings.push(booking);
+    }
+  }
+
   ngOnInit(): void {
+    this.loadBookings();
     // this.getAllBookings();
     // setInterval(() => {
     //   console.log("Live-status av pendingBookings: ", this.pendingBookings);

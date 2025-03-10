@@ -9,7 +9,7 @@
     <span>Önskat datum: {{ booking.requestedDate | date:'yyyy-MM-dd HH:mm' }}</span><br>
     <span *ngIf="booking.confirmedDate">Bekräftat datum: {{ booking.confirmedDate | date:'yyyy-MM-dd HH:mm' }}</span><br>
     <span>Skapad: {{ booking.createdAt | date:'yyyy-MM-dd HH:mm' }}</span><br>
-    <span *ngIf="booking.notes">Anteckningar: {{ booking.notes }}</span><br>
+    <span *ngIf="booking.note">Anteckningar: {{ booking.note }}</span><br>
     
     <h3>Tjänster:</h3>
     <ul>

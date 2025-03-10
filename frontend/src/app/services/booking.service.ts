@@ -25,7 +25,7 @@ export class BookingService {
     );
   }
 
-  getConfirmedBookings(): Observable<any> {
+  getConfirmedBookingsForCalendar(): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/calendar`);
   }
 }

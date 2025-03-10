@@ -18,12 +18,12 @@ export class GetConfirmedBookingsComponent implements OnInit {
   constructor( private bookingService: BookingService ) { }
 
   ngOnInit(): void {
-      this.getConfirmedBookings();
+      this.getConfirmedBookingsForCalendar();
   }
 
-  getConfirmedBookings(): void {
+  getConfirmedBookingsForCalendar(): void {
     try {
-      this.bookingService.getConfirmedBookings().subscribe( data => {
+      this.bookingService.getConfirmedBookingsForCalendar().subscribe( data => {
         this.confirmedBookings = data;
         console.log("Hämtade bekräftade bokningar: ", this.confirmedBookings);
       });

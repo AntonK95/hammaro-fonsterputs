@@ -1,7 +1,28 @@
+<!-- Bokningsformulär -->
+<app-booking-form 
+  [confirmedBookings]="confirmedBookings" 
+  (newBooking)="handleNewBooking($event)">
+</app-booking-form>
 
-<app-booking-form (newBooking)="handleNewBooking($event)"></app-booking-form>
-<app-get-bookings (bookingsList)="handleBookingsList($event)" (pendingBookingsList)="handlePendingBookings($event)"></app-get-bookings>
-<app-calendar [bookings]="bookings" [pendingBookings]="pendingBookings"></app-calendar>
+<app-get-bookings 
+  (bookingsList)="handleBookingsList($event)" 
+  (pendingBookingsList)="handlePendingBookings($event)">
+</app-get-bookings>
+<!-- Kalender i bokningsformulär: endast bekräftade bokningar -->
+<!-- <app-calendar
+[bookings]="confirmedBookings">
+</app-calendar> -->
+
+<!-- Personalens kalender -->
+<app-calendar 
+  [bookings]="confirmedBookings" 
+  (dateSelected)="onDateSelected($event)">
+</app-calendar>
+
 <app-get-confirmed-bookings></app-get-confirmed-bookings>
-<app-get-pending-bookings [pendingBookings]="pendingBookings"></app-get-pending-bookings>
+
+<!-- Lista med pending bookings för drag and drop -->
+<app-get-pending-bookings 
+  [pendingBookings]="pendingBookings">
+</app-get-pending-bookings>
 <!-- <app-calendar [bookings]="confirmedBookings"></app-calendar> -->

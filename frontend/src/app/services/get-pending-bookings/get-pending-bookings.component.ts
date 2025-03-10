@@ -1,5 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, Input } from '@angular/core';
+import { Booking } from '../../models/booking.model';
 
 @Component({
   selector: 'app-get-pending-bookings',
@@ -9,7 +10,7 @@ import { Component, Input } from '@angular/core';
   styleUrl: './get-pending-bookings.component.css'
 })
 export class GetPendingBookingsComponent {
-  @Input() pendingBookings: any[] = [];
+  @Input() pendingBookings: Booking[] = [];
 
   
   ngOnInit() {
