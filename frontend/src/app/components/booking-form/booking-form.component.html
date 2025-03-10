@@ -22,8 +22,8 @@
             
             <!-- <label>Datum</label>
             <input type="date" formControlName="date" required /> -->
-            <app-calendar [bookings]="confirmedBookings" (dateSelected)="onDateSelected($event)"></app-calendar>
-            
+            <!-- <app-calendar [bookings]="confirmedBookings" (dateSelected)="onDateSelected($event)"></app-calendar> -->
+            <app-booking-calendar [bookings]="confirmedBookings"></app-booking-calendar>
             <label>Produkt</label>
             <select formControlName="product">
                 <option value="">Välj en produkt</option>

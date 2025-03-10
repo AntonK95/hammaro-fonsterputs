@@ -14,7 +14,7 @@ import { start } from 'repl';
 
 @Component({
   selector: 'app-calendar',
-  imports: [CommonModule, FullCalendarModule, GetPendingBookingsComponent],
+  imports: [CommonModule, FullCalendarModule],
   templateUrl: './calendar.component.html',
   styleUrl: './calendar.component.css',
   standalone: true,

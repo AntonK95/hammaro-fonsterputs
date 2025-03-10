@@ -45,7 +45,10 @@ export class AppComponent implements OnInit {
 
   onDateSelected(dateSelected: Date) {
     console.log("Valt datum från kalender: ", dateSelected);
-    
+    //   const formattedDate = date.toLocaleDateString('sv-SE'); // Svenskt datum format
+    //   this.bookingForm.patchValue({ date: formattedDate });
+    //   console.log("Valt datum: ", this.bookingForm.value.date)
+    // }
   }
 
   // handlePendingBookingsFilter() {

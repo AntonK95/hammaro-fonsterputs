@@ -3,13 +3,14 @@ import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angula
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { Booking } from '../../models/booking.model';
+import { BookingCalendarComponent } from "../booking-calendar/booking-calendar.component";
 
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CalendarComponent],
+  imports: [ReactiveFormsModule, CommonModule, CalendarComponent, BookingCalendarComponent],
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
