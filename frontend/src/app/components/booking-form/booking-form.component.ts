@@ -4,13 +4,14 @@ import { CommonModule } from '@angular/common';
 import { CalendarComponent } from '../calendar/calendar.component';
 import { Booking } from '../../models/booking.model';
 import { BookingCalendarComponent } from "../booking-calendar/booking-calendar.component";
+import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
 
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CalendarComponent, BookingCalendarComponent],
+  imports: [ReactiveFormsModule, CommonModule, CalendarComponent, BookingCalendarComponent, GetConfirmedBookingsComponent],
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
@@ -38,10 +39,14 @@ export class BookingFormComponent implements OnInit {
     console.log(this.isExpanded);
   }
 
-  onDateSelected(date: Date) {
-    const formattedDate = date.toLocaleDateString('sv-SE'); // Svenskt datum format
-    this.bookingForm.patchValue({ date: formattedDate });
-    console.log("Valt datum: ", this.bookingForm.value.date)
+  // onDateSelected(date: Date) {
+  //   const formattedDate = date.toLocaleDateString('sv-SE'); // Svenskt datum format
+  //   this.bookingForm.patchValue({ date: formattedDate });
+  //   console.log("Valt datum: ", this.bookingForm.value.date)
+  // }
+  onDateSelected(date: string) {
+    this.bookingForm.patchValue({ date: date });
+    console.log("Valt datum i formuläret: ", this.bookingForm.value.date);
   }
 
   submitBooking() {

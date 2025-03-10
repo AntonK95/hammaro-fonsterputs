@@ -23,7 +23,9 @@
             <!-- <label>Datum</label>
             <input type="date" formControlName="date" required /> -->
             <!-- <app-calendar [bookings]="confirmedBookings" (dateSelected)="onDateSelected($event)"></app-calendar> -->
-            <app-booking-calendar [bookings]="confirmedBookings"></app-booking-calendar>
+            <app-get-confirmed-bookings #confirmedBookings></app-get-confirmed-bookings>
+            <app-booking-calendar [confirmedBookings]="confirmedBookings.confirmedBookings" (dateSelected)="onDateSelected($event)"></app-booking-calendar>
+            <p>Valt datum: {{ bookingForm.value.date }}</p>
             <label>Produkt</label>
             <select formControlName="product">
                 <option value="">Välj en produkt</option>
