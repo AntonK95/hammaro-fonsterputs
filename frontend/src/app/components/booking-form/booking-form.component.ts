@@ -52,7 +52,7 @@ export class BookingFormComponent implements OnInit {
   submitBooking() {
     if (this.bookingForm.valid) {
       this.newBooking.emit(this.bookingForm.value); // Skicka bokningen vidare
-      alert('Bokning skickad!');
+      // alert('Bokning skickad!');
       console.log('Skickad bokning:', this.bookingForm.value);
       this.bookingForm.reset(); // Nollställ formuläret
     }

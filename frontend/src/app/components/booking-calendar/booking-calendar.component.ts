@@ -50,10 +50,66 @@ export class BookingCalendarComponent implements OnInit {
   }
 
   getFilteredEvents() {
-    return this.confirmedBookings.map(booking => ({
-      title: booking.duration,
-      start: booking.confirmedDate,
-    }))
+    const bookingsPerDay: { [key: string]: number } = {};
+  
+    this.confirmedBookings.forEach(booking => {
+      const date = booking.confirmedDate; // YYYY-MM-DD
+      const hours = booking.duration / 60; // Omvandla minuter till timmar
+      const roundedHours = Math.ceil(hours * 4) / 4; 
+
+      if (bookingsPerDay[date]) {
+        bookingsPerDay[date] += roundedHours; // Lägg till om det redan finns bokningar på denna dag
+      } else {
+        bookingsPerDay[date] = roundedHours; // Skapa nytt entry
+      }
+    });
+  
+    // Konvertera map till event-array för kalendern
+  //   return Object.keys(bookingsPerDay).map(date => {
+
+  //     const totalHours = bookingsPerDay[date];
+  //     let colorClass = '';
+
+  //     if (totalHours >= 7) {
+  //       colorClass = 'full-booked'; // Röd
+  //     } else if (totalHours >= 4) {
+  //       colorClass = 'medium-booked'; // Gul
+  //     } else {
+  //       colorClass = 'low-booked'; // Grön
+  //     }
+  //     return {
+  //       title: `${bookingsPerDay[date].toFixed(2)} h`, // Visa total tid med 1 decimal
+  //       start: date,
+  //       className: colorClass,
+  //     }
+  //   });
+  // }
+
+  return Object.keys(bookingsPerDay).map(date => {
+    const totalHours = bookingsPerDay[date];
+    let color = '';
+    let borderColor = '';
+  
+    if (totalHours >= 7) {
+      color = '#ff6961'; // Röd
+      borderColor = '#ff6961';
+    } else if (totalHours >= 4) {
+      color = '#ffd97d'; // Gul
+      borderColor = '#ffd97d'
+    } else {
+      color = '#27d192'; // Grön
+      borderColor = '#27d192';
+    }
+  
+    return {
+      title: `${totalHours.toFixed(2)} h`,
+      start: date,
+      className: 'custom-event', 
+      backgroundColor: color,
+      borderColor: borderColor,
+      textColor: totalHours >= 7 ? 'white' : 'black',
+    };
+    });
   }
 
   handleDateClick(info: any) {

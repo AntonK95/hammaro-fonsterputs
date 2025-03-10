@@ -18,7 +18,7 @@
   
   /* Ändra färg på event */
   .fc-event {
-    background-color: #007bff !important; /* Blå */
+   /* background-color: #007bff !important;  Blå */
     color: white !important; /* Vit text */
     border-radius: 5px;
     padding: 5px;
