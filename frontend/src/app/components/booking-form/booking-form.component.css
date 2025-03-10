@@ -1,0 +1,161 @@
+.booking-container {
+    max-width: 400px;
+    margin: auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    background-color: #f9f9f9;
+  }
+  
+  form {
+    display: flex;
+    flex-direction: column;
+  }
+  
+  label {
+    margin-top: 10px;
+  }
+  
+  input, select, button {
+    padding: 8px;
+    margin-top: 5px;
+  }
+  
+  button {
+    width: 100%;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+
+  button:hover {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  }
+
+  button:active {
+    transform: scale(0.98);
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+  }
+    
+  /* .form-container {
+    max-height: 0;
+    opacity: 0;
+    transform: scaleY(0);
+    overflow: hidden;
+    transition: max-height 0.8s ease-in-out, 
+                opacity 0.5s ease-in-out, 
+                transform 0.5s ease-in-out;
+    padding: 0;
+  }
+  
+  .form-container.expanded {
+    max-height: 100%;
+    opacity: 1;
+    transform: scaleY(1);
+    padding: 15px;
+  }
+  
+  .toggle-form-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .toggle-form-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  } */
+  
+  @keyframes bounceDrop {
+    0% {
+      transform: translateY(-30px);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(0);
+    }
+    65% {
+      transform: translateY(-15px);
+    }
+    75% {
+      transform: translateY(5px);
+    }
+    85% {
+      transform: translateY(-10px);
+    }
+    100% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .form-container {
+    max-height: 0;
+    opacity: 0;
+    overflow: hidden;
+    padding: 0;
+    transition: max-height 0.8s ease-in-out, opacity 0.5s ease-in-out;
+  }
+  
+  .form-container.expanded {
+    max-height: 100%; /* Anpassa efter innehåll */
+    opacity: 1;
+    padding: 15px;
+    animation: bounceDrop 0.7s cubic-bezier(0.25, 1.5, 0.5, 1);
+  }
+  
+  .toggle-form-btn {
+    width: 100%;
+    background: linear-gradient(135deg, #007bff, #00d4ff);
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    border: none;
+    padding: 12px;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s ease, box-shadow 0.3s ease;
+  }
+  
+  .toggle-form-btn:hover {
+    background: linear-gradient(135deg, #0056b3, #0088cc);
+    transform: scale(1.05);
+    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  }
+  
+  .toggle-form-btn:active {
+    transform: scale(0.98);
+    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+  }
+  
+  

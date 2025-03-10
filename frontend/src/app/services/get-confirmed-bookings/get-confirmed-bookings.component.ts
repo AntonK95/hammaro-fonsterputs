@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { BookingService } from '../booking.service';
 import { CommonModule } from '@angular/common';
+import { Booking } from '../../models/booking.model';
 
 
 @Component({
@@ -12,17 +13,17 @@ import { CommonModule } from '@angular/common';
 })
 
 export class GetConfirmedBookingsComponent implements OnInit {
-  confirmedBookings: any[] = [];
+  confirmedBookings: Booking[] = [];
 
   constructor( private bookingService: BookingService ) { }
 
   ngOnInit(): void {
-      this.getConfirmedBookings();
+      this.getConfirmedBookingsForCalendar();
   }
 
-  getConfirmedBookings(): void {
+  getConfirmedBookingsForCalendar(): void {
     try {
-      this.bookingService.getConfirmedBookings().subscribe( data => {
+      this.bookingService.getConfirmedBookingsForCalendar().subscribe( data => {
         this.confirmedBookings = data;
         console.log("Hämtade bekräftade bokningar: ", this.confirmedBookings);
       });
