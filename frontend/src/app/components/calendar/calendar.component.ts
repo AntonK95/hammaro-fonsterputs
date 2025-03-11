@@ -1,16 +1,13 @@
 import { Component, Inject, Input, OnInit, PLATFORM_ID, ViewEncapsulation, OnChanges, SimpleChange, SimpleChanges, Output, EventEmitter } from '@angular/core';
 import { FullCalendarModule } from '@fullcalendar/angular';
 import { CommonModule } from '@angular/common';
-import { CalendarOptions, EventInput } from '@fullcalendar/core';
+import { CalendarOptions } from '@fullcalendar/core';
 import dayGridPlugin from '@fullcalendar/daygrid';
 import timeGridPlugin from '@fullcalendar/timegrid';
 import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { isPlatformBrowser } from '@angular/common';
 import { BookingService } from '../../services/booking.service';
-import { GetPendingBookingsComponent } from '../../services/get-pending-bookings/get-pending-bookings.component';
-import { info } from 'console';
 import { Booking } from '../../models/booking.model';
-import { start } from 'repl';
 
 @Component({
   selector: 'app-calendar',
@@ -23,7 +20,8 @@ import { start } from 'repl';
 export class CalendarComponent implements OnInit {
   @Input() bookings: Booking[] = [];
   @Input() pendingBookings: Booking[] = [];
-  @Output() dateSelected = new EventEmitter<any>(); // emittar datum
+  @Output() dateSelected = new EventEmitter<any>();
+  @Output() bookingPlaced = new EventEmitter<string>();
   // pendingBookings: any[] = [];
   calendarOptions!: CalendarOptions;
 
@@ -32,11 +30,8 @@ export class CalendarComponent implements OnInit {
   ngOnInit(): void {
     console.log("Alla bokningar: ", this.bookings);
     console.log("pendingBookings till calendern: ", this.pendingBookings)
-
-    // Filtrera ut alla bokningar med statusen 'pending'
-    // this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
-    // console.log("Pending bokningar: ", this.pendingBookings); // Loggar de som har status pending
-  
+    const filteredEvents = this.getFilteredEvents();
+    console.log("Filtrerade bokningar för kalendern: ", filteredEvents);
   
 
     // Konfigurera kalendern
@@ -68,18 +63,34 @@ export class CalendarComponent implements OnInit {
         start: new Date().toISOString().split('T')[0], // Förhindrar val av tidigare datum
       },
       events: this.getFilteredEvents(),
-      // this.bookings.map(booking => ({
-      //   title: booking.address,
-      //   start: booking.requestedDate,
-      //   extendedProps: {
-      //     email: booking.email,
-      //     phone: booking.phone
-      //   }
-      // })),
       eventReceive: (eventInfo: any) => {
         console.log(`Bokning lagd i kalendern:`, eventInfo.event);
-        alert(`Bokningen "${eventInfo.event.title}" har lagts till i kalendern!`);
+        console.log("eventInfo", eventInfo);
 
+        // Hämta bokningens ID från extendedProps
+        const bookingId = eventInfo.event.extendedProps.id;
+        console.log("Letar efter bokning med id: ", bookingId);
+
+        console.log("Nuvarande pendingBookings:", this.pendingBookings);
+      
+        // Hitta bokningen i pendingBookings
+        const booking = this.pendingBookings.find(booking => booking.id === bookingId);
+        if (booking) {
+          console.log("Bokning som hittades:", booking);
+
+          booking.status = 'placed';
+
+          console.log("Bokningens nya status:", booking);
+      
+          // Skapa en ny array för att trigga Angulars change detection
+          this.pendingBookings = [...this.pendingBookings];
+      
+          this.bookingPlaced.emit(bookingId);
+
+          console.log("Uppdaterade pendingBookings efter placering:", this.pendingBookings);
+        } else {
+          console.log("Bokning kunde inte hittas i pendingBookings");
+        }
         // Uppdatera bokningens status i Firestore
         // this.updateBookingStatus(eventInfo.event.title, "confirmed", eventInfo.event.start);
       },
@@ -94,14 +105,20 @@ export class CalendarComponent implements OnInit {
   }
 
   getFilteredEvents() {
-    return this.bookings.map(booking => ({
-      title: booking.address,
-      start: booking.requestedDate,
+    console.log("Bokningar innan filtrering: ", this.bookings);
+    const events = this.bookings
+    .filter(booking => booking.confirmedDate)
+    .map(booking => ({
+      title: booking.address || 'Titel saknas',
+      start: booking.confirmedDate || '',
       extendedProps: {
         email: booking.email,
-        phone: booking.phone
+        phone: booking.phone,
+        id: booking.id
       }
     }));
+    console.log("Skapade kalenderhändelser: ", events);
+    return events;
   }
 
   handleDateClick(info: any) {
@@ -119,30 +136,29 @@ export class CalendarComponent implements OnInit {
     if (draggableEl) {
       new Draggable(draggableEl, {
         itemSelector: '.draggable-booking',
-        eventData: (eventEl: any) => ({
-          title: eventEl.getAttribute("data-title"),
-          start: new Date().toISOString().split('T')[0] // Default startdatum
-        })
+        eventData: (eventEl: any) => {
+
+          console.log("Drar i bokning", { id: eventEl.getAttribute("data-id")});
+
+          return {
+
+            id: eventEl.getAttribute("data-id"),
+            title: eventEl.getAttribute("data-title"),
+            start: new Date().toISOString().split('T')[0], // Default startdatum
+            extendedProps: {
+              id: eventEl.getAttribute("data-id")
+            }
+          }
+        }
       });
     }
   }
-
-  // updateBookingStatus(bookingName: string, newStatus: string, newDate: string) {
-  //   this.bookingService.updateBookingStatus(bookingName, newStatus, newDate).subscribe(
-  //     () => console.log(`Bokning ${bookingName} uppdaterad till ${newStatus} med datum ${newDate}`),
-  //     error => console.error("Fel vid uppdatering av bokning:", error)
-  //   );
-  // }
 
   handleEventClick(info: any) {
     alert(`Bokning: ${info.event.title} \nEmail: ${info.event.extendedProps.email}`);
   }
   ngOnChanges(changes: SimpleChanges) {
-  //   if(changes['bookings'] && this.bookings.length > 0){
-  //     this.pendingBookings = this.bookings.filter(booking => 
-  //       booking.status === 'pending');
-  //       console.log("Pending bookings in calendar: ", this.pendingBookings);
-  //   }
+
     if(changes['pendingBookings']) {
       console.log("pendingBookings uppdaterat i calendar.component:", this.pendingBookings)
     }
