@@ -5,7 +5,7 @@ import { GetConfirmedBookingsComponent } from "./services/get-confirmed-bookings
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { BookingService } from './services/booking.service';
 import { BookingFormComponent } from "./components/booking-form/booking-form.component";
-import { GetPendingBookingsComponent } from './services/get-pending-bookings/get-pending-bookings.component'
+// import { GetPendingBookingsComponent } from './services/get-pending-bookings/get-pending-bookings.component'
 import { Booking } from './models/booking.model';
 import { CommonModule } from '@angular/common';
 
