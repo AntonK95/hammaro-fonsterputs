@@ -23,12 +23,6 @@
 </app-calendar>
 
 <app-get-confirmed-bookings></app-get-confirmed-bookings>
-
-<!-- Lista med pending bookings för drag and drop -->
-<!-- <app-get-pending-bookings 
-  [pendingBookings]="pendingBookings">
-</app-get-pending-bookings> -->
-<!-- <app-calendar [bookings]="confirmedBookings"></app-calendar> -->
  
 <div class="pending-list">
   <h3>Ej schemalagda bokningar</h3> <!-- denna titel kan vi ta bort från komponenten och lägga i den container som skall hålla listan senare-->
@@ -60,11 +54,11 @@
         <!-- {{ booking.name }}  -->
     </li>
   </ul>
-  <p *ngIf="!pendingBookings || pendingBookings.length === 0">Inga bokningar hittades. (get-pending-bookings) 🚨</p>
-  <p *ngIf="pendingBookings.length > 0">✅ Hittade {{ pendingBookings.length }} bokningar! (get-pending-bookings)</p>
+  <p *ngIf="!pendingBookings || pendingBookings.length === 0">Inga bokningar hittades.</p>
+  <p *ngIf="pendingBookings.length > 0">✅ Hittade {{ pendingBookings.length }} bokningar!</p>
 
 
   <ng-template #noPendingBookings>
-    <p>Inga bokningar hittades. (get-pending-bookings)</p>
+    <p>Inga bokningar hittades.</p>
   </ng-template>
 </div>
