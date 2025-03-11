@@ -14,6 +14,6 @@ export class GetPendingBookingsComponent {
 
   
   ngOnInit() {
-    console.log("GetPendingBookingsComponent: ", this.pendingBookings);
+    // console.log("GetPendingBookingsComponent: ", this.pendingBookings);
   }
 }

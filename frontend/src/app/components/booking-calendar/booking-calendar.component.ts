@@ -10,7 +10,7 @@ import { GetConfirmedBookingsComponent } from '../../services/get-confirmed-book
 
 @Component({
   selector: 'app-booking-calendar',
-  imports: [FullCalendarModule, CommonModule, GetConfirmedBookingsComponent],
+  imports: [FullCalendarModule, CommonModule],
   templateUrl: './booking-calendar.component.html',
   styleUrls: ['./booking-calendar.component.css'],
 })

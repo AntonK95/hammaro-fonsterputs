@@ -11,7 +11,7 @@ import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-book
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, CalendarComponent, BookingCalendarComponent, GetConfirmedBookingsComponent],
+  imports: [ReactiveFormsModule, CommonModule, BookingCalendarComponent, GetConfirmedBookingsComponent],
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];

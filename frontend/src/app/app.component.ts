@@ -7,16 +7,18 @@ import { BookingService } from './services/booking.service';
 import { BookingFormComponent } from "./components/booking-form/booking-form.component";
 import { GetPendingBookingsComponent } from './services/get-pending-bookings/get-pending-bookings.component'
 import { Booking } from './models/booking.model';
+import { CommonModule } from '@angular/common';
 
 @Component({
   selector: 'app-root',
   imports: [
+    CommonModule,
     // RouterOutlet, 
     GetBookingsComponent,
     GetConfirmedBookingsComponent,
     CalendarComponent,
     BookingFormComponent,
-    GetPendingBookingsComponent
+    // GetPendingBookingsComponent
 ],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
@@ -29,61 +31,48 @@ export class AppComponent implements OnInit {
 
   constructor( private bookingService: BookingService ) {}
 
+
+  ngOnInit(): void {
+    this.loadBookings();
+  }
+
   handleBookingsList(bookings: Booking[]) {
     this.bookings = bookings;
   }
 
-  handleNewBooking(booking: Booking) {
-    console.log("Bokning skickad:", booking);
-  }
-
-  handlePendingBookings(pendingBookings: Booking[]) {
-      console.log("handlePendingBookings", pendingBookings)
-      this.pendingBookings = pendingBookings;
-      console.log("handlePendingBookings this.pendingBookings:", this.pendingBookings);
-  }
-
   onDateSelected(dateSelected: Date) {
     console.log("Valt datum från kalender: ", dateSelected);
-    //   const formattedDate = date.toLocaleDateString('sv-SE'); // Svenskt datum format
-    //   this.bookingForm.patchValue({ date: formattedDate });
-    //   console.log("Valt datum: ", this.bookingForm.value.date)
-    // }
   }
-
-  // handlePendingBookingsFilter() {
-  //   console.log(this.handlePendingBookingsFilter);
-  //   console.log("handlePendingBookingsFilter anropad!")
-  //   console.log("handlePendingBookingsFilter: ", this.pendingBookings);
-  //   return this.bookings.filter(booking => booking.status === 'pending');
-  // }
 
   loadBookings(): void {
     this.bookingService.getAllBookings().subscribe(bookings => {
       this.bookings = bookings;
-      this.confirmedBookings = bookings.filter((booking: Booking) => booking.status === 'confirmed');
-      console.log("Confirmed bookings: ", this.confirmedBookings);
-      this.pendingBookings = bookings.filter((booking: Booking) => booking.status === 'pending');
-      console.log("PendingBookings: ", this.pendingBookings);
-    })
+      this.filterBookings();
+    });
   }
 
-  handelNewBooking(booking: Booking) {
+  filterBookings() {
+    this.confirmedBookings = this.bookings.filter(booking => booking.status === 'confirmed');
+    this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
+    console.log("Bekräftade bokningar: ", this.confirmedBookings);
+    console.log("Pending bokningar: ", this.pendingBookings);
+  }
+
+  handleNewBooking(booking: Booking) {
     console.log("Ny bokning mottagen: ", booking);
     this.bookings.push(booking);
+    this.filterBookings(); // Filtrera om efter att en ny bokning lagts till
+  }
 
-    if(booking.status === 'confirmed') {
-      this.confirmedBookings.push(booking);
+  // Hantera eventet när en bokning placeras i kalendern
+  onBookingPlaced(bookingId: string) {
+    const booking = this.bookings.find(b => b.id === bookingId);
+    if (booking) {
+      booking.status = 'placed'; // Ändra statusen till "placed"
+      this.filterBookings(); // Filtrera om bokningarna
+      console.log("Boknin placerad i kalendern: ", booking);
     } else {
-      this.pendingBookings.push(booking);
+      console.log("Bokning med id" + bookingId + "hittades inte i pendingBookings");
     }
-  }
-
-  ngOnInit(): void {
-    this.loadBookings();
-    // this.getAllBookings();
-    // setInterval(() => {
-    //   console.log("Live-status av pendingBookings: ", this.pendingBookings);
-    // }, 3000);
-  }
+  } 
 }
