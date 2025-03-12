@@ -27,8 +27,8 @@ export class ProductListComponent implements OnInit{
       }
     });
   }
-  selectProduct(product: any): void {
-    this.selectedProduct.emit(product);
+  selectProduct(product: any, quantity: number): void {
+    this.selectedProduct.emit({...product, quantity });
     console.log("Vald produkt: ", product);
   }
 }

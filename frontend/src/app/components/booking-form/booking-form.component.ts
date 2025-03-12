@@ -42,8 +42,15 @@ export class BookingFormComponent implements OnInit {
   get products(): FormArray {
     return this.bookingForm.get('products') as FormArray;
   }
+  
   onProductSelected(product: any): void {
-    this.products.push(this.fb.control(product));
+    this.products.push(this.fb.group({
+      serviceName: [product.serviceName],
+      // price: [product.price],
+      timePerUnit: [product.timePerUnit],
+      description: [product.description],
+      quantity: [product.quantity, Validators.required]
+    }));
   }
 
   onDateSelected(date: string) {
