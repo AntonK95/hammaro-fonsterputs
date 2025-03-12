@@ -64,27 +64,6 @@ export class BookingCalendarComponent implements OnInit {
       }
     });
   
-    // Konvertera map till event-array för kalendern
-  //   return Object.keys(bookingsPerDay).map(date => {
-
-  //     const totalHours = bookingsPerDay[date];
-  //     let colorClass = '';
-
-  //     if (totalHours >= 7) {
-  //       colorClass = 'full-booked'; // Röd
-  //     } else if (totalHours >= 4) {
-  //       colorClass = 'medium-booked'; // Gul
-  //     } else {
-  //       colorClass = 'low-booked'; // Grön
-  //     }
-  //     return {
-  //       title: `${bookingsPerDay[date].toFixed(2)} h`, // Visa total tid med 1 decimal
-  //       start: date,
-  //       className: colorClass,
-  //     }
-  //   });
-  // }
-
   return Object.keys(bookingsPerDay).map(date => {
     const totalHours = bookingsPerDay[date];
     let color = '';

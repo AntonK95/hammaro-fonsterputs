@@ -58,12 +58,44 @@ export class BookingFormComponent implements OnInit {
     console.log("Valt datum i formuläret: ", this.bookingForm.value.date);
   }
 
+  calculateTotalTimeOfBooking(): number {
+    return this.products.controls.reduce((total, product) => {
+      const timePerUnit = product.get('timePerUnit')?.value || 0;
+      const quantity = product.get('quantity')?.value || 0;
+      return total + (timePerUnit * quantity);
+    }, 0)
+  }
+
+  canBookOnDate(date: string): boolean {
+    const bookingsPerDay: { [key: string]: number } = {};
+
+    this.confirmedBookings.forEach(booking => {
+      const bookingDate = booking.confirmedDate; // YYYY-MM-DD
+      if (!bookingDate) return;
+      const hours = booking.totalDuration / 60; // Omvandla minuter till timmar
+      const roundedHours = Math.ceil(hours * 4) / 4;
+
+      if (bookingsPerDay[bookingDate]) {
+        bookingsPerDay[bookingDate] += roundedHours; // Lägg till om det redan finns bokningar på denna dag
+      } else {
+        bookingsPerDay[bookingDate] = roundedHours; // Skapa nytt entry
+      }
+    });
+
+    const bookedHours = bookingsPerDay[date] || 0;
+    const newBookingHours = this.calculateTotalTimeOfBooking() / 60;
+
+    return (bookedHours + newBookingHours) <= 8;
+  }
+
   submitBooking() {
-    if (this.bookingForm.valid) {
+    const selectedDate = this.bookingForm.get('date')?.value;
+    if (this.bookingForm.valid && this.canBookOnDate(selectedDate)) {
       this.newBooking.emit(this.bookingForm.value); // Skicka bokningen vidare
-      // alert('Bokning skickad!');
       console.log('Skickad bokning:', this.bookingForm.value);
       this.bookingForm.reset(); // Nollställ formuläret
+    } else {
+      alert('Denna bokning väntas ta längre tid än vad som finns tilljängligt denna dag. Vänligen välj en annan dag.');
     }
   }
 }
