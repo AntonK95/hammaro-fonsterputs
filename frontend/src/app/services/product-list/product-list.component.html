@@ -1,0 +1,9 @@
+
+<div class="product-list">
+    <div *ngFor="let product of products" class="product-card">
+      <p>{{ product.description }}</p>
+      <label for="quantity">Antal fönster:</label>
+      <input type="number" id="quantity" min="1" [value]="1" #quantityInput>
+      <button type="button" (click)="selectProduct(product, + quantityInput.value)">Välj</button>
+    </div>
+</div>
