@@ -1,0 +1,7 @@
+
+<div class="product-list">
+    <div *ngFor="let product of products" class="product-card">
+      <p>{{ product.description }}</p>
+      <button type="button" (click)="selectProduct(product)">Välj</button>
+    </div>
+</div>

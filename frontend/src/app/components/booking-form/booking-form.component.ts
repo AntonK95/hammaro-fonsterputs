@@ -1,17 +1,17 @@
 import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
-import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
+import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
-import { CalendarComponent } from '../calendar/calendar.component';
 import { Booking } from '../../models/booking.model';
 import { BookingCalendarComponent } from "../booking-calendar/booking-calendar.component";
 import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
+import { ProductListComponent } from "../../services/product-list/product-list.component";
 
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, BookingCalendarComponent, GetConfirmedBookingsComponent],
+  imports: [ReactiveFormsModule, CommonModule, BookingCalendarComponent, GetConfirmedBookingsComponent, ProductListComponent],
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
@@ -29,7 +29,7 @@ export class BookingFormComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
       date: ['', Validators.required], // Datum väljs manuellt
-      product: ['', Validators.required], // Produktval
+      products: this.fb.array([], Validators.required), // Produktval
     });
     console.log("Confirmed bookings: ", this.confirmedBookings);
   }
@@ -39,11 +39,13 @@ export class BookingFormComponent implements OnInit {
     console.log(this.isExpanded);
   }
 
-  // onDateSelected(date: Date) {
-  //   const formattedDate = date.toLocaleDateString('sv-SE'); // Svenskt datum format
-  //   this.bookingForm.patchValue({ date: formattedDate });
-  //   console.log("Valt datum: ", this.bookingForm.value.date)
-  // }
+  get products(): FormArray {
+    return this.bookingForm.get('products') as FormArray;
+  }
+  onProductSelected(product: any): void {
+    this.products.push(this.fb.control(product));
+  }
+
   onDateSelected(date: string) {
     this.bookingForm.patchValue({ date: date });
     console.log("Valt datum i formuläret: ", this.bookingForm.value.date);

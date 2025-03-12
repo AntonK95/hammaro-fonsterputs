@@ -20,20 +20,10 @@
             <label>Telefon</label>
             <input type="text" formControlName="phone" required />
             
-            <!-- <label>Datum</label>
-            <input type="date" formControlName="date" required /> -->
-            <!-- <app-calendar [bookings]="confirmedBookings" (dateSelected)="onDateSelected($event)"></app-calendar> -->
             <app-get-confirmed-bookings #confirmedBookings></app-get-confirmed-bookings>
             <app-booking-calendar [confirmedBookings]="confirmedBookings.confirmedBookings" (dateSelected)="onDateSelected($event)"></app-booking-calendar>
-            <p>Valt datum: {{ bookingForm.value.date }}</p>
-            <label>Produkt</label>
-            <select formControlName="product">
-                <option value="">Välj en produkt</option>
-                <option value="Fönsterputs">Fönsterputs</option>
-        <option value="Takrengöring">Takrengöring</option>
-        <option value="Fasadtvätt">Fasadtvätt</option>
-    </select>
-    
+            <!-- <p>Valt datum: {{ bookingForm.value.date }}</p> -->
+            <app-product-list (selectedProduct)="onProductSelected($event)"></app-product-list>
     <button type="submit" [disabled]="bookingForm.invalid">Boka</button>
     </form>
     </section>
