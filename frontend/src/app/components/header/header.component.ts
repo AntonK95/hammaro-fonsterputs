@@ -30,6 +30,10 @@ export class HeaderComponent {
     });
   }
 
+  isLoggedIn(): boolean {
+    return localStorage.getItem('idToken') !== null; 
+  }
+
   logout() {
     this.authService.logout();
   }

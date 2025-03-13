@@ -21,7 +21,7 @@ import { MatDialogModule } from '@angular/material/dialog'
     GetConfirmedBookingsComponent,
     CalendarComponent,
     BookingFormComponent,
-    LoginComponent,
+    // LoginComponent,
     HeaderComponent,
     MatDialogModule,
 ],

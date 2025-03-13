@@ -10,7 +10,7 @@ export class AuthServiceService {
   
   private apiUrl = 'http://localhost:3000/auth';
   private userSubject = new BehaviorSubject<any>(null);
-  user$ = this.userSubject.asObservable();
+  user$ = this.userSubject.asObservable(); // Detta får jag kolla om det behövs..
 
   constructor(private http: HttpClient) { }
 
