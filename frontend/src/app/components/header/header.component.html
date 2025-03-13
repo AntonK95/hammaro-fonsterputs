@@ -1,0 +1,14 @@
+<nav>
+    <div class="nav-wrapper">
+      <a href="#" class="brand-logo">Hammarö Fönsterputs</a>
+      <ul id="nav-mobile" class="right hide-on-med-and-down">
+        <li *ngIf="!(authService.user$ | async)"> <!-- Visa om användaren inte är inloggad -->
+          <a (click)="openLoginDialog()">Logga in</a>
+        </li>
+        <li *ngIf="authService.user$ | async as user"> <!-- Visa om användaren är inloggad -->
+          <span>Välkommen, {{ user.firstname }}</span>
+          <a (click)="logout()">Logga ut</a>
+        </li>
+      </ul>
+    </div>
+  </nav>
