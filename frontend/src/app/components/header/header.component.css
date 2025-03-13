@@ -1,0 +1,35 @@
+.nav-wrapper {
+    background-color: #f5f1f1;
+    color: #fff;
+    padding: 10px;
+  }
+  
+  .nav-wrapper .brand-logo {
+    font-size: 1.5em;
+  }
+  
+  .nav-wrapper ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-wrapper ul li {
+    display: inline;
+    margin-left: 20px;
+  }
+  
+  .nav-wrapper ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  button {
+    padding: .5rem 1rem;
+    background-color: rgb(85, 85, 204);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: medium;
+    font-weight: 500;
+  }

@@ -7,17 +7,25 @@ import { BookingService } from './services/booking.service';
 import { BookingFormComponent } from "./components/booking-form/booking-form.component";
 import { Booking } from './models/booking.model';
 import { CommonModule } from '@angular/common';
+import { LoginComponent } from './components/login/login.component';
+import { AuthServiceService } from './services/auth.service';
+import { HeaderComponent } from './components/header/header.component';
+import { MatDialogModule } from '@angular/material/dialog'
 
 @Component({
   selector: 'app-root',
   imports: [
     CommonModule,
-    // RouterOutlet, 
+    // RouterOutlet,
     // GetBookingsComponent,
     GetConfirmedBookingsComponent,
     CalendarComponent,
     BookingFormComponent,
+    // LoginComponent,
+    HeaderComponent,
+    MatDialogModule,
 ],
+  providers: [AuthServiceService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
@@ -72,5 +80,5 @@ export class AppComponent implements OnInit {
     } else {
       console.log("Bokning med id" + bookingId + "hittades inte i pendingBookings");
     }
-  } 
+  }
 }
