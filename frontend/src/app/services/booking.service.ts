@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import { Booking } from '../models/booking.model';
 
 @Injectable({
   providedIn: 'root'
@@ -15,9 +16,9 @@ export class BookingService {
 
   constructor( private http: HttpClient ) { }
 
-  // getAllBookings(): Observable<any> {
-  //   return this.http.get<any[]>(this.apiUrl);
-  // }
+  createBooking(booking: Booking): Observable<Booking> {
+    return this.http.post<Booking>(this.apiUrl, booking);
+  }
 
   getAllBookings(): Observable<any> {
     return this.http.get<any[]>(this.apiUrl).pipe(

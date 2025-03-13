@@ -5,13 +5,20 @@ import { Booking } from '../../models/booking.model';
 import { BookingCalendarComponent } from "../booking-calendar/booking-calendar.component";
 import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
 import { ProductListComponent } from "../../services/product-list/product-list.component";
+import { BookingService } from '../../services/booking.service';
+import { HttpErrorResponse } from '@angular/common/http';
 
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
   styleUrls: ['./booking-form.component.css'],
   standalone: true,
-  imports: [ReactiveFormsModule, CommonModule, BookingCalendarComponent, GetConfirmedBookingsComponent, ProductListComponent],
+  imports: [ReactiveFormsModule, 
+            CommonModule, 
+            BookingCalendarComponent, 
+            GetConfirmedBookingsComponent, 
+            ProductListComponent
+          ],
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
@@ -19,15 +26,20 @@ export class BookingFormComponent implements OnInit {
 
   bookingForm!: FormGroup;
   isExpanded = false;
+  errorMessage: string | null = null;
 
-  constructor(private fb: FormBuilder) {}
+  constructor(
+    private fb: FormBuilder, 
+    private bookingService: BookingService
+  ) {}
 
   ngOnInit(): void {
     this.bookingForm = this.fb.group({
-      firstName: ['', Validators.required],
-      lastName: ['', Validators.required],
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
+      address: ['', Validators.required],
       date: ['', Validators.required], // Datum väljs manuellt
       products: this.fb.array([], Validators.required), // Produktval
     });
@@ -46,7 +58,7 @@ export class BookingFormComponent implements OnInit {
   onProductSelected(product: any): void {
     this.products.push(this.fb.group({
       serviceName: [product.serviceName],
-      // price: [product.price],
+      price: [product.priceRange.min],
       timePerUnit: [product.timePerUnit],
       description: [product.description],
       quantity: [product.quantity, Validators.required]
@@ -66,6 +78,7 @@ export class BookingFormComponent implements OnInit {
     }, 0)
   }
 
+  // Räkna ut om det finns tillräckligt med tid kvar för vald dag
   canBookOnDate(date: string): boolean {
     const bookingsPerDay: { [key: string]: number } = {};
 
@@ -91,11 +104,40 @@ export class BookingFormComponent implements OnInit {
   submitBooking() {
     const selectedDate = this.bookingForm.get('date')?.value;
     if (this.bookingForm.valid && this.canBookOnDate(selectedDate)) {
-      this.newBooking.emit(this.bookingForm.value); // Skicka bokningen vidare
-      console.log('Skickad bokning:', this.bookingForm.value);
-      this.bookingForm.reset(); // Nollställ formuläret
+      if (this.products.length === 0) {
+        this.errorMessage = 'Minst en produkt/tjänst måste väljas';
+        return;
+      }
+
+      const booking: Booking = {
+        ...this.bookingForm.value,
+        requestedDate: this.bookingForm.value.date,
+        items: this.bookingForm.value.products,
+        totalDuration: this.calculateTotalTimeOfBooking(),
+        totalPrice: this.products.controls.reduce((total, product) => {
+          const price = product.get('price')?.value || 0;
+          const quantity = product.get('quantity')?.value || 0;
+          return total + (price * quantity);
+        }, 0),
+        status: 'pending',
+        createdAt: new Date().toISOString(),
+      };
+      console.log("Skickar bokning via form: ", booking);
+      // Kommentera ut nedan för att inte skicka till databasen / för felsökning
+      this.bookingService.createBooking(booking).subscribe(
+        (response) => {
+          this.newBooking.emit(response); // Skicka bokningen vidare
+          console.log('Skickad bokning:', response);
+          this.bookingForm.reset(); // Nollställ formuläret
+          this.errorMessage = null; // Rensa felmeddelandet
+        },
+        (error: HttpErrorResponse) => {
+          console.error('Error creating booking:', error);
+          this.errorMessage = error.error?.error || 'Ett fel uppstod vid skapandet av bokningen. Försök igen senare.';
+        }
+      );
     } else {
-      alert('Denna bokning väntas ta längre tid än vad som finns tilljängligt denna dag. Vänligen välj en annan dag.');
+      this.errorMessage = 'Denna bokning väntas ta längre tid än vad som finns tillgängligt denna dag. Vänligen välj en annan dag.';
     }
   }
 }
