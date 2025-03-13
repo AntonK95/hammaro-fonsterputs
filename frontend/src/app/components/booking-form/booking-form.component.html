@@ -9,10 +9,10 @@
 
         <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
             <label>Förnamn</label>
-            <input type="text" formControlName="firstName" required />
+            <input type="text" formControlName="firstname" required />
             
             <label>Efternamn</label>
-            <input type="text" formControlName="lastName" required />
+            <input type="text" formControlName="lastname" required />
             
             <label>E-post</label>
             <input type="email" formControlName="email" required />
@@ -20,12 +20,18 @@
             <label>Telefon</label>
             <input type="text" formControlName="phone" required />
             
+            <label>Address</label>
+            <input type="text" formControlName="address" required />
+            
             <app-get-confirmed-bookings #confirmedBookings></app-get-confirmed-bookings>
             <app-booking-calendar [confirmedBookings]="confirmedBookings.confirmedBookings" (dateSelected)="onDateSelected($event)"></app-booking-calendar>
             <!-- <p>Valt datum: {{ bookingForm.value.date }}</p> -->
             <app-product-list (selectedProduct)="onProductSelected($event)"></app-product-list>
     <button type="submit" [disabled]="bookingForm.invalid">Boka</button>
     </form>
+    <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+    </div>
     </section>
   </div>
   

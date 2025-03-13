@@ -13,7 +13,7 @@ import { CommonModule } from '@angular/common';
   imports: [
     CommonModule,
     // RouterOutlet, 
-    GetBookingsComponent,
+    // GetBookingsComponent,
     GetConfirmedBookingsComponent,
     CalendarComponent,
     BookingFormComponent,
