@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnInit, Output, Input } from '@angular/core';
+import { Component, EventEmitter, OnInit, Output, Input, ViewChild } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule, FormArray } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Booking } from '../../models/booking.model';
@@ -7,6 +7,7 @@ import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-book
 import { ProductListComponent } from "../../services/product-list/product-list.component";
 import { BookingService } from '../../services/booking.service';
 import { HttpErrorResponse } from '@angular/common/http';
+import { AuthServiceService } from '../../services/auth.service';
 
 @Component({
   selector: 'app-booking-form',
@@ -24,13 +25,15 @@ export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
   @Output() newBooking = new EventEmitter<Booking>(); // Skickar bokningen till föräldern
 
+  // @ViewChild(GetConfirmedBookingsComponent) getConfirmedBookingsComponent!: GetConfirmedBookingsComponent;
   bookingForm!: FormGroup;
   isExpanded = false;
   errorMessage: string | null = null;
 
   constructor(
     private fb: FormBuilder, 
-    private bookingService: BookingService
+    private bookingService: BookingService,
+    private authService: AuthServiceService
   ) {}
 
   ngOnInit(): void {
@@ -49,6 +52,25 @@ export class BookingFormComponent implements OnInit {
   toggleForm() {
     this.isExpanded = !this.isExpanded;
     console.log(this.isExpanded);
+
+    if(this.isExpanded) {
+      const user = this.authService.getUser();
+      // console.log("User from localStorage");
+      if(user) {
+        this.bookingForm.patchValue({
+          firstname: user.firstname,
+          lastname: user.lastname,
+          email: user.email,
+          phone: user.phone,
+          address: user.address
+        })
+      } else {
+        console.log("No user data received");
+      }
+      // Här vill jag hämta alla bekräftade bokningar, detta för att spara api anrop.
+      // console.log("Calling getConfirmedBookingsForCalendar");
+      // this.getConfirmedBookingsForCalendar();
+    }
   }
 
   get products(): FormArray {
