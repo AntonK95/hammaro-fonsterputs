@@ -6,7 +6,7 @@
           <button (click)="openLoginDialog()">Logga in</button>
         </li>
         <li *ngIf="isLoggedIn()"> <!-- Visa om användaren är inloggad -->
-          <span>Välkommen!</span>
+          <span>Välkommen {{ user.firstname }}!</span>
           <button (click)="logout()">Logga ut</button>
         </li>
       </ul>

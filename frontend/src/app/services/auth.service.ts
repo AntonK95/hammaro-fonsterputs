@@ -9,22 +9,21 @@ import { tap } from 'rxjs';
 export class AuthServiceService {
   
   private apiUrl = 'http://localhost:3000/auth';
-  private userSubject = new BehaviorSubject<any>(null);
-  user$ = this.userSubject.asObservable(); // Detta får jag kolla om det behövs..
-
   constructor(private http: HttpClient) { }
 
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
-        this.userSubject.next(response.user);
+        console.log("Login response: ", response);
         localStorage.setItem('idToken', response.idToken);
+        localStorage.setItem("user", JSON.stringify(response.user));
       })
     );
   }
 
-  getUser(): Observable<any> {
-    return this.user$;
+  getUser(): any {
+    const userData = localStorage.getItem("user");
+    return userData ? JSON.parse(userData) : null;
   }
 
   getToken(): string | null {
@@ -33,6 +32,6 @@ export class AuthServiceService {
 
   logout(): void {
     localStorage.removeItem('idToken');
-    this.userSubject.next(null);
+    localStorage.removeItem('user');
   }
 }

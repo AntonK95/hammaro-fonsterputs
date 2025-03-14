@@ -13,6 +13,8 @@ import { MatDialog } from '@angular/material/dialog';
 })
 export class HeaderComponent {
 
+  user: any;
+
   constructor(
     public authService: AuthServiceService,
     public dialog: MatDialog
@@ -31,6 +33,10 @@ export class HeaderComponent {
   }
 
   isLoggedIn(): boolean {
+    if(typeof localStorage === 'undefined') {
+      return false;
+    }
+    this.user = this.authService.getUser();
     return localStorage.getItem('idToken') !== null; 
   }
 
