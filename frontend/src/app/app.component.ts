@@ -11,6 +11,8 @@ import { LoginComponent } from './components/login/login.component';
 import { AuthServiceService } from './services/auth.service';
 import { HeaderComponent } from './components/header/header.component';
 import { MatDialogModule } from '@angular/material/dialog'
+import { LandingPageComponent } from "./pages/landing-page/landing-page.component";
+import { StaffPageComponent } from "./pages/staff-page/staff-page.component";
 
 @Component({
   selector: 'app-root',
@@ -24,6 +26,8 @@ import { MatDialogModule } from '@angular/material/dialog'
     // LoginComponent,
     HeaderComponent,
     MatDialogModule,
+    LandingPageComponent,
+    StaffPageComponent
 ],
   providers: [AuthServiceService],
   templateUrl: './app.component.html',
