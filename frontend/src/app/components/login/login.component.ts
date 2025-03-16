@@ -4,6 +4,7 @@ import { AuthServiceService } from '../../services/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { MatDialogRef } from '@angular/material/dialog';
+import { resolve } from 'path';
 
 @Component({
   selector: 'app-login',
@@ -35,11 +36,21 @@ export class LoginComponent implements OnInit {
 
   onSubmit() {
     if (this.loginForm.valid) {
+      console.log("Inloggningsuppgifter:", this.loginForm.value);
       this.authService.login(this.loginForm.value).subscribe(
         (response) => {
           console.log("Inloggad: ", response);
           console.log("Angivet värde: ", this.loginForm.value);
           this.dialogRef.close();
+          const userRole = response.user.role;
+
+          if(userRole === 'staff' || userRole === 'admin') {
+            console.log("Navigating to staffpage");
+            this.router.navigate(['/staff']);
+          } else {
+            console.log("Navigating to landingpage");
+            this.router.navigate(['/booking']);
+          }
           // Om vi är staff eller personal så skall vi navigera till deras sida, om kund stanna kvar.
           // this.router.navigate(['/']);
           this.loginForm.reset();
