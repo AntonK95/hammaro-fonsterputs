@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, BehaviorSubject } from 'rxjs';
 import { tap } from 'rxjs/operators';
 import { Booking } from '../models/booking.model';
@@ -29,4 +29,13 @@ export class BookingService {
   getConfirmedBookingsForCalendar(): Observable<any> {
     return this.http.get<any[]>(`${this.apiUrl}/calendar`);
   }
+
+  updateBooking(id: string, bookingData: Partial<Booking>): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${localStorage.getItem('idToken')}`  // Hämta token från localStorage
+    });
+  
+    return this.http.put(`${this.apiUrl}/${id}`, bookingData, { headers });
+  }
+  
 }

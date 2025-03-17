@@ -2,12 +2,12 @@ import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { AuthServiceService } from '../../services/auth.service';
 import { LoginComponent } from '../login/login.component';
-import { MatDialog } from '@angular/material/dialog';
+import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 
 
 @Component({
   selector: 'app-header',
-  imports: [CommonModule],
+  imports: [CommonModule, MatDialogModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.css'
 })

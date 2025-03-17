@@ -51,4 +51,35 @@ export class StaffPageComponent implements OnInit {
       console.log('Bokning med id ' + bookingId + ' hittades inte i pendingBookings');
     }
   }
+
+  confirmBookings(): void {
+    const placedBookings = this.bookings.filter(booking => booking.status === 'placed');
+  
+    placedBookings.forEach(booking => {
+      const updatedData: Partial<Booking> = {
+        status: 'confirmed',
+        confirmedDate: booking.placedDate,
+      };
+
+      if(!booking.id) {
+        console.error("Bokningen saknar id: ", booking);
+        return;
+      }
+  
+      this.bookingService.updateBooking(booking.id, updatedData)
+        .subscribe(
+          (updatedBooking) => {
+            console.log(`Bokning ${updatedBooking.id} bekräftad i databasen`);
+            booking.status = 'confirmed';
+            booking.confirmedDate = updatedBooking.confirmedDate;
+          },
+          (error) => {
+            console.error(`Fel vid uppdatering av bokning ${booking.id}:`, error);
+          }
+        );
+    });
+  
+    this.filterBookings();
+  }
+  
 }
