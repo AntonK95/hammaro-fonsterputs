@@ -65,42 +65,37 @@ export class CalendarComponent implements OnInit {
         start: new Date().toISOString().split('T')[0], // Förhindrar val av tidigare datum
       },
       events: this.getFilteredEvents(),
+      // När en bokning placeras i kalendern för första gången
       eventReceive: (eventInfo: any) => {
-        console.log(`Bokning lagd i kalendern:`, eventInfo.event);
-        console.log("eventInfo", eventInfo);
-        console.log("Alla nuvarande events i kalendern: ", this.calendarOptions.events);
-
-        // Hämta bokningens ID från extendedProps
         const bookingId = eventInfo.event.extendedProps.id;
-        console.log("Letar efter bokning med id: ", bookingId);
-
-        console.log("Nuvarande pendingBookings:", this.pendingBookings);
-      
-        // Hitta bokningen i pendingBookings
         const booking = this.pendingBookings.find(booking => booking.id === bookingId);
         if (booking) {
-          console.log("Bokning som hittades:", booking);
-
           booking.status = 'placed';
-          booking.placedDate = eventInfo.event.start.toISOString().split('T')[0];
-          console.log("Bokning slöppt på datum: ", booking.placedDate);
-          console.log("Bokningens nya status:", booking);
+          booking.placedDate = eventInfo.event.start.toISOString().split('T')[0]; 
           this.placedBookings.push(booking);
-          console.log("placedBookings efter placering: ", this.placedBookings);
-      
-          // Skapa en ny array för att trigga Angulars change detection
-          // this.pendingBookings = [...this.pendingBookings];
-      
-          this.pendingBookings = this.pendingBookings.filter(b => b.id !== bookingId); // Ta bort från pending
+          this.pendingBookings = this.pendingBookings.filter(b => b.id !== bookingId);
           this.bookingPlaced.emit(bookingId);
-
+          this.calendarOptions.events = this.getFilteredEvents();
+          console.log("placedBookings efter placering: ", this.placedBookings);
+        }
+      },
+      // När en bokning FLYTTAS i kalendern
+      eventDrop: (eventInfo: any) => {
+        console.log("Bokning flyttad:", eventInfo.event);
+        
+        const bookingId = eventInfo.event.extendedProps.id;
+        const booking = this.placedBookings.find(booking => booking.id === bookingId);
+    
+        if (booking) {
+          booking.placedDate = eventInfo.event.start.toISOString().split('T')[0]; 
+    
+          // Uppdatera kalendern med det nya datumet
           this.calendarOptions.events = this.getFilteredEvents();
           console.log("Uppdaterade pendingBookings efter placering:", this.pendingBookings);
         } else {
           console.log("Bokning kunde inte hittas i pendingBookings");
         }
-        // Uppdatera bokningens status i Firestore
-        // this.updateBookingStatus(eventInfo.event.title, "confirmed", eventInfo.event.start);
+        console.log("placedBookings efter flytt: ", this.placedBookings);
       },
       dateClick: (info) => this.handleDateClick(info),
       
