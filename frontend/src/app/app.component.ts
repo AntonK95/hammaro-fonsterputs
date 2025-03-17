@@ -18,22 +18,22 @@ import { StaffPageComponent } from "./pages/staff-page/staff-page.component";
   selector: 'app-root',
   imports: [
     CommonModule,
-    // RouterOutlet,
+    RouterOutlet,
     // GetBookingsComponent,
-    GetConfirmedBookingsComponent,
-    CalendarComponent,
-    BookingFormComponent,
+    // GetConfirmedBookingsComponent,
+    // CalendarComponent,
+    // BookingFormComponent,
     // LoginComponent,
     HeaderComponent,
     MatDialogModule,
-    LandingPageComponent,
-    StaffPageComponent
+    // LandingPageComponent,
+    // StaffPageComponent
 ],
   providers: [AuthServiceService],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })
-export class AppComponent implements OnInit {
+export class AppComponent {
   title = 'frontend';
   bookings: Booking[] = [];
   pendingBookings: Booking[] = [];
@@ -42,47 +42,47 @@ export class AppComponent implements OnInit {
   constructor( private bookingService: BookingService ) {}
 
 
-  ngOnInit(): void {
-    this.loadBookings();
-  }
+  // ngOnInit(): void {
+  //   this.loadBookings();
+  // }
 
-  handleBookingsList(bookings: Booking[]) {
-    this.bookings = bookings;
-  }
+  // handleBookingsList(bookings: Booking[]) {
+  //   this.bookings = bookings;
+  // }
 
-  onDateSelected(dateSelected: Date) {
-    console.log("Valt datum från kalender: ", dateSelected);
-  }
+  // onDateSelected(dateSelected: Date) {
+  //   console.log("Valt datum från kalender: ", dateSelected);
+  // }
 
-  loadBookings(): void {
-    this.bookingService.getAllBookings().subscribe(bookings => {
-      this.bookings = bookings;
-      this.filterBookings();
-    });
-  }
+  // loadBookings(): void {
+  //   this.bookingService.getAllBookings().subscribe(bookings => {
+  //     this.bookings = bookings;
+  //     this.filterBookings();
+  //   });
+  // }
 
-  filterBookings() {
-    this.confirmedBookings = this.bookings.filter(booking => booking.status === 'confirmed');
-    this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
-    console.log("Bekräftade bokningar: ", this.confirmedBookings);
-    console.log("Pending bokningar: ", this.pendingBookings);
-  }
+  // filterBookings() {
+  //   this.confirmedBookings = this.bookings.filter(booking => booking.status === 'confirmed');
+  //   this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
+  //   console.log("Bekräftade bokningar: ", this.confirmedBookings);
+  //   console.log("Pending bokningar: ", this.pendingBookings);
+  // }
 
-  handleNewBooking(booking: Booking) {
-    console.log("Ny bokning mottagen: ", booking);
-    this.bookings.push(booking);
-    this.filterBookings(); // Filtrera om efter att en ny bokning lagts till
-  }
+  // handleNewBooking(booking: Booking) {
+  //   console.log("Ny bokning mottagen: ", booking);
+  //   this.bookings.push(booking);
+  //   this.filterBookings(); // Filtrera om efter att en ny bokning lagts till
+  // }
 
-  // Hantera eventet när en bokning placeras i kalendern
-  onBookingPlaced(bookingId: string) {
-    const booking = this.bookings.find(b => b.id === bookingId);
-    if (booking) {
-      booking.status = 'placed'; // Ändra statusen till "placed"
-      this.filterBookings(); // Filtrera om bokningarna
-      console.log("Boknin placerad i kalendern: ", booking);
-    } else {
-      console.log("Bokning med id" + bookingId + "hittades inte i pendingBookings");
-    }
-  }
+  // // Hantera eventet när en bokning placeras i kalendern
+  // onBookingPlaced(bookingId: string) {
+  //   const booking = this.bookings.find(b => b.id === bookingId);
+  //   if (booking) {
+  //     booking.status = 'placed'; // Ändra statusen till "placed"
+  //     this.filterBookings(); // Filtrera om bokningarna
+  //     console.log("Boknin placerad i kalendern: ", booking);
+  //   } else {
+  //     console.log("Bokning med id" + bookingId + "hittades inte i pendingBookings");
+  //   }
+  // }
 }

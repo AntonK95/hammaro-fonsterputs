@@ -24,20 +24,22 @@ export class CalendarComponent implements OnInit {
   @Output() bookingPlaced = new EventEmitter<string>();
   // pendingBookings: any[] = [];
   calendarOptions!: CalendarOptions;
+  placedBookings: Booking[] = [];
 
   constructor(@Inject(PLATFORM_ID) private platformID: Object, private bookingService: BookingService) {}
 
   ngOnInit(): void {
-    console.log("Alla bokningar: ", this.bookings);
-    console.log("pendingBookings till calendern: ", this.pendingBookings)
-    const filteredEvents = this.getFilteredEvents();
-    console.log("Filtrerade bokningar för kalendern: ", filteredEvents);
+    // console.log("Alla bokningar: ", this.bookings);
+    // console.log("pendingBookings till calendern: ", this.pendingBookings)
+    // const filteredEvents = this.getFilteredEvents();
+    // console.log("Filtrerade bokningar för kalendern: ", filteredEvents);
   
 
     // Konfigurera kalendern
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
+      timeZone: 'Europe/Stockholm',
       firstDay: 1,
       headerToolbar: {
         left: 'prev,next today',
@@ -66,6 +68,7 @@ export class CalendarComponent implements OnInit {
       eventReceive: (eventInfo: any) => {
         console.log(`Bokning lagd i kalendern:`, eventInfo.event);
         console.log("eventInfo", eventInfo);
+        console.log("Alla nuvarande events i kalendern: ", this.calendarOptions.events);
 
         // Hämta bokningens ID från extendedProps
         const bookingId = eventInfo.event.extendedProps.id;
@@ -79,14 +82,19 @@ export class CalendarComponent implements OnInit {
           console.log("Bokning som hittades:", booking);
 
           booking.status = 'placed';
-
+          booking.placedDate = eventInfo.event.start.toISOString().split('T')[0];
+          console.log("Bokning slöppt på datum: ", booking.placedDate);
           console.log("Bokningens nya status:", booking);
+          this.placedBookings.push(booking);
+          console.log("placedBookings efter placering: ", this.placedBookings);
       
           // Skapa en ny array för att trigga Angulars change detection
-          this.pendingBookings = [...this.pendingBookings];
+          // this.pendingBookings = [...this.pendingBookings];
       
+          this.pendingBookings = this.pendingBookings.filter(b => b.id !== bookingId); // Ta bort från pending
           this.bookingPlaced.emit(bookingId);
 
+          this.calendarOptions.events = this.getFilteredEvents();
           console.log("Uppdaterade pendingBookings efter placering:", this.pendingBookings);
         } else {
           console.log("Bokning kunde inte hittas i pendingBookings");
@@ -103,22 +111,35 @@ export class CalendarComponent implements OnInit {
       this.enableDraggable();
     }
   }
+  ngAfterViewInit() {
+    this.enableDraggable();
+  }
 
   getFilteredEvents() {
     console.log("Bokningar innan filtrering: ", this.bookings);
     const events = this.bookings
-    .filter(booking => booking.confirmedDate)
+    .filter(booking => booking.confirmedDate || booking.status === 'placed')
     .map(booking => ({
       title: booking.address || 'Titel saknas',
-      start: booking.confirmedDate || '',
+      start: booking.confirmedDate || booking.placedDate || '',
       extendedProps: {
         email: booking.email,
         phone: booking.phone,
         id: booking.id
       }
     }));
+        // Mappa placerade bokningar till evenemang
+        const placedEvents = this.placedBookings.map(booking => ({
+          title: booking.address || 'Titel saknas',
+          start: booking.placedDate || '',
+          extendedProps: {
+            email: booking.email,
+            phone: booking.phone,
+            id: booking.id
+          }
+        }));
     console.log("Skapade kalenderhändelser: ", events);
-    return events;
+    return [...events, ...placedEvents];
   }
 
   handleDateClick(info: any) {
@@ -132,6 +153,7 @@ export class CalendarComponent implements OnInit {
 
   enableDraggable() {
     let draggableEl = document.getElementById('external-events');
+    console.log("enableDraggable", draggableEl);
 
     if (draggableEl) {
       new Draggable(draggableEl, {
@@ -160,10 +182,11 @@ export class CalendarComponent implements OnInit {
   ngOnChanges(changes: SimpleChanges) {
 
     if(changes['pendingBookings']) {
-      console.log("pendingBookings uppdaterat i calendar.component:", this.pendingBookings)
+      console.log("pendingBookings uppdaterat i calendar.component:", this.pendingBookings);
     }
     if(changes['bookings']) {
       console.log("bookings uppdaterat i calendar.component:", this.bookings)
+      this.calendarOptions.events = this.getFilteredEvents();
     }
   }
 }
