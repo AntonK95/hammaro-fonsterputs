@@ -27,6 +27,7 @@ export class BookingCalendarComponent implements OnInit {
     this.calendarOptions = {
       plugins: [dayGridPlugin, interactionPlugin],
       initialView: 'dayGridMonth',
+      timeZone: 'Europe/Stockholm',
       firstDay: 1,
       selectable: true,
       selectMirror: true,

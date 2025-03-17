@@ -38,6 +38,7 @@ export class AppComponent {
   bookings: Booking[] = [];
   pendingBookings: Booking[] = [];
   confirmedBookings: Booking[] = [];
+  blockedDates: string[] = [];
 
   constructor( private bookingService: BookingService ) {}
 
