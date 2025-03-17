@@ -1,1 +1,5 @@
 <p>landing-page works!</p>
+<app-booking-form 
+  [confirmedBookings]="confirmedBookings" 
+  (newBooking)="handleNewBooking($event)">
+</app-booking-form>
