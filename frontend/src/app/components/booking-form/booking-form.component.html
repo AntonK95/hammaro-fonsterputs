@@ -1,37 +1,61 @@
-
 <div class="booking-container">
-    <h2>Boka tjänst</h2>
-    <button class="toggle-form-btn" (click)="toggleForm()">
-        {{ isExpanded ? 'Stäng bokningsformulär' : 'Öppna bokningsformuär'}}
+    <h2>Boka tid för fönsterputs</h2>
+    <button mat-raised-button color="primary" class="toggle-form-btn" (click)="toggleForm()">
+        {{ isExpanded ? 'Stäng bokningsformulär' : 'Öppna bokningsformulär'}}
     </button>
     <section class="form-container" [ngClass]="{'expanded' : isExpanded }">
+  
+      <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+        <mat-form-field appearance="outline">
+          <mat-label>Förnamn</mat-label>
+          <input matInput type="text" formControlName="firstname" required />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>Efternamn</mat-label>
+          <input matInput type="text" formControlName="lastname" required />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>E-post</mat-label>
+          <input matInput type="email" formControlName="email" required />
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>Telefon</mat-label>
+          <input matInput type="text" formControlName="phone" required />
+        </mat-form-field>
+        <div formGroupName="address">
+            <mat-form-field appearance="outline">
+                <mat-label>Gatuadress</mat-label>
+                <input matInput type="text" formControlName="street" required />
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+                <mat-label>Postnummer</mat-label>
+                <input matInput type="text" formControlName="postalCode" required />
+            </mat-form-field>
+            
+            <mat-form-field appearance="outline">
+                <mat-label>Ort</mat-label>
+                <input matInput type="text" formControlName="city" required />
+            </mat-form-field>
+        </div>
+  
+        <app-get-confirmed-bookings #confirmedBookings></app-get-confirmed-bookings>
+        <app-booking-calendar [confirmedBookings]="confirmedBookings.confirmedBookings" (dateSelected)="onDateSelected($event)"></app-booking-calendar>
+  
+        <app-product-list (selectedProduct)="onProductSelected($event)"></app-product-list>
 
-
-        <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
-            <label>Förnamn</label>
-            <input type="text" formControlName="firstname" required />
-            
-            <label>Efternamn</label>
-            <input type="text" formControlName="lastname" required />
-            
-            <label>E-post</label>
-            <input type="email" formControlName="email" required />
-            
-            <label>Telefon</label>
-            <input type="text" formControlName="phone" required />
-            
-            <label>Address</label>
-            <input type="text" formControlName="address" required />
-            
-            <app-get-confirmed-bookings #confirmedBookings></app-get-confirmed-bookings>
-            <app-booking-calendar [confirmedBookings]="confirmedBookings.confirmedBookings" (dateSelected)="onDateSelected($event)"></app-booking-calendar>
-            <!-- <p>Valt datum: {{ bookingForm.value.date }}</p> -->
-            <app-product-list (selectedProduct)="onProductSelected($event)"></app-product-list>
-    <button type="submit" [disabled]="bookingForm.invalid">Boka</button>
-    </form>
-    <div *ngIf="errorMessage" class="error-message">
+        <label for="notes">Anteckningar</label>
+        <textarea id="notes" formControlName="notes" placeholder="Skriv eventuell kommentar här"></textarea>
+  
+        <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">Boka</button>
+      </form>
+  
+      <div *ngIf="errorMessage" class="error-message">
         {{ errorMessage }}
-    </div>
+      </div>
     </section>
   </div>
   

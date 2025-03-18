@@ -136,7 +136,7 @@ export class CalendarComponent implements OnInit {
     const events = this.bookings
       .filter(booking => booking.confirmedDate)
       .map(booking => ({
-        title: booking.address || 'Titel saknas',
+        title: booking.address.street || 'Titel saknas',
         start: booking.confirmedDate || booking.placedDate || '',
         extendedProps: {
           email: booking.email,
@@ -146,7 +146,7 @@ export class CalendarComponent implements OnInit {
       }));
     // Mappa placerade bokningar till evenemang
     const placedEvents = this.placedBookings.map(booking => ({
-      title: booking.address || 'Titel saknas',
+      title: booking.address.street || 'Titel saknas',
       start: booking.placedDate || '',
       extendedProps: {
         email: booking.email,
