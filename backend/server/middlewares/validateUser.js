@@ -11,7 +11,7 @@ const validateUser = [
       .matches(/[a-z]/).withMessage('Lösenordet måste innehålla minst en liten bokstav')
       .matches(/\d/).withMessage('Lösenordet måste innehålla minst en siffra')
       .matches(/[@$!%*?&]/).withMessage('Lösenordet måste innehålla minst ett specialtecken'),
-    body('phone').matches(/^(\+46|0)[1-9][0-9]{6,11}$/).withMessage('Ogiltigt telefonnummer'),
+    body('phone').matches(/^(\+46|0)[1-9][0-9\s-]{6,11}$/).withMessage('Ogiltigt telefonnummer'),
   ];
 
   export default validateUser;

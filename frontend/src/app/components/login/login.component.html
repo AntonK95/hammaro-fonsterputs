@@ -20,7 +20,7 @@
 
       <button mat-raised-button color="primary" type="submit">Logga in</button>
     </form>
-    <p class="switch-text">
+    <p class="no-account-text">
       Har du inget konto? 
       <button mat-button (click)="toggleMode()">Registrera dig</button>
     </p>
@@ -29,24 +29,36 @@
   <!-- Registrera -->
   <div class="signup" [ngClass]="{ 'active' : !isLoginMode}">
     <form [formGroup]="registerForm" (ngSubmit)="onRegister()">
-      <h2 class="register-title">Registrera</h2>
+      <h2 class="register-title" (click)="toggleMode()">Registrera</h2>
 
       <mat-form-field appearance="outline" class="custom-input">
         <mat-label>Förnamn</mat-label>
         <input class="signup-input" matInput formControlName="firstname" required>
       </mat-form-field>
+
       <mat-form-field appearance="outline" class="custom-input">
         <mat-label>Efternamn</mat-label>
         <input class="signup-input" matInput formControlName="lastname" required>
       </mat-form-field>
+
       <mat-form-field appearance="outline" class="custom-input">
         <mat-label>Adress</mat-label>
-        <input class="signup-input" matInput formControlName="address" required>
+        <input class="signup-input" matInput formControlName="street" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Postnummer</mat-label>
+        <input matInput type="text" formControlName="postalCode" required>
+      </mat-form-field>
+      
+      <mat-form-field appearance="outline">
+        <mat-label>Ort</mat-label>
+        <input matInput formControlName="city" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="custom-input">
         <mat-label>E-post</mat-label>
-        <input class="signup-input" matInput type="email" formControlName="email" required>
+        <input class="signup-input" placeholder="mail@exempel.se" matInput type="email" formControlName="email" required>
       </mat-form-field>
 
       <mat-form-field appearance="outline" class="custom-input">
@@ -61,10 +73,22 @@
           <mat-icon>{{ hidePassword ? 'visibility_off' : 'visibility' }}</mat-icon>
         </button>
       </mat-form-field>
+      <section class="radio-section">
+        <label>
+          <input type="radio" formControlName="type" value="private"> Privatperson
+        </label>
+        <label>
+          <input type="radio" formControlName="type" value="company"> Företag
+        </label>
+      </section>
+
+      <div *ngIf="errorMessage" class="error-message">
+        {{ errorMessage }}
+      </div>
 
       <button class="register-btn" mat-raised-button type="submit">Registrera</button>
     </form>
-    <p class="switch-text signup-swith-text">
+    <p class="switch-text signup-switch-text">
       Har du redan ett konto? 
       <button class="signup-login-btn" mat-button (click)="toggleMode()">Logga in</button>
     </p>

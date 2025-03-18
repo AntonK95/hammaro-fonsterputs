@@ -1,6 +1,6 @@
 .form-container {
-  width: 400px;
-  height: 522px;
+  max-width: 400px;
+  height: 550px;
   background: rgba(255, 255, 255, 0.1);
   border-radius: 10px;
   box-shadow: 5px 20px 50px rgba(0, 0, 0, 0.5);
@@ -19,7 +19,7 @@
   top: 0;
   left: 0;
   transition: all 0.8s ease-in-out;
-  margin: auto;
+  margin: 5rem 0 0 0;
 }
 
 .login-title {
@@ -36,6 +36,9 @@
   opacity: 0;
 }
 
+.no-account-text {
+  color: var(--dark-blue);
+}
 
 /* Signup styling nedan */
 .signup {
@@ -70,12 +73,22 @@
   background-color: white;
 }
 
+.radio-section {
+  color: white;
+}
 
+.error-message {
+  color: var(--alert-red);
+  font-weight: bold;
+  margin-top: 10px;
+}
 
 /* Textstil */
 .register-title {
   color: white;
   margin-bottom: 20px;
+  font-size: 1.2rem;
+  cursor: pointer;
 }
 
 .mat-form-field {
