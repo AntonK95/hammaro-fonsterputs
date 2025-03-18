@@ -9,6 +9,7 @@ import { tap } from 'rxjs';
 export class AuthServiceService {
   
   private apiUrl = 'http://localhost:3000/auth';
+  private regUserApiUrl = 'http://localhost:3000';
   constructor(private http: HttpClient) { }
 
   login(credentials: { email: string; password: string }): Observable<any> {
@@ -17,6 +18,16 @@ export class AuthServiceService {
         console.log("Login response: ", response);
         localStorage.setItem('idToken', response.idToken);
         localStorage.setItem("user", JSON.stringify(response.user));
+      })
+    );
+  }
+
+  register(userData: any): Observable<any> {
+    return this.http.post<any>(`${this.regUserApiUrl}/users/register`, userData).pipe(
+      tap(response => {
+        console.log("Registreringssvar: ", response);
+        // localStorage.setItem('idToken', response.idToken);
+        // localStorage.setItem("user", JSON.stringify(response.user));
       })
     );
   }

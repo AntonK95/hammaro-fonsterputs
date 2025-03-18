@@ -95,10 +95,14 @@ router.post('/', authenticate, async (req, res) => {
     const lastname = userInfo.lastname || req.body.lastname;
     const email = userInfo.email || req.body.email;
     const phone = userInfo.phone || req.body.phone;
-    const address = userInfo.address || req.body.address;
+    const address = userInfo.address || {
+      street: req.body.address.street,
+      postalCode: req.body.address.postalCode,
+      city: req.body.address.city
+    };
 
     // Kontrollera att vi har alla nödvändiga fält
-    if (!firstname || !lastname || !email || !phone || !address) {
+    if (!firstname || !lastname || !email || !phone || !address.street || !address.postalCode || !address.city) {
       console.error("userInfo: ", userInfo, { firstname, lastname, email, phone, address });
       return res.status(400).json({ error: 'Alla kontaktuppgifter måste vara ifyllda' });
     }

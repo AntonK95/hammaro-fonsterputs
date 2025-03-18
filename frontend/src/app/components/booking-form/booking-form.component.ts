@@ -8,6 +8,8 @@ import { ProductListComponent } from "../../services/product-list/product-list.c
 import { BookingService } from '../../services/booking.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServiceService } from '../../services/auth.service';
+import { MatFormField } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-booking-form',
@@ -18,7 +20,9 @@ import { AuthServiceService } from '../../services/auth.service';
             CommonModule, 
             BookingCalendarComponent, 
             GetConfirmedBookingsComponent, 
-            ProductListComponent
+            ProductListComponent,
+            MatFormField,
+            MatInputModule
           ],
 })
 export class BookingFormComponent implements OnInit {
@@ -42,9 +46,14 @@ export class BookingFormComponent implements OnInit {
       lastname: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],
       phone: ['', Validators.required],
-      address: ['', Validators.required],
+      address: this.fb.group({
+        street: ['', Validators.required],
+        postalCode: ['', Validators.required],
+        city: ['', Validators.required]
+      }),
       date: ['', Validators.required], // Datum väljs manuellt
       products: this.fb.array([], Validators.required), // Produktval
+      notes: [''],
     });
     console.log("Confirmed bookings: ", this.confirmedBookings);
   }

@@ -19,7 +19,8 @@
         <p>{{ booking.customerId }}</p>
         <p>{{ booking.firstname || 'Gäst' }}</p>
         <p>{{ booking.lastname || '' }}</p>
-        <p>{{ booking.address }}</p>
+        <p>{{ booking.address.street }}</p>
+        <p>{{ booking.address.postalCode }} {{ booking.address.city }}</p>
         <p>{{ booking.createdAt }}</p>
         <p>{{ booking.email }}</p> 
         <p>Önskat datum: {{ booking.requestedDate }}</p>

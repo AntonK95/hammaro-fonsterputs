@@ -47,15 +47,21 @@ router.post('/register', validateUser, async (req, res) => {
     return res.status(400).json({ errors: errors.array()});
   }
   try {
-    const { email, password, firstname, lastname, phone, address, type } = req.body;
+    const { email, password, firstname, lastname, phone, street, postalCode, city, type } = req.body;
     
     // Kanske inte behöver denna if sats då vi nu har validateUSer
-    if (!email || !password || !firstname || !lastname || !phone || !address || !type) {
+    if (!email || !password || !firstname || !lastname || !phone || !street || !postalCode || !city || !type) {
       return res.status(400).json({ error: 'Alla fält måste fyllas i' });
     }
 
     // Skapa användaren i Firebase Authentication
     const userRecord = await getAuth().createUser({ email, password });
+
+    const address = {
+      street,
+      postalCode,
+      city
+    }
 
     const userData = {
       email,

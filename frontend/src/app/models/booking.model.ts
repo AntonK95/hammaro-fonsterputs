@@ -6,7 +6,11 @@ export interface Booking {
   lastname: string;
   email: string;
   phone: string;
-  address: string;
+  address: {
+    street: string;
+    postalCode: string;
+    city: string;
+  };
   customerId?: string | null; // Kan vara null om ingen kund är inloggad
   requestedDate: string; // YYYY-MM-DD eller ISO-format
   confirmedDate?: string | null; // Null tills det godkänns
