@@ -1,0 +1,36 @@
+
+/* <div class="product-list">
+    <div *ngFor="let product of products" class="product-card">
+      <p class="poduct-desc">{{ product.description }}</p>
+      <label class="quantity" for="quantity">Antal fönster:</label>
+      <input class="input" type="number" id="quantity" min="1" [value]="1" #quantityInput>
+      <button class="select-btn" type="button" (click)="selectProduct(product, + quantityInput.value)">Välj</button>
+    </div>
+</div> */
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 10px;
+}
+
+.product-card {
+    display: flex;
+    flex-direction: column;
+    height: 150px;
+    width: 150px;
+}
+
+.divider {
+    margin-top: auto;
+}
+
+.pruduct-desc {
+    font-family: 'roboto', sans-serif;
+    
+}
+
+.label {
+    margin-top: auto;
+    margin-bottom: 0;
+}
