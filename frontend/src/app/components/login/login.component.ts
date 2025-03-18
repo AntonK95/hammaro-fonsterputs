@@ -24,13 +24,16 @@ import { MatButtonModule } from '@angular/material/button';
 })
 export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
+  registerForm!: FormGroup;
   errorMessage: string | null = null;
+  isLoginMode: boolean = true;
+  hidePassword: boolean = true;
 
-    hide = signal(true);
-    clickEvent(event: MouseEvent) {
-      this.hide.set(!this.hide());
-      event.stopPropagation();
-    }
+  // hide = signal(true);
+  // clickEvent(event: MouseEvent) {
+  //   this.hide.set(!this.hide());
+  //     event.stopPropagation();
+  //   }
 
   constructor(
     private fb: FormBuilder,
@@ -45,8 +48,28 @@ export class LoginComponent implements OnInit {
       email: ['', [Validators.required, Validators.email]],
       password: ['', Validators.required]
     });
+    this.registerForm = this.fb.group({
+      firstname: ['', Validators.required],
+      lastname: ['', Validators.required],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', Validators.required],
+      address: ['', Validators.required],
+      password: ['', Validators.required]
+    });
   }
 
+  toggleMode() {
+    this.isLoginMode = !this.isLoginMode;
+    console.log("toggleMode: ", this.isLoginMode);
+  }
+
+  togglePasswordVisibility() {
+    this.hidePassword = !this.hidePassword;
+  }
+
+  onRegister() {
+    console.log("Registreringsinformation: ", this.registerForm.value);
+    }
 
   onSubmit() {
     if (this.loginForm.valid) {
