@@ -13,6 +13,7 @@ import { HeaderComponent } from './components/header/header.component';
 import { MatDialogModule } from '@angular/material/dialog'
 import { LandingPageComponent } from "./pages/landing-page/landing-page.component";
 import { StaffPageComponent } from "./pages/staff-page/staff-page.component";
+import { FbComponent } from './components/fb/fb.component';
 
 @Component({
   selector: 'app-root',
@@ -26,6 +27,7 @@ import { StaffPageComponent } from "./pages/staff-page/staff-page.component";
     // LoginComponent,
     HeaderComponent,
     MatDialogModule,
+    FbComponent
     // LandingPageComponent,
     // StaffPageComponent
 ],
@@ -42,48 +44,4 @@ export class AppComponent {
 
   constructor( private bookingService: BookingService ) {}
 
-
-  // ngOnInit(): void {
-  //   this.loadBookings();
-  // }
-
-  // handleBookingsList(bookings: Booking[]) {
-  //   this.bookings = bookings;
-  // }
-
-  // onDateSelected(dateSelected: Date) {
-  //   console.log("Valt datum från kalender: ", dateSelected);
-  // }
-
-  // loadBookings(): void {
-  //   this.bookingService.getAllBookings().subscribe(bookings => {
-  //     this.bookings = bookings;
-  //     this.filterBookings();
-  //   });
-  // }
-
-  // filterBookings() {
-  //   this.confirmedBookings = this.bookings.filter(booking => booking.status === 'confirmed');
-  //   this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
-  //   console.log("Bekräftade bokningar: ", this.confirmedBookings);
-  //   console.log("Pending bokningar: ", this.pendingBookings);
-  // }
-
-  // handleNewBooking(booking: Booking) {
-  //   console.log("Ny bokning mottagen: ", booking);
-  //   this.bookings.push(booking);
-  //   this.filterBookings(); // Filtrera om efter att en ny bokning lagts till
-  // }
-
-  // // Hantera eventet när en bokning placeras i kalendern
-  // onBookingPlaced(bookingId: string) {
-  //   const booking = this.bookings.find(b => b.id === bookingId);
-  //   if (booking) {
-  //     booking.status = 'placed'; // Ändra statusen till "placed"
-  //     this.filterBookings(); // Filtrera om bokningarna
-  //     console.log("Boknin placerad i kalendern: ", booking);
-  //   } else {
-  //     console.log("Bokning med id" + bookingId + "hittades inte i pendingBookings");
-  //   }
-  // }
 }

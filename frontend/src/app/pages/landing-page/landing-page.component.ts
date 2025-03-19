@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { Booking } from '../../models/booking.model';
 import { BookingFormComponent } from "../../components/booking-form/booking-form.component";
+import { FbComponent } from '../../components/fb/fb.component';
 
 @Component({
   selector: 'app-landing-page',
-  imports: [BookingFormComponent],
+  imports: [BookingFormComponent, FbComponent],
   templateUrl: './landing-page.component.html',
   styleUrl: './landing-page.component.css'
 })

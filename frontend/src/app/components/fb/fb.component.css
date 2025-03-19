@@ -1,0 +1,10 @@
+.fb-page {
+    width: 100%; /* Gör den responsiv */
+    height: auto; /* Låt höjden anpassa sig */
+    max-width: 600px; /* Maximala bredden */
+    margin: auto; /* Centrerar sidan */
+    border-radius: 8px; /* Rundade hörn */
+    overflow: hidden; /* Döljer överflödig del */
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1); /* Skugga för djup */
+    background-color: #fff; /* Vit bakgrund */
+}
