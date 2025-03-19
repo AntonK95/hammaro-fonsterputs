@@ -50,7 +50,7 @@
         <label for="notes">Anteckningar</label>
         <textarea class="notes-textarea" id="notes" formControlName="notes" placeholder="Skriv eventuell kommentar här"></textarea>
   
-        <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">Boka</button>
+        <button class="submit-btn" mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">Boka</button>
       </form>
   
       <div *ngIf="errorMessage" class="error-message">
