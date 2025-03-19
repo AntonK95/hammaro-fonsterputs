@@ -27,7 +27,7 @@ import { FbComponent } from './components/fb/fb.component';
     // LoginComponent,
     HeaderComponent,
     MatDialogModule,
-    FbComponent
+    // FbComponent
     // LandingPageComponent,
     // StaffPageComponent
 ],

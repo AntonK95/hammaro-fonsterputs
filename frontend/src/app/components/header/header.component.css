@@ -1,11 +1,21 @@
 .nav-wrapper {
-    background-color: #f5f1f1;
-    color: #fff;
-    padding: 10px;
+  background-color: var(--dark-blue);
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  height: 8rem;
   }
   
   .nav-wrapper .brand-logo {
     font-size: 1.5em;
+    color: white;
+    text-decoration: none;
+  }
+
+  .brand-logo {
+    height: 50px;
+    width: 50px;
   }
   
   .nav-wrapper ul {
@@ -24,12 +34,19 @@
     text-decoration: none;
   }
 
-  button {
+  .loginBtn {
     padding: .5rem 1rem;
-    background-color: var(--dark-blue);
+    background-color: white;
     border: none;
     border-radius: 8px;
-    color: white;
+    color: var(--dark-blue);
     font-size: medium;
     font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .loginBtn:hover {
+    scale: 1.2;
+    font-weight: 600;
+    cursor: pointer;
   }
