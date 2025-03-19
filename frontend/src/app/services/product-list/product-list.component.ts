@@ -13,6 +13,7 @@ export class ProductListComponent implements OnInit{
   @Output() selectedProduct = new EventEmitter<any[]>();
 
   products: any[] = [];
+  selectedProducts: { [key: string]: { quantity: number } } = {};
 
   constructor(private productService: ProductService) {}
 
@@ -27,8 +28,43 @@ export class ProductListComponent implements OnInit{
       }
     });
   }
-  selectProduct(product: any, quantity: number): void {
-    this.selectedProduct.emit({...product, quantity });
-    console.log("Vald produkt: ", product);
+
+  toggleProductSelection(product: any, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    if (isChecked) {
+      // Lägg till produkten med standardantal 1
+      this.selectedProducts[product.id] = { quantity: 1 };
+    } else {
+      // Ta bort produkten om checkboxen avmarkeras
+      delete this.selectedProducts[product.id];
+    }
+    console.log("isChecked: ", isChecked);
+    this.emitSelectedProducts();
+  }
+
+  updateQuantity(product: any, event: Event): void {
+    const quantity = +((event.target as HTMLInputElement).value);
+    if (this.selectedProducts[product.id]) {
+      this.selectedProducts[product.id].quantity = quantity;
+    }
+    console.log("Uppdaterad produkt i updateQuantity:", this.selectedProducts[product.id]);
+    this.emitSelectedProducts();
+  }
+
+  emitSelectedProducts(): void {
+    // Skicka markerade produkter med deras antal
+    const selected = Object.keys(this.selectedProducts).map(productId => {
+      const product = this.products.find(p => p.id === productId);
+      console.log("Produkt hittad i emitSelectedProducts:", product);
+      return { ...product, quantity: this.selectedProducts[productId].quantity };
+    });
+    this.selectedProduct.emit(selected);
+    console.log("Valda produkter: ", selected);
+  }
+
+  resetSelectedProducts(): void {
+    this.selectedProducts = {}; // Rensa alla valda produkter
+    this.emitSelectedProducts(); // Skicka en tom lista för att uppdatera föräldern
+    console.log("Valda produkter har återställts.");
   }
 }
