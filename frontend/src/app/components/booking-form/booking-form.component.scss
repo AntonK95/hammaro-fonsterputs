@@ -1,10 +1,10 @@
 .booking-container {
-    max-width: 400px;
+    max-width: 600px;
     margin: auto;
     padding: 20px;
     border: 1px solid #ccc;
     border-radius: 5px;
-    background-color: #f9f9f9;
+    background-color: white;
   }
   
   form {
@@ -21,9 +21,9 @@
     margin-top: 5px;
   }
   
-  button {
+  .submit-btn {
     width: 100%;
-    background: linear-gradient(135deg, #007bff, #00d4ff);
+    // background: linear-gradient(135deg, #007bff, #00d4ff);
     color: white;
     font-size: 16px;
     font-weight: bold;
@@ -37,61 +37,25 @@
     transition: transform 0.2s ease, box-shadow 0.3s ease;
   }
 
-  button:hover {
+  .submit-btn:hover {
     background: linear-gradient(135deg, #0056b3, #0088cc);
     transform: scale(1.05);
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
   }
+  .submit-btn:not(:active):hover {
+    background: #ccc;
+    scale: none;
+  }
 
-  button:active {
+  .submit-btn:active {
     transform: scale(0.98);
     box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
   }
   
-  button:disabled {
+  .submit-btn:disabled {
     background-color: #ccc;
     cursor: not-allowed;
   }
-    
-  /* .form-container {
-    max-height: 0;
-    opacity: 0;
-    transform: scaleY(0);
-    overflow: hidden;
-    transition: max-height 0.8s ease-in-out, 
-                opacity 0.5s ease-in-out, 
-                transform 0.5s ease-in-out;
-    padding: 0;
-  }
-  
-  .form-container.expanded {
-    max-height: 100%;
-    opacity: 1;
-    transform: scaleY(1);
-    padding: 15px;
-  }
-  
-  .toggle-form-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #007bff, #00d4ff);
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    border: none;
-    padding: 12px;
-    cursor: pointer;
-    text-align: center;
-    border-radius: 8px;
-    margin-bottom: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
-  }
-  
-  .toggle-form-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #0088cc);
-    transform: scale(1.05);
-    box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
-  } */
   
   @keyframes bounceDrop {
     0% {
@@ -125,37 +89,69 @@
   }
   
   .form-container.expanded {
-    max-height: 100%; /* Anpassa efter innehåll */
+    max-height: 100%; 
     opacity: 1;
     padding: 15px;
     animation: bounceDrop 0.7s cubic-bezier(0.25, 1.5, 0.5, 1);
   }
   
+  // .toggle-form-btn {
+  //   width: 100%;
+  //   background: linear-gradient(135deg, #007bff, #00d4ff);
+  //   color: white;
+  //   font-size: 16px;
+  //   font-weight: bold;
+  //   border: none;
+  //   padding: 12px;
+  //   cursor: pointer;
+  //   text-align: center;
+  //   border-radius: 8px;
+  //   margin-bottom: 10px;
+  //   box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
+  //   transition: transform 0.2s ease, box-shadow 0.3s ease;
+  // }
+  
+  // .toggle-form-btn:hover {
+  //   background: linear-gradient(135deg, #0056b3, #0088cc);
+  //   transform: scale(1.05);
+  //   box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
+  // }
+  
+  // .toggle-form-btn:active {
+  //   transform: scale(0.98);
+  //   box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+  // }
+
   .toggle-form-btn {
-    width: 100%;
-    background: linear-gradient(135deg, #007bff, #00d4ff);
-    color: white;
+    /* width: 90%; */
+    background: white;
+    color: black;
     font-size: 16px;
     font-weight: bold;
-    border: none;
+    border: 1px solid black;
     padding: 12px;
     cursor: pointer;
     text-align: center;
     border-radius: 8px;
     margin-bottom: 10px;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2);
-    transition: transform 0.2s ease, box-shadow 0.3s ease;
+    /* box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.2); */
+    transition: all 0.2s ease, box-shadow 0.3s ease;
   }
-  
   .toggle-form-btn:hover {
-    background: linear-gradient(135deg, #0056b3, #0088cc);
+    color: white;
+    background-color: var(--dark-blue);
     transform: scale(1.05);
     box-shadow: 0px 6px 15px rgba(0, 0, 0, 0.3);
   }
   
-  .toggle-form-btn:active {
-    transform: scale(0.98);
-    box-shadow: 0px 3px 8px rgba(0, 0, 0, 0.2);
+  .address-group {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   }
-  
+
+  .notes-textarea {
+    background-color: white;
+    height: 40px;
+    border-radius: 6px;
+  }
   

@@ -8,26 +8,27 @@ import { ProductListComponent } from "../../services/product-list/product-list.c
 import { BookingService } from '../../services/booking.service';
 import { HttpErrorResponse } from '@angular/common/http';
 import { AuthServiceService } from '../../services/auth.service';
-import { MatFormField } from '@angular/material/form-field';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 
 @Component({
   selector: 'app-booking-form',
   templateUrl: './booking-form.component.html',
-  styleUrls: ['./booking-form.component.css'],
+  styleUrls: ['./booking-form.component.scss'],
   standalone: true,
   imports: [ReactiveFormsModule, 
             CommonModule, 
             BookingCalendarComponent, 
             GetConfirmedBookingsComponent, 
             ProductListComponent,
-            MatFormField,
+            MatFormFieldModule,
             MatInputModule
           ],
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
   @Output() newBooking = new EventEmitter<Booking>(); // Skickar bokningen till föräldern
+  @ViewChild(ProductListComponent) productListComponent!: ProductListComponent;
 
   // @ViewChild(GetConfirmedBookingsComponent) getConfirmedBookingsComponent!: GetConfirmedBookingsComponent;
   bookingForm!: FormGroup;
@@ -86,15 +87,61 @@ export class BookingFormComponent implements OnInit {
     return this.bookingForm.get('products') as FormArray;
   }
   
-  onProductSelected(product: any): void {
-    this.products.push(this.fb.group({
-      serviceName: [product.serviceName],
-      price: [product.priceRange.min],
-      timePerUnit: [product.timePerUnit],
-      description: [product.description],
-      quantity: [product.quantity, Validators.required]
-    }));
+  // onProductSelected(product: any): void {
+  //   this.products.push(this.fb.group({
+  //     serviceName: [product.serviceName],
+  //     price: [product.priceRange.min],
+  //     timePerUnit: [product.timePerUnit],
+  //     description: [product.description],
+  //     quantity: [product.quantity, Validators.required]
+  //   }));
+  // }
+
+  onProductSelected(products: any[]): void {
+    console.log("Produkter mottagna i onProductSelected:", products);
+  
+    // Rensa befintliga produkter i formuläret
+    this.products.clear();
+  
+    // Lägg till de nya produkterna i formuläret
+    products.forEach(product => {
+      this.products.push(this.fb.group({
+        serviceName: [product.serviceName],
+        price: [product.price],
+        timePerUnit: [product.timePerUnit],
+        description: [product.description],
+        quantity: [product.quantity, Validators.required]
+      }));
+    });
+  
+    console.log("Produkter tillagda i bokningsformuläret:", this.products.value);
+    console.log("Formulärets giltighet:", this.bookingForm.valid);
   }
+
+  // onProductSelected(product: any): void {
+  //   console.log("Produkt mottagen i onProductSelected:", product);
+  
+  //   if (!product.priceRange || product.priceRange.min === undefined) {
+  //     console.error("Produkt saknar priceRange eller min-värde:", product);
+  //     return; // Avbryt om priceRange eller min saknas
+  //   }
+  
+  //   this.products.push(this.fb.group({
+  //     serviceName: [product.serviceName],
+  //     price: [product.priceRange.min],
+  //     timePerUnit: [product.timePerUnit],
+  //     description: [product.description],
+  //     quantity: [product.quantity, Validators.required]
+  //   }));
+  
+  //   console.log("Produkt tillagd i bokningsformuläret:", {
+  //     serviceName: product.serviceName,
+  //     price: product.priceRange.min,
+  //     timePerUnit: product.timePerUnit,
+  //     description: product.description,
+  //     quantity: product.quantity
+  //   });
+  // }
 
   onDateSelected(date: string) {
     this.bookingForm.patchValue({ date: date });
@@ -160,6 +207,7 @@ export class BookingFormComponent implements OnInit {
           this.newBooking.emit(response); // Skicka bokningen vidare
           console.log('Skickad bokning:', response);
           this.bookingForm.reset(); // Nollställ formuläret
+          this.productListComponent.resetSelectedProducts(); // Nollställ valda produkter
           this.errorMessage = null; // Rensa felmeddelandet
         },
         (error: HttpErrorResponse) => {

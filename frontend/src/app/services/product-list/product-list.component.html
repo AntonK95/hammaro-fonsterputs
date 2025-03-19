@@ -1,9 +1,24 @@
 
 <div class="product-list">
-    <div *ngFor="let product of products" class="product-card">
-      <p>{{ product.description }}</p>
-      <label for="quantity">Antal fönster:</label>
-      <input type="number" id="quantity" min="1" [value]="1" #quantityInput>
-      <button type="button" (click)="selectProduct(product, + quantityInput.value)">Välj</button>
+  <div *ngFor="let product of products" class="product-card">
+    <p class="product-desc">{{ product.description }}</p>
+    <div class="divider">
+      <label class="activate-checkbox">
+        <input  
+          type="checkbox" 
+          (change)="toggleProductSelection(product, $event)">
+        Välj
+      </label>
+      <div class="show-input" [class.visible]="selectedProducts[product.id]">
+        <label class="quantity" for="quantity-{{ product.id }}">Antal:</label>
+        <input 
+          class="input" 
+          type="number" 
+          id="quantity-{{ product.id }}" 
+          min="1" 
+          [value]="selectedProducts[product.id]?.quantity" 
+          (input)="updateQuantity(product, $event)">
+      </div>
     </div>
+  </div>
 </div>

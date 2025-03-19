@@ -5,7 +5,7 @@
     </button>
     <section class="form-container" [ngClass]="{'expanded' : isExpanded }">
   
-      <form [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
+      <form class="booking-form" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
         <mat-form-field appearance="outline">
           <mat-label>Förnamn</mat-label>
           <input matInput type="text" formControlName="firstname" required />
@@ -25,8 +25,8 @@
           <mat-label>Telefon</mat-label>
           <input matInput type="text" formControlName="phone" required />
         </mat-form-field>
-        <div formGroupName="address">
-            <mat-form-field appearance="outline">
+        <div formGroupName="address" class="address-group">
+            <mat-form-field appearance="outline" class="street">
                 <mat-label>Gatuadress</mat-label>
                 <input matInput type="text" formControlName="street" required />
             </mat-form-field>
@@ -48,9 +48,9 @@
         <app-product-list (selectedProduct)="onProductSelected($event)"></app-product-list>
 
         <label for="notes">Anteckningar</label>
-        <textarea id="notes" formControlName="notes" placeholder="Skriv eventuell kommentar här"></textarea>
+        <textarea class="notes-textarea" id="notes" formControlName="notes" placeholder="Skriv eventuell kommentar här"></textarea>
   
-        <button mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">Boka</button>
+        <button class="submit-btn" mat-raised-button color="primary" type="submit" [disabled]="bookingForm.invalid">Boka</button>
       </form>
   
       <div *ngIf="errorMessage" class="error-message">
