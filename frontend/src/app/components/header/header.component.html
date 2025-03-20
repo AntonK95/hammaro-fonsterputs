@@ -1,8 +1,8 @@
 <nav>
     <div class="nav-wrapper">
       
-      <a href="#" class="brand-logo"><img src="assets/transLogo.png" alt=""></a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
+      <a href="#" class="brand-logo"><img src="assets/transLogo.png" alt="Logotyp"></a>
+      <ul id="nav-mobile" class="align-self">
         <li *ngIf="!isLoggedIn()"> <!-- Visa om användaren inte är inloggad -->
           <button class="loginBtn" (click)="openLoginDialog()">Logga in</button>
         </li>

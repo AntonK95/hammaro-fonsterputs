@@ -1,0 +1,27 @@
+footer {
+    background-color: var(--dark-blue);
+    color: white;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+    font-weight: 400;
+    font-size: 16px;
+    
+    ul {
+        list-style-type: none;
+        padding: 20px;
+
+        li {
+            padding: 1px;
+        }
+    }
+
+    .footer-img {
+        max-width: 100%;
+        max-height: 80px;
+        min-width: 55px;
+        min-height: 55px;
+        object-fit: contain;
+    }
+}

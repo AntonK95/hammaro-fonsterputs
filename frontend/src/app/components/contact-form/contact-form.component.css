@@ -1,0 +1,36 @@
+.mat-mdc-card {
+    background-color: white;
+    padding: 15px;
+    gap: 15px;
+    max-width: 340px;
+    height: 500px;
+}
+
+mat-card-content {
+    display: flex;
+
+
+}
+.contact-form-btn {
+    padding: .5rem 1rem;
+    background-color: var(--dark-blue);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: medium;
+    font-weight: 500;
+    transition: all 0.3s;
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.3s;
+}
+.contact-form-btn:hover {
+    scale: 1.2;
+    font-weight: 600;
+}
+.contact-form-btn:disabled {
+    background-color: gray;
+    scale: none;
+    cursor: not-allowed;
+}
+

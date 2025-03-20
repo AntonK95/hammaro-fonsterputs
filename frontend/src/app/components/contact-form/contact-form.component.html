@@ -1,0 +1,25 @@
+<mat-card>
+    <mat-card-title>Kontaktformulär</mat-card-title>
+    <mat-card-content>
+      <form (ngSubmit)="onSubmit()" #contactForm="ngForm">
+        <mat-form-field appearance="outline">
+          <mat-label>Namn</mat-label>
+          <input matInput required name="name" [(ngModel)]="model.name">
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>E-post</mat-label>
+          <input matInput type="email" required name="email" [(ngModel)]="model.email">
+        </mat-form-field>
+  
+        <mat-form-field appearance="outline">
+          <mat-label>Meddelande</mat-label>
+          <textarea matInput required name="message" [(ngModel)]="model.message"></textarea>
+        </mat-form-field>
+  
+    </form>
+    </mat-card-content>
+        <button class="contact-form-btn" mat-raised-button type="submit" [disabled]="!contactForm.form.valid">Skicka</button>
+        <div *ngIf="responseMessage">{{ responseMessage }}</div>
+  </mat-card>
+  

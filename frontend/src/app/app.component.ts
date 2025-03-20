@@ -14,6 +14,7 @@ import { MatDialogModule } from '@angular/material/dialog'
 import { LandingPageComponent } from "./pages/landing-page/landing-page.component";
 import { StaffPageComponent } from "./pages/staff-page/staff-page.component";
 import { FbComponent } from './components/fb/fb.component';
+import { FooterComponent } from "./components/footer/footer.component";
 
 @Component({
   selector: 'app-root',
@@ -27,9 +28,8 @@ import { FbComponent } from './components/fb/fb.component';
     // LoginComponent,
     HeaderComponent,
     MatDialogModule,
-    // FbComponent
-    // LandingPageComponent,
-    // StaffPageComponent
+    // FbComponent,
+    FooterComponent
 ],
   providers: [AuthServiceService],
   templateUrl: './app.component.html',
