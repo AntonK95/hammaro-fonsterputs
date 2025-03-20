@@ -3,15 +3,10 @@
   <!-- <img src="https://scontent.xx.fbcdn.net/v/t39.30808-6/331674482_476579274559271_3395805377824426513_n.png?stp=dst-png_s526x296&_nc_cat=104&ccb=1-7&_nc_sid=4cb600&_nc_ohc=p0zeshBJr7QQ7kNvgG5Iza1&_nc_oc=Admzp6UTUyflKTkYRZED82vjUhESTuxKmzolhdcpOZoDYnFmquDRvMTGxu8YltDE-Xo&_nc_zt=23&_nc_ht=scontent.xx&edm=AFGbsqAEAAAA&_nc_gid=FI5NjubY7yXLNybZhK7HcA&oh=00_AYG1iG7PZAbjy9ZX45_Erac05uW9H1Da6kpU0YkDwrpKHw&oe=67E0BE4E"
   alt="Putsar fönster"
   class="hero-img"> -->
-</section>
-<main class="landing-page-wrapper">
-
-  <section class="about-section y mandatory-scroll-snapping">
-    <section class="image-wrapper">
+  <section class="about-section--hero y mandatory-scroll-snapping">
+    <figure class="image-wrapper">
       <img src="assets/Branschvinnare2022Transparant.png" alt="Branschvinnare 2022">
-      <img src="assets/Branschvinnare2023.png" alt="Branschvinnare 2023">
-    </section>
-    <h2>Om oss:</h2>
+    </figure>
     <section class="about-text">
       <p>Vi erbjuder fönsterputs åt både företag och privatpersoner.</p>
       <p>Vi utför även fasadtvätt och fastighetsservice.</p>
@@ -19,9 +14,17 @@
       <p>Företaget innehar F-skattsedel.</p>
       <p>För Företag och Kommuner Löpande avtal eller engångsuppdrag</p>
     </section>
+    <figure class="image-wrapper">
+      <img src="assets/Branschvinnare2023.png" alt="Branschvinnare 2023">
+    </figure>
   </section>
+</section>
 
-
+<main class="landing-page-wrapper">
+  <app-booking-form 
+    [confirmedBookings]="confirmedBookings" 
+    (newBooking)="handleNewBooking($event)">
+  </app-booking-form>
   <section class="services-section y mandatory-scroll-snapping">
     <h2>Vad vi erbjuder:</h2>
     <section class="services-section--inner">
@@ -77,10 +80,23 @@
       <a href="tel:+73-5051625">073 - 505 16 25</a>
     </section>
   </section>
-  <app-booking-form 
-    [confirmedBookings]="confirmedBookings" 
-    (newBooking)="handleNewBooking($event)">
-  </app-booking-form>
+
+  <section class="about-section y mandatory-scroll-snapping">
+    <section class="image-wrapper">
+      <img src="assets/Branschvinnare2022Transparant.png" alt="Branschvinnare 2022">
+      <img src="assets/Branschvinnare2023.png" alt="Branschvinnare 2023">
+    </section>
+    <h2>Om oss:</h2>
+    <section class="about-text">
+      <p>Vi erbjuder fönsterputs åt både företag och privatpersoner.</p>
+      <p>Vi utför även fasadtvätt och fastighetsservice.</p>
+      <p>Vårt arbetsområde är främst inom Hammarö Kommun.</p>
+      <p>Företaget innehar F-skattsedel.</p>
+      <p>För Företag och Kommuner Löpande avtal eller engångsuppdrag</p>
+    </section>
+  </section>
+
+
 
   <section class="contact-section y mandatory-scroll-snapping">
     <h2>Kontakta oss:</h2>

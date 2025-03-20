@@ -12,14 +12,16 @@
           <input matInput type="email" required name="email" [(ngModel)]="model.email">
         </mat-form-field>
   
-        <mat-form-field appearance="outline">
-          <mat-label>Meddelande</mat-label>
-          <textarea matInput required name="message" [(ngModel)]="model.message"></textarea>
-        </mat-form-field>
+        <!-- <mat-form-field appearance="outline"> -->
+        <section class="textarea-wrapper">
+            <mat-label>Meddelande</mat-label>
+            <textarea matInput required name="message" [(ngModel)]="model.message"></textarea>
+        </section>
+        <!-- </mat-form-field> -->
   
+        <div *ngIf="responseMessage">{{ responseMessage }}</div>
+        <button class="contact-form-btn" mat-raised-button type="submit" [disabled]="!contactForm.form.valid">Skicka</button>
     </form>
     </mat-card-content>
-        <button class="contact-form-btn" mat-raised-button type="submit" [disabled]="!contactForm.form.valid">Skicka</button>
-        <div *ngIf="responseMessage">{{ responseMessage }}</div>
   </mat-card>
   

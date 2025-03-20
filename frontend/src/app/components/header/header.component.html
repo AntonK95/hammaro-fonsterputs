@@ -3,10 +3,10 @@
       
       <a href="#" class="brand-logo"><img src="assets/transLogo.png" alt="Logotyp"></a>
       <ul id="nav-mobile" class="align-self">
-        <li *ngIf="!isLoggedIn()"> <!-- Visa om användaren inte är inloggad -->
+        <li *ngIf="!isUserLoggedIn"> <!-- Visa om användaren inte är inloggad -->
           <button class="loginBtn" (click)="openLoginDialog()">Logga in</button>
         </li>
-        <li *ngIf="isLoggedIn()"> <!-- Visa om användaren är inloggad -->
+        <li *ngIf="isUserLoggedIn"> <!-- Visa om användaren är inloggad -->
           <!-- <span>Välkommen {{ user.firstname }}!</span> -->
           <button class="loginBtn" (click)="logout()">Logga ut</button>
         </li>
