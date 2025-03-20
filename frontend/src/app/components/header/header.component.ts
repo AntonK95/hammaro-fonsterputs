@@ -13,12 +13,17 @@ import { MatDialog, MatDialogModule } from '@angular/material/dialog';
 })
 export class HeaderComponent {
 
+  isUserLoggedIn: boolean = false;
   user: any;
 
   constructor(
     public authService: AuthServiceService,
     public dialog: MatDialog
   ) {}
+
+  ngOnInit() {
+    this.checkLoginStatus();
+  }
 
 
   openLoginDialog(): void {
@@ -29,19 +34,22 @@ export class HeaderComponent {
 
     dialogRef.afterClosed().subscribe(result => {
       console.log('Login dialog closed');
+      this.checkLoginStatus();
     });
   }
 
-  isLoggedIn(): boolean {
+  checkLoginStatus(): boolean {
     if(typeof localStorage === 'undefined') {
-      return false;
-    }
+          return false;
+        }
     this.user = this.authService.getUser();
-    return localStorage.getItem('idToken') !== null; 
+    this.isUserLoggedIn = localStorage.getItem('idToken') !== null;
+    return this.isUserLoggedIn;
   }
 
   logout() {
     this.authService.logout();
+    this.checkLoginStatus();
   }
 
 }

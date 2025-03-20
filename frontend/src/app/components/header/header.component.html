@@ -1,13 +1,14 @@
 <nav>
     <div class="nav-wrapper">
-      <a href="#" class="brand-logo">Hammarö Fönsterputs</a>
-      <ul id="nav-mobile" class="right hide-on-med-and-down">
-        <li *ngIf="!isLoggedIn()"> <!-- Visa om användaren inte är inloggad -->
-          <button (click)="openLoginDialog()">Logga in</button>
+      
+      <a href="#" class="brand-logo"><img src="assets/transLogo.png" alt="Logotyp"></a>
+      <ul id="nav-mobile" class="align-self">
+        <li *ngIf="!isUserLoggedIn"> <!-- Visa om användaren inte är inloggad -->
+          <button class="loginBtn" (click)="openLoginDialog()">Logga in</button>
         </li>
-        <li *ngIf="isLoggedIn()"> <!-- Visa om användaren är inloggad -->
-          <span>Välkommen {{ user.firstname }}!</span>
-          <button (click)="logout()">Logga ut</button>
+        <li *ngIf="isUserLoggedIn"> <!-- Visa om användaren är inloggad -->
+          <!-- <span>Välkommen {{ user.firstname }}!</span> -->
+          <button class="loginBtn" (click)="logout()">Logga ut</button>
         </li>
       </ul>
     </div>
