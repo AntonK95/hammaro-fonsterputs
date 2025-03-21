@@ -4,11 +4,11 @@ import { Booking } from '../../models/booking.model';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from "../../components/calendar/calendar.component";
 // import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
-
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-staff-page',
-  imports: [CommonModule, CalendarComponent],
+  imports: [CommonModule, CalendarComponent, FormsModule],
   templateUrl: './staff-page.component.html',
   standalone: true,
   styleUrl: './staff-page.component.css'
@@ -18,6 +18,8 @@ export class StaffPageComponent implements OnInit {
   pendingBookings: Booking[] = [];
   confirmedBookings: Booking[] = [];
   expandedId: string | null = null;
+  editingId: string | null = null;
+  editableBooking: Booking | null = null;
 
   constructor(private bookingService: BookingService) {}
 
@@ -27,6 +29,26 @@ export class StaffPageComponent implements OnInit {
 
   toggleBooking(bookingId: string) {
     this.expandedId = this.expandedId === bookingId ? null : bookingId;
+  }
+
+  startEditing(booking: Booking) {
+    this.editingId = booking.id ?? null;
+    this.editableBooking = { ...booking }; // Skapa en kopia av bokningen
+  }
+
+  saveChanges() {
+    if (this.editableBooking) {
+      console.log("Uppdaterad bokning:", this.editableBooking);
+      this.bookings = this.bookings.map(booking =>
+        booking.id === this.editableBooking!.id ? { ...this.editableBooking! } : booking
+      );
+    }
+    this.cancelEditing();
+  }
+
+  cancelEditing() {
+    this.editingId = null;
+    this.editableBooking = null;
   }
 
   loadBookings(): void {

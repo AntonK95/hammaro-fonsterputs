@@ -11,7 +11,25 @@
     max-width: 1000px;
 }
 
+.confirmBookings-btn {
+    padding: .5rem 1rem;
+    background-color: var(--dark-blue);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: medium;
+    font-weight: 500;
+    transition: all 0.5s;
+  }
+
+  .confirmBookings-btn:hover {
+    scale: 1.05;
+    cursor: pointer;
+  }
+
 .pending-list {
+
+    max-width: 320px;
 
     .pending-list-header{
         color: white;
