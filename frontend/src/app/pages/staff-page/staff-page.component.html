@@ -49,8 +49,10 @@
 <section class="pending-list-wrapper">
   
   <div class="pending-list">
-    <h3>Ej schemalagda bokningar</h3>
-    <p class="pendingBookingsLength" *ngIf="pendingBookings.length > 0">Hittade {{ pendingBookings.length }} bokningar!</p>
+    <div class="pending-list-header">
+      <h3>Ej schemalagda bokningar</h3>
+      <p class="pendingBookingsLength" *ngIf="pendingBookings.length > 0">{{ pendingBookings.length }}st.</p>
+    </div>
     <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
       <li *ngFor="let booking of pendingBookings; let i = index" 
           class="draggable-booking" 
@@ -59,12 +61,12 @@
   
         <!-- Panel Header (Klickbar) -->
         <div class="panel-header" (click)="booking.id && toggleBooking(booking.id)">
-          <div>
-            <span>{{ booking.firstname || 'Gäst' }} {{ booking.lastname || '' }}</span> <br>
+          <div class="panel-header-info">
+            <span class="booking-name">{{ booking.firstname || 'Gäst' }} {{ booking.lastname || '' }}</span>
             <span class="address">{{ booking.address.street }}</span>
             <span class="postalCodeAndCity"> {{ booking.address.postalCode }} {{ booking.address.city }}</span>
           </div>
-          <span class="toggle-icon">{{ expandedId === booking.id ? '▲' : '▼' }}</span>
+          <span class="toggle-icon" [class.expanded]="expandedId === booking.id">V</span>
         </div>
   
         <!-- Panel Innehåll -->

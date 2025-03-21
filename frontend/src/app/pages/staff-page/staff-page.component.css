@@ -12,19 +12,31 @@
 }
 
 .pending-list {
+
+    .pending-list-header{
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0px 10px;
+        border: 1px solid var(--dark-blue);
+        border-radius: 5px 5px 0px 0px;
+        background-color: var(--dark-blue);
+    }
+
     .booking-list {
       list-style: none;
-      padding: 0;
+      padding: 10px 1px 10px 10px;
       max-height: 80dvh;
       min-height: 80dvh;
       overflow: hidden;
       overflow-y: scroll;
-      background-color: aliceblue;
-      border: 1px solid;
-      border-radius: 5px;
+      background-color: white;
+      border: 1px solid var(--dark-blue);
+      border-radius: 0px 0px 5px 5px;
+      margin-top: 0;
   
       .draggable-booking {
-        border: 1px solid #ccc;
         border-radius: 8px;
         margin-bottom: 10px;
         background-color: #fff;
@@ -37,13 +49,24 @@
           justify-content: space-between;
           align-items: center;
           padding: 10px;
-          font-weight: bold;
-          background-color: #f5f5f5;
+          background-color: var(--soft-blue);
           border-bottom: 1px solid #ddd;
+          font-family: 'roboto' sans-serif;
+          color: var(--dark-blue);
+          border-radius: 8px;
+
+          .panel-header-info {
+            display: flex;
+            flex-direction: column;
+
+            .booking-name {
+                font-weight: bold;
+            }
+          }
         }
   
         .panel-header:hover {
-          background-color: #e0e0e0;
+          background-color: var(--soft-blue-hover);
         }
   
         .panel-content {
@@ -60,11 +83,15 @@
             max-height: fit-content;
           }
 
-        
-  
-        .toggle-icon {
-          font-size: 18px;
-        }
+          .toggle-icon {
+            font-size: larger;
+            font-weight: 500;
+            transition: transform 0.5s ease-in-out;
+          }
+          
+          .toggle-icon.expanded {
+            transform: rotate(180deg);
+          }
       }
     }
   }

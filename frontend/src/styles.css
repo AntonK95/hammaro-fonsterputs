@@ -8,7 +8,9 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     --dark-blue: #276587;
     --light-blue: #009ff5;
     --soft-blue: #eefbff;
+    --soft-blue-hover: #d5f0f9;
     --soft-green: #e6f4f1;
+    --soft-green-hover: #c8e8e1;
     --alert-red: #9f413d;
 }
 
