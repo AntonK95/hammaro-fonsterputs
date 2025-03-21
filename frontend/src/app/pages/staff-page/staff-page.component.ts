@@ -5,21 +5,28 @@ import { CommonModule } from '@angular/common';
 import { CalendarComponent } from "../../components/calendar/calendar.component";
 // import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
 
+
 @Component({
   selector: 'app-staff-page',
   imports: [CommonModule, CalendarComponent],
   templateUrl: './staff-page.component.html',
+  standalone: true,
   styleUrl: './staff-page.component.css'
 })
 export class StaffPageComponent implements OnInit {
   bookings: Booking[] = [];
   pendingBookings: Booking[] = [];
   confirmedBookings: Booking[] = [];
+  expandedId: string | null = null;
 
   constructor(private bookingService: BookingService) {}
 
   ngOnInit(): void {
     this.loadBookings();
+  }
+
+  toggleBooking(bookingId: string) {
+    this.expandedId = this.expandedId === bookingId ? null : bookingId;
   }
 
   loadBookings(): void {

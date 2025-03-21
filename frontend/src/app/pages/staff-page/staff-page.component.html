@@ -1,51 +1,105 @@
-
 <!-- Personalens kalender -->
-<app-calendar 
-  [bookings]="confirmedBookings" 
-  [pendingBookings]="pendingBookings"
-  (dateSelected)="onDateSelected($event)"
-  (bookingPlaced)="onBookingPlaced($event)">
-</app-calendar>
-<button (click)="confirmBookings()">Bekräfta bokningar</button>
+<section class="landing-page-wrapper">
+  <section class="calendar-wrapper">
 
-<!-- <app-get-confirmed-bookings></app-get-confirmed-bookings> -->
- 
-<div class="pending-list">
-  <h3>Ej schemalagda bokningar</h3> <!-- denna titel kan vi ta bort från komponenten och lägga i den container som skall hålla listan senare-->
-  <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
-    <li *ngFor="let booking of pendingBookings" class="draggable-booking"
-        [attr.data-title]="booking.address"
-        [attr.data-id]="booking.id">
-        <p>{{ booking.customerId }}</p>
-        <p>{{ booking.firstname || 'Gäst' }}</p>
-        <p>{{ booking.lastname || '' }}</p>
-        <p>{{ booking.address.street }}</p>
-        <p>{{ booking.address.postalCode }} {{ booking.address.city }}</p>
-        <p>{{ booking.createdAt }}</p>
-        <p>{{ booking.email }}</p> 
-        <p>Önskat datum: {{ booking.requestedDate }}</p>
-        <ul>
-            <li *ngFor="let item of booking.items">
-                <p>{{ item.serviceName }}</p>
-                <p>Beskrivning: {{ item.description }}</p>
-                <p>Antal: {{ item.quantity }}st</p>
-                <p>Tid per enhet: {{ item.timePerUnit }}min</p>
-                <p>Price: {{ item.price}}kr</p>
-            </li>
-        </ul>
-        <p>{{ booking.note }}</p> 
-        <p>{{ booking.status }}</p>
-        <p>Uppskattad total tid: {{ booking.totalDuration }}min</p>
-        <p>Uppskattat total pris: {{ booking.totalPrice }}sek</p>
-        <!-- {{ booking.date }}  -->
-        <!-- {{ booking.name }}  -->
+    <app-calendar [bookings]="confirmedBookings" [pendingBookings]="pendingBookings"
+      (dateSelected)="onDateSelected($event)" (bookingPlaced)="onBookingPlaced($event)">
+    </app-calendar>
+    <button (click)="confirmBookings()">Bekräfta bokningar</button>
+  </section>  
+
+
+    <!-- <div class="pending-list">
+    <h3>Ej schemalagda bokningar</h3> 
+    <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
+      <li *ngFor="let booking of pendingBookings" class="draggable-booking"
+      [attr.data-title]="booking.address"
+      [attr.data-id]="booking.id">
+      <p>{{ booking.customerId }}</p>
+      <p>{{ booking.firstname || 'Gäst' }}</p>
+      <p>{{ booking.lastname || '' }}</p>
+      <p>{{ booking.address.street }}</p>
+      <p>{{ booking.address.postalCode }} {{ booking.address.city }}</p>
+      <p>{{ booking.createdAt }}</p>
+      <p>{{ booking.email }}</p> 
+      <p>Önskat datum: {{ booking.requestedDate }}</p>
+      <ul>
+        <li *ngFor="let item of booking.items">
+          <p>{{ item.serviceName }}</p>
+          <p>Beskrivning: {{ item.description }}</p>
+          <p>Antal: {{ item.quantity }}st</p>
+          <p>Tid per enhet: {{ item.timePerUnit }}min</p>
+          <p>Price: {{ item.price}}kr</p>
+        </li>
+      </ul>
+      <p>{{ booking.note }}</p> 
+      <p>{{ booking.status }}</p>
+      <p>Uppskattad total tid: {{ booking.totalDuration }}min</p>
+      <p>Uppskattat total pris: {{ booking.totalPrice }}sek</p>
     </li>
-  </ul>
-  <!-- <p *ngIf="!pendingBookings || pendingBookings.length === 0">Inga bokningar hittades.</p> -->
-  <p *ngIf="pendingBookings.length > 0">Hittade {{ pendingBookings.length }} bokningar!</p>
+</ul>
+
+<p *ngIf="pendingBookings.length > 0">Hittade {{ pendingBookings.length }} bokningar!</p>
 
 
-  <ng-template #noPendingBookings>
-    <p>Inga bokningar hittades.</p>
-  </ng-template>
-</div>
+<ng-template #noPendingBookings>
+  <p>Inga bokningar hittades.</p>
+</ng-template>
+</div> -->
+<section class="pending-list-wrapper">
+  
+  <div class="pending-list">
+    <h3>Ej schemalagda bokningar</h3>
+    <p class="pendingBookingsLength" *ngIf="pendingBookings.length > 0">Hittade {{ pendingBookings.length }} bokningar!</p>
+    <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
+      <li *ngFor="let booking of pendingBookings; let i = index" 
+          class="draggable-booking" 
+          [attr.data-title]="booking.address"
+          [attr.data-id]="booking.id">
+  
+        <!-- Panel Header (Klickbar) -->
+        <div class="panel-header" (click)="booking.id && toggleBooking(booking.id)">
+          <div>
+            <span>{{ booking.firstname || 'Gäst' }} {{ booking.lastname || '' }}</span> <br>
+            <span class="address">{{ booking.address.street }}</span>
+            <span class="postalCodeAndCity"> {{ booking.address.postalCode }} {{ booking.address.city }}</span>
+          </div>
+          <span class="toggle-icon">{{ expandedId === booking.id ? '▲' : '▼' }}</span>
+        </div>
+  
+        <!-- Panel Innehåll -->
+        <div class="panel-content" [class.expanded]="expandedId === booking.id">
+          <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p>
+          <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
+          <p><strong>Email:</strong> {{ booking.email }}</p>
+          <p><strong>Önskat datum:</strong> {{ booking.requestedDate }}</p>
+  
+          <h4>Tjänster:</h4>
+          <ul>
+            <li *ngFor="let item of booking.items">
+              <p><strong>{{ item.serviceName }}</strong></p>
+              <p>Beskrivning: {{ item.description }}</p>
+              <p>Antal: {{ item.quantity }}st</p>
+              <p>Tid per enhet: {{ item.timePerUnit }} min</p>
+              <p>Pris: {{ item.price }} kr</p>
+            </li>
+          </ul>
+  
+          <p><strong>Notering:</strong> {{ booking.note }}</p>
+          <p><strong>Status:</strong> {{ booking.status }}</p>
+          <p><strong>Total tid:</strong> {{ booking.totalDuration }} min</p>
+          <p><strong>Total pris:</strong> {{ booking.totalPrice }} sek</p>
+        </div>
+      </li>
+    </ul>
+
+
+
+        <ng-template #noPendingBookings>
+          <p>Inga bokningar hittades.</p>
+        </ng-template>
+      </div>
+    </section>
+
+  
+</section>
