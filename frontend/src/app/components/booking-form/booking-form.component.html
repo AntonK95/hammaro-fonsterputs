@@ -1,8 +1,13 @@
+<section class="booking-container-wrapper">
+
+
 <div class="booking-container">
+  <section class="booking-container-header">
     <h2 class="booking-form-title">Boka tid för fönsterputs</h2>
     <button mat-raised-button color="primary" class="toggle-form-btn" (click)="toggleForm()">
-        {{ isExpanded ? 'Stäng bokningsformulär' : 'Öppna bokningsformulär'}}
+      {{ isExpanded ? 'Stäng bokningsformulär' : 'Öppna bokningsformulär'}}
     </button>
+  </section>
     <section class="form-container" [ngClass]="{'expanded' : isExpanded }">
   
       <form class="booking-form" [formGroup]="bookingForm" (ngSubmit)="submitBooking()">
@@ -58,4 +63,4 @@
       </div>
     </section>
   </div>
-  
+</section>
