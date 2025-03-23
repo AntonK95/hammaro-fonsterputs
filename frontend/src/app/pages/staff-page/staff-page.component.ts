@@ -33,17 +33,50 @@ export class StaffPageComponent implements OnInit {
 
   startEditing(booking: Booking) {
     this.editingId = booking.id ?? null;
-    this.editableBooking = { ...booking }; // Skapa en kopia av bokningen
+    this.editableBooking = JSON.parse(JSON.stringify(booking)); // Skapa en djup kopia av bokningen
+    // this.editableBooking = { ...booking, items: booking.items || [] }; // Skapa en kopia av bokningen
+  }
+
+  calculateTotalDuration(): number {
+    if(!this.editableBooking || !this.editableBooking.items) {
+      return 0;
+    }
+
+    return this.editableBooking.items.reduce((total, item) => {
+      if (item.timePerUnit && item.quantity) {
+        return total + item.timePerUnit * item.quantity;
+      }
+      return total;
+    }, 0);
   }
 
   saveChanges() {
     if (this.editableBooking) {
-      console.log("Uppdaterad bokning:", this.editableBooking);
-      this.bookings = this.bookings.map(booking =>
-        booking.id === this.editableBooking!.id ? { ...this.editableBooking! } : booking
-      );
+      if (!this.editableBooking.id) {
+        console.error("Bokningen saknar ett ID och kan inte uppdateras.");
+        return;
+      }
+  
+      this.editableBooking.totalDuration = this.calculateTotalDuration();
+
+      const updatedData: Partial<Booking> = { ...this.editableBooking };
+  
+      this.bookingService.updateBooking(this.editableBooking.id, updatedData).subscribe({
+        next: (updatedBooking) => {
+          console.log("Bokningen uppdaterades:", updatedBooking);
+  
+          this.bookings = this.bookings.map(booking =>
+            booking.id === updatedBooking.id ? { ...updatedBooking } : booking
+          );
+  
+          this.filterBookings(); 
+          this.cancelEditing(); 
+        },
+        error: (err) => {
+          console.error("Fel vid uppdatering av bokning:", err);
+        }
+      });
     }
-    this.cancelEditing();
   }
 
   cancelEditing() {

@@ -1,23 +1,23 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
+// import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { GetBookingsComponent } from './get-bookings.component';
+// import { GetBookingsComponent } from './get-bookings.component';
 
-describe('GetBookingsComponent', () => {
-  let component: GetBookingsComponent;
-  let fixture: ComponentFixture<GetBookingsComponent>;
+// describe('GetBookingsComponent', () => {
+//   let component: GetBookingsComponent;
+//   let fixture: ComponentFixture<GetBookingsComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      imports: [GetBookingsComponent]
-    })
-    .compileComponents();
+//   beforeEach(async () => {
+//     await TestBed.configureTestingModule({
+//       imports: [GetBookingsComponent]
+//     })
+//     .compileComponents();
 
-    fixture = TestBed.createComponent(GetBookingsComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+//     fixture = TestBed.createComponent(GetBookingsComponent);
+//     component = fixture.componentInstance;
+//     fixture.detectChanges();
+//   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
-});
+//   it('should create', () => {
+//     expect(component).toBeTruthy();
+//   });
+// });

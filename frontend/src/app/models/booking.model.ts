@@ -19,7 +19,7 @@ export interface Booking {
   totalDuration: number; // Totalt antal minuter
   totalPrice: number; // Totalt pris i valfri valuta
   status: 'pending' | 'placed' | 'confirmed' | 'canceled'; // Status kan ändras
-  note?: string; // Valfria anteckningar
+  notes?: string; // Valfria anteckningar
   createdAt: string; // Tidsstämpel när bokningen skapades
   }
 

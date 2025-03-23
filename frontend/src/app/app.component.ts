@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { GetBookingsComponent } from "./services/get-bookings/get-bookings.component";
+// import { GetBookingsComponent } from "./services/get-bookings/get-bookings.component";
 import { GetConfirmedBookingsComponent } from "./services/get-confirmed-bookings/get-confirmed-bookings.component";
 import { CalendarComponent } from './components/calendar/calendar.component';
 import { BookingService } from './services/booking.service';
