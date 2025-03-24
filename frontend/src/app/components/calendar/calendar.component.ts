@@ -95,7 +95,7 @@ export class CalendarComponent implements OnInit {
           this.placedBookings.push(booking);
           this.pendingBookings = this.pendingBookings.filter(b => b.id !== bookingId);
           this.bookingPlaced.emit(bookingId);
-          this.calendarOptions.events = this.getFilteredEvents();
+          // this.calendarOptions.events = this.getFilteredEvents();
           console.log("placedBookings efter placering: ", this.placedBookings);
         }
       },
@@ -116,6 +116,25 @@ export class CalendarComponent implements OnInit {
           console.log("Bokning kunde inte hittas i pendingBookings");
         }
         console.log("placedBookings efter flytt: ", this.placedBookings);
+      },
+      eventContent: (arg: any) => {
+        const bookingId = arg.event.extendedProps.id;
+        const title = arg.event.title;
+    
+        // Skapa en knapp för att avbryta bokningen
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'del-spec-btn'
+        cancelButton.textContent = 'X';
+        // cancelButton.style.marginLeft = '10px';
+        cancelButton.style.cursor = 'pointer';
+        cancelButton.onclick = () => this.cancelSpecificBooking(bookingId);
+    
+        // Skapa en container för händelseinnehållet
+        const container = document.createElement('div');
+        container.textContent = title;
+        container.appendChild(cancelButton);
+    
+        return { domNodes: [container] };
       },
       dateClick: (info) => this.handleDateClick(info),
       
@@ -164,6 +183,27 @@ export class CalendarComponent implements OnInit {
     if (day === 0 || day === 6) {
       alert('Du kan inte boka på helger!');
       return;
+    }
+  }
+
+  cancelSpecificBooking(bookingId: string): void {
+    const bookingIndex = this.placedBookings.findIndex(booking => booking.id === bookingId);
+  
+    if (bookingIndex !== -1) {
+      // Uppdatera status till "pending"
+      const booking = this.placedBookings[bookingIndex];
+      booking.status = 'pending';
+  
+      // Ta bort bokningen från placedBookings
+      this.placedBookings.splice(bookingIndex, 1);
+      this.pendingBookings.push(booking);
+  
+      // Uppdatera kalendern
+      this.updateCalendar();
+  
+      console.log(`Bokning med ID ${bookingId} har avbrutits och flyttats tillbaka till pending.`);
+    } else {
+      console.error(`Bokning med ID ${bookingId} kunde inte hittas i placedBookings.`);
     }
   }
 
@@ -268,7 +308,10 @@ export class CalendarComponent implements OnInit {
         itemSelector: '.draggable-booking',
         eventData: (eventEl: any) => {
 
-          console.log("Drar i bokning", { id: eventEl.getAttribute("data-id") });
+          console.log("Drar i bokning", { 
+            id: eventEl.getAttribute("data-id"),
+            title: eventEl.getAttribute("data-title") 
+          });
 
           return {
 

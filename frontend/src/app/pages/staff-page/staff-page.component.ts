@@ -148,32 +148,16 @@ export class StaffPageComponent implements OnInit {
   }
 
   cancelPlacedBookings(): void {
-    const placedBookings = this.bookings.filter(booking => booking.status === 'placed');
+    const placedBookings = this.calendarComponent.placedBookings.slice(); // Skapa en kopia av placedBookings
   
     placedBookings.forEach(booking => {
-      const updatedData: Partial<Booking> = {
-        status: 'pending',
-      };
-  
-      if (!booking.id) {
-        console.error("Bokningen saknar id: ", booking);
-        return;
-      }
-  
-      this.bookingService.updateBooking(booking.id, updatedData).subscribe({
-        next: (updatedBooking) => {
-          console.log(`Bokning ${updatedBooking.id} återställd till 'pending' i databasen`);
-          booking.status = 'pending'; // Uppdatera lokalt
-          this.filterBookings(); // Uppdatera filtrerade listor
-
-          this.calendarComponent.placedBookings = [];
-          this.calendarComponent.updateCalendar();
-        },
-        error: (error) => {
-          console.error(`Fel vid återställning av bokning ${booking.id}:`, error);
-        }
-      });
+      booking.status = 'pending';
+      this.pendingBookings.push(booking);
     });
+  
+    this.calendarComponent.placedBookings = []; 
+    this.calendarComponent.updateCalendar(); 
+    console.log("placedBookings efter avbrytning:", this.calendarComponent.placedBookings);
   }
   
 }
