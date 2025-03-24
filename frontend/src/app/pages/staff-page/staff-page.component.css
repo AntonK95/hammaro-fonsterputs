@@ -20,6 +20,7 @@
     font-size: medium;
     font-weight: 500;
     transition: all 0.5s;
+    margin-top: .5rem;
   }
 
   .confirmBookings-btn:hover {
@@ -37,6 +38,7 @@
   font-weight: 500;
   transition: all 0.5s;
   margin-left: .5rem;
+  margin-top: .5rem;
 }
 
 .cancelPlacedBookings-btn:hover {
@@ -116,6 +118,20 @@
             opacity: 1;
             padding: 16px;
             max-height: fit-content;
+            color: var(--dark-blue);
+
+            .edit-btn {
+              border: none;
+              background-color: var(--dark-blue);
+              color: white;
+              padding: 5px 10px;
+              border-radius: 5px;
+            }
+
+            .cancel {
+              background-color: var(--alert-red);
+              margin-left: .5rem;
+            } 
           }
 
           .toggle-icon {

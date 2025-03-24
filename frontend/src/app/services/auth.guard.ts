@@ -16,12 +16,12 @@ export class AuthGuard implements CanActivate {
       if (user.role === 'staff' || user.role === 'admin') {
         return true; // Tillåt åtkomst till staff-sidan
       } else {
-        this.router.navigate(['/booking']); // Skicka vanliga användare till bokningssidan
+        this.router.navigate(['/']); // Skicka vanliga användare till landingpage
         return false;
       }
     }
 
-    this.router.navigate(['/login']); // Om ingen är inloggad, skicka till login
+    this.router.navigate(['/']); // Om ingen är inloggad, skicka till landingpage
     return false;
   }
 }

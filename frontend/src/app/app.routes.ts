@@ -6,9 +6,9 @@ import { AuthGuard } from './services/auth.guard';
 import { LandingPageComponent } from './pages/landing-page/landing-page.component';
 
 export const routes: Routes = [
-    // { path: 'login', component: LoginComponent },
+    { path: 'login', component: LoginComponent },
     { path: 'booking', component: BookingFormComponent },
     { path: '', component: LandingPageComponent },
     { path: 'staff', component: StaffPageComponent, canActivate: [AuthGuard]},
-    { path: '', redirectTo: '/', pathMatch: 'full' }
+    { path: '**', redirectTo: '', pathMatch: 'full' },
 ];

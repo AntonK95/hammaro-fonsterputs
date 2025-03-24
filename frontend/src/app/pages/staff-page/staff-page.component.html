@@ -34,8 +34,8 @@
         <!-- Panel Innehåll -->
         <div class="panel-content" [class.expanded]="expandedId === booking.id">
           <div class="" *ngIf="editingId !== booking.id">
-            <button class="edit-booking-btn" (click)="startEditing(booking)">Edit booking</button>
-            <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p>
+            <button class="edit-btn booking" (click)="startEditing(booking)">Ändra bokning</button>
+            <!-- <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p> -->
             <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
             <p><strong>Email:</strong> {{ booking.email }}</p>
             <p><strong>Tel:</strong> {{ booking.phone }}</p>
@@ -58,9 +58,9 @@
             <p><strong>Total pris:</strong> {{ booking.totalPrice }} sek</p>
           </div>
           <div class="" *ngIf="editingId === booking.id">
-            <button (click)="saveChanges()">💾 Spara</button>
-            <button (click)="cancelEditing()">❌ Avbryt</button>
-            <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p>
+            <button class="edit-btn save" (click)="saveChanges()">Spara</button>
+            <button class="edit-btn cancel" (click)="cancelEditing()">Avbryt</button>
+            <!-- <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p> -->
             <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
             <p><strong>Email:</strong> {{ booking.email }}</p>
             <p><strong>Tel:</strong> {{ booking.phone }}</p>
