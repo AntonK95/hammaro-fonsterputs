@@ -1,0 +1,40 @@
+
+.booking-info-dialog {
+    color: var(--dark-blue);
+    background-color: white;
+    padding: 1rem 1rem 2rem 1rem;
+
+    .booking-info-header {
+        display: flex;
+        flex-direction: row-reverse;
+        justify-content: space-between;
+    }
+
+    .close-btn {
+        margin-top: -3rem;
+        margin-right: -2rem;
+        border: none;
+        background-color: var(--dark-blue);
+        color: white;
+        font-size: x-large;
+        font-weight: 600;
+        border-radius: 8px;
+        padding: 5px 10px 5px 10px;
+        transition: all 0.3s;
+    }
+
+    .close-btn:hover {
+        scale: 1.05;
+        cursor: pointer;
+    }
+
+
+    h1 {
+        color: var(--dark-blue);
+        font-weight: 600;
+    }
+
+    .booking-info-inner {
+        color: var(--dark-blue);
+    }
+}
