@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
 import { Booking } from '../../models/booking.model';
 import { CommonModule } from '@angular/common';
@@ -14,6 +14,9 @@ import { FormsModule } from '@angular/forms';
   styleUrl: './staff-page.component.css'
 })
 export class StaffPageComponent implements OnInit {
+
+  @ViewChild(CalendarComponent) calendarComponent!: CalendarComponent;
+
   bookings: Booking[] = [];
   pendingBookings: Booking[] = [];
   confirmedBookings: Booking[] = [];
@@ -142,6 +145,35 @@ export class StaffPageComponent implements OnInit {
     });
   
     this.filterBookings();
+  }
+
+  cancelPlacedBookings(): void {
+    const placedBookings = this.bookings.filter(booking => booking.status === 'placed');
+  
+    placedBookings.forEach(booking => {
+      const updatedData: Partial<Booking> = {
+        status: 'pending',
+      };
+  
+      if (!booking.id) {
+        console.error("Bokningen saknar id: ", booking);
+        return;
+      }
+  
+      this.bookingService.updateBooking(booking.id, updatedData).subscribe({
+        next: (updatedBooking) => {
+          console.log(`Bokning ${updatedBooking.id} återställd till 'pending' i databasen`);
+          booking.status = 'pending'; // Uppdatera lokalt
+          this.filterBookings(); // Uppdatera filtrerade listor
+
+          this.calendarComponent.placedBookings = [];
+          this.calendarComponent.updateCalendar();
+        },
+        error: (error) => {
+          console.error(`Fel vid återställning av bokning ${booking.id}:`, error);
+        }
+      });
+    });
   }
   
 }
