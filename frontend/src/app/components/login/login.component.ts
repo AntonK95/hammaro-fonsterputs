@@ -113,7 +113,7 @@ export class LoginComponent implements OnInit {
             this.router.navigate(['/staff']);
           } else {
             console.log("Navigating to landingpage");
-            this.router.navigate(['/booking']);
+            this.router.navigate(['/']);
           }
           this.loginForm.reset();
         },

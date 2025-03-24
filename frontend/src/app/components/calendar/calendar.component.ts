@@ -8,6 +8,8 @@ import interactionPlugin, { Draggable } from '@fullcalendar/interaction';
 import { isPlatformBrowser } from '@angular/common';
 import { BookingService } from '../../services/booking.service';
 import { Booking } from '../../models/booking.model';
+import { MatDialog } from '@angular/material/dialog';
+import { BookingDialogComponent } from '../booking-dialog/booking-dialog.component';
 
 @Component({
   selector: 'app-calendar',
@@ -31,7 +33,11 @@ export class CalendarComponent implements OnInit {
   isBlockingDates: boolean = false;
   isUnblockingDates: boolean = false;
 
-  constructor(@Inject(PLATFORM_ID) private platformID: Object, private bookingService: BookingService) { }
+  constructor(
+    @Inject(PLATFORM_ID) private platformID: Object,
+    private bookingService: BookingService,
+    private dialog: MatDialog,
+  ) { }
 
   ngOnInit(): void {
     // console.log("Alla bokningar: ", this.bookings);
@@ -95,7 +101,7 @@ export class CalendarComponent implements OnInit {
           this.placedBookings.push(booking);
           this.pendingBookings = this.pendingBookings.filter(b => b.id !== bookingId);
           this.bookingPlaced.emit(bookingId);
-          this.calendarOptions.events = this.getFilteredEvents();
+          // this.calendarOptions.events = this.getFilteredEvents();
           console.log("placedBookings efter placering: ", this.placedBookings);
         }
       },
@@ -117,7 +123,27 @@ export class CalendarComponent implements OnInit {
         }
         console.log("placedBookings efter flytt: ", this.placedBookings);
       },
+      eventContent: (arg: any) => {
+        const bookingId = arg.event.extendedProps.id;
+        const title = arg.event.title;
+    
+        // Skapa en knapp för att avbryta bokningen
+        const cancelButton = document.createElement('button');
+        cancelButton.className = 'del-spec-btn'
+        cancelButton.textContent = 'X';
+        // cancelButton.style.marginLeft = '10px';
+        cancelButton.style.cursor = 'pointer';
+        cancelButton.onclick = () => this.cancelSpecificBooking(bookingId);
+    
+        // Skapa en container för händelseinnehållet
+        const container = document.createElement('div');
+        container.textContent = title;
+        container.appendChild(cancelButton);
+    
+        return { domNodes: [container] };
+      },
       dateClick: (info) => this.handleDateClick(info),
+      eventClick: (info) => this.handleEventClick(info),
       
     };
     console.log("Blockerade datum: ", this.blockedDatesArray);
@@ -139,22 +165,19 @@ export class CalendarComponent implements OnInit {
         title: booking.address.street || 'Titel saknas',
         start: booking.confirmedDate || booking.placedDate || '',
         extendedProps: {
-          email: booking.email,
-          phone: booking.phone,
-          id: booking.id
+          ...booking
         }
       }));
     // Mappa placerade bokningar till evenemang
     const placedEvents = this.placedBookings.map(booking => ({
       title: booking.address.street || 'Titel saknas',
       start: booking.placedDate || '',
+      color: "orange",
       extendedProps: {
-        email: booking.email,
-        phone: booking.phone,
-        id: booking.id
+        ...booking
       }
     }));
-    console.log("Skapade kalenderhändelser: ", events);
+    console.log("Skapade kalenderhändelser: ", events, [...events, ...placedEvents]);
     return [...events, ...placedEvents];
   }
 
@@ -164,6 +187,27 @@ export class CalendarComponent implements OnInit {
     if (day === 0 || day === 6) {
       alert('Du kan inte boka på helger!');
       return;
+    }
+  }
+
+  cancelSpecificBooking(bookingId: string): void {
+    const bookingIndex = this.placedBookings.findIndex(booking => booking.id === bookingId);
+  
+    if (bookingIndex !== -1) {
+      // Uppdatera status till "pending"
+      const booking = this.placedBookings[bookingIndex];
+      booking.status = 'pending';
+  
+      // Ta bort bokningen från placedBookings
+      this.placedBookings.splice(bookingIndex, 1);
+      this.pendingBookings.push(booking);
+  
+      // Uppdatera kalendern
+      this.updateCalendar();
+  
+      console.log(`Bokning med ID ${bookingId} har avbrutits och flyttats tillbaka till pending.`);
+    } else {
+      console.error(`Bokning med ID ${bookingId} kunde inte hittas i placedBookings.`);
     }
   }
 
@@ -202,62 +246,66 @@ export class CalendarComponent implements OnInit {
     ];
   }
 
-  handleDateSelect(info: any) {
-    const dateString = info.startStr;
-    if (this.isBlockingDates) {
-      if (!this.blockedDatesArray.includes(dateString)) {
-        this.blockedDatesArray.push(dateString);
-        console.log("Datum tillagt för blockering: ", dateString);
-      }
-    } else if (this.isUnblockingDates) {
-      if (this.blockedDatesArray.includes(dateString)) {
-        this.unblockDate(dateString);
-      }
-    }
-    this.updateCalendar();
-  }
+  // Det som är utkommenterat nedan är för att kunna välja och blockera datum
+  // så att man inte skall kunna boka dem i bokningsformuläret.
+  // Det fungerar inte i nuläget så jag kommeterar ut det för att förhindra förvirring.
 
-  confirmBlockedDates() {
-    this.updateCalendar();
-    console.log("Blockerade datum: ", this.blockedDatesArray);
-    this.isBlockingDates = false;
-  }
+  // handleDateSelect(info: any) {
+  //   const dateString = info.startStr;
+  //   if (this.isBlockingDates) {
+  //     if (!this.blockedDatesArray.includes(dateString)) {
+  //       this.blockedDatesArray.push(dateString);
+  //       console.log("Datum tillagt för blockering: ", dateString);
+  //     }
+  //   } else if (this.isUnblockingDates) {
+  //     if (this.blockedDatesArray.includes(dateString)) {
+  //       this.unblockDate(dateString);
+  //     }
+  //   }
+  //   this.updateCalendar();
+  // }
 
-  cancelBlockedDates() {
-    this.blockedDatesArray = [];
-    console.log("Blockering av datum avbruten", this.blockedDatesArray);
-    this.isBlockingDates = false;
-  }
+  // confirmBlockedDates() {
+  //   this.updateCalendar();
+  //   console.log("Blockerade datum: ", this.blockedDatesArray);
+  //   this.isBlockingDates = false;
+  // }
 
-  toggleBlockDates() {
-    this.isBlockingDates = !this.isBlockingDates;
-    this.isUnblockingDates = false;
-    if (!this.isBlockingDates) {
-      this.cancelBlockedDates();
-    }
-  }
+  // cancelBlockedDates() {
+  //   this.blockedDatesArray = [];
+  //   console.log("Blockering av datum avbruten", this.blockedDatesArray);
+  //   this.isBlockingDates = false;
+  // }
+
+  // toggleBlockDates() {
+  //   this.isBlockingDates = !this.isBlockingDates;
+  //   this.isUnblockingDates = false;
+  //   if (!this.isBlockingDates) {
+  //     this.cancelBlockedDates();
+  //   }
+  // }
 
 
-  // Nedan är för att avblockera blockerade datum.
-  // Det fungerar inta just nu...
-  unblockDate(date: string) {
-    this.blockedDatesArray = this.blockedDatesArray.filter(d => d !== date);
-    this.updateCalendar();
-    console.log("Datum avblockerat: ", date);
-  }
+  // // Nedan är för att avblockera blockerade datum.
+  // // Det fungerar inta just nu...
+  // unblockDate(date: string) {
+  //   this.blockedDatesArray = this.blockedDatesArray.filter(d => d !== date);
+  //   this.updateCalendar();
+  //   console.log("Datum avblockerat: ", date);
+  // }
 
-  unblockDates(dates: string[]) {
-    this.blockedDatesArray = this.blockedDatesArray.filter(d => !dates.includes(d));
-    this.updateCalendar();
-    console.log("Datum avblockerade: ", dates);
-  }
+  // unblockDates(dates: string[]) {
+  //   this.blockedDatesArray = this.blockedDatesArray.filter(d => !dates.includes(d));
+  //   this.updateCalendar();
+  //   console.log("Datum avblockerade: ", dates);
+  // }
 
-  toggleUnblockDates() {
-    this.isUnblockingDates = !this.isUnblockingDates;
-    this.isBlockingDates = false; // Se till att blockering är avaktiverad
-    console.log("isUnblockingDates: ", this.isUnblockingDates);
-    console.log("blockedDatesArray: ", this.blockedDatesArray);
-  }
+  // toggleUnblockDates() {
+  //   this.isUnblockingDates = !this.isUnblockingDates;
+  //   this.isBlockingDates = false; // Se till att blockering är avaktiverad
+  //   console.log("isUnblockingDates: ", this.isUnblockingDates);
+  //   console.log("blockedDatesArray: ", this.blockedDatesArray);
+  // }
 
   enableDraggable() {
     let draggableEl = document.getElementById('external-events');
@@ -268,7 +316,10 @@ export class CalendarComponent implements OnInit {
         itemSelector: '.draggable-booking',
         eventData: (eventEl: any) => {
 
-          console.log("Drar i bokning", { id: eventEl.getAttribute("data-id") });
+          console.log("Drar i bokning", { 
+            id: eventEl.getAttribute("data-id"),
+            title: eventEl.getAttribute("data-title") 
+          });
 
           return {
 
@@ -285,8 +336,12 @@ export class CalendarComponent implements OnInit {
   }
 
   handleEventClick(info: any) {
-    alert(`Bokning: ${info.event.title} \nEmail: ${info.event.extendedProps.email}`);
+    console.log("Klickar på bokning: ", { title: info.event.title, id: info.event.extendedProps.id});
+    this.dialog.open(BookingDialogComponent, {
+      data: info.event.extendedProps,
+    });
   }
+
   ngOnChanges(changes: SimpleChanges) {
 
     if (changes['pendingBookings']) {

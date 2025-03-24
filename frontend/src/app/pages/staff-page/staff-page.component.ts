@@ -1,25 +1,90 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { BookingService } from '../../services/booking.service';
 import { Booking } from '../../models/booking.model';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from "../../components/calendar/calendar.component";
 // import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-staff-page',
-  imports: [CommonModule, CalendarComponent],
+  imports: [CommonModule, CalendarComponent, FormsModule],
   templateUrl: './staff-page.component.html',
+  standalone: true,
   styleUrl: './staff-page.component.css'
 })
 export class StaffPageComponent implements OnInit {
+
+  @ViewChild(CalendarComponent) calendarComponent!: CalendarComponent;
+
   bookings: Booking[] = [];
   pendingBookings: Booking[] = [];
   confirmedBookings: Booking[] = [];
+  expandedId: string | null = null;
+  editingId: string | null = null;
+  editableBooking: Booking | null = null;
 
   constructor(private bookingService: BookingService) {}
 
   ngOnInit(): void {
     this.loadBookings();
+  }
+
+  toggleBooking(bookingId: string) {
+    this.expandedId = this.expandedId === bookingId ? null : bookingId;
+  }
+
+  startEditing(booking: Booking) {
+    this.editingId = booking.id ?? null;
+    this.editableBooking = JSON.parse(JSON.stringify(booking)); // Skapa en djup kopia av bokningen
+    // this.editableBooking = { ...booking, items: booking.items || [] }; // Skapa en kopia av bokningen
+  }
+
+  calculateTotalDuration(): number {
+    if(!this.editableBooking || !this.editableBooking.items) {
+      return 0;
+    }
+
+    return this.editableBooking.items.reduce((total, item) => {
+      if (item.timePerUnit && item.quantity) {
+        return total + item.timePerUnit * item.quantity;
+      }
+      return total;
+    }, 0);
+  }
+
+  saveChanges() {
+    if (this.editableBooking) {
+      if (!this.editableBooking.id) {
+        console.error("Bokningen saknar ett ID och kan inte uppdateras.");
+        return;
+      }
+  
+      this.editableBooking.totalDuration = this.calculateTotalDuration();
+
+      const updatedData: Partial<Booking> = { ...this.editableBooking };
+  
+      this.bookingService.updateBooking(this.editableBooking.id, updatedData).subscribe({
+        next: (updatedBooking) => {
+          console.log("Bokningen uppdaterades:", updatedBooking);
+  
+          this.bookings = this.bookings.map(booking =>
+            booking.id === updatedBooking.id ? { ...updatedBooking } : booking
+          );
+  
+          this.filterBookings(); 
+          this.cancelEditing(); 
+        },
+        error: (err) => {
+          console.error("Fel vid uppdatering av bokning:", err);
+        }
+      });
+    }
+  }
+
+  cancelEditing() {
+    this.editingId = null;
+    this.editableBooking = null;
   }
 
   loadBookings(): void {
@@ -80,6 +145,19 @@ export class StaffPageComponent implements OnInit {
     });
   
     this.filterBookings();
+  }
+
+  cancelPlacedBookings(): void {
+    const placedBookings = this.calendarComponent.placedBookings.slice(); // Skapa en kopia av placedBookings
+  
+    placedBookings.forEach(booking => {
+      booking.status = 'pending';
+      this.pendingBookings.push(booking);
+    });
+  
+    this.calendarComponent.placedBookings = []; 
+    this.calendarComponent.updateCalendar(); 
+    console.log("placedBookings efter avbrytning:", this.calendarComponent.placedBookings);
   }
   
 }
