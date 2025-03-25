@@ -1,0 +1,28 @@
+<section class="booking-info-dialog">
+    <section class="booking-info-header">
+        <div mat-dialog-actions>
+            <button class="close-btn" mat-button (click)="close()">X</button>
+        </div>
+        <h1 mat-dialog-title>Tack för din bokning!</h1>
+    </section>
+    <div class="booking-info-inner" mat-dialog-content>
+    <section class="confirmed-booking-info">
+        <p>Bekräftat datum kommer skickas på mail: {{ data.email }}</p>
+        <h2>Skickad bokning:</h2>
+    </section>
+        <p><strong>Adress:</strong> {{ data.address.street }}, <br> {{ data.address.postalCode }} {{ data.address.city }}</p>
+        <p><strong>Email:</strong> {{ data.email }}</p>
+        <p><strong>Telefon:</strong> {{ data.phone }}</p>
+        <p><strong>Status:</strong> {{ data.status }}</p>
+        <p><strong>Datum:</strong> {{ data.confirmedDate || data.placedDate }}</p>
+        <p><strong>Anteckningar:</strong> {{ data.notes }}</p>
+        <p><strong>Uppskattad tid:</strong> {{ data.totalDuration }} minuter</p>
+        <!-- <p><strong>Totalt pris:</strong> {{ data.totalPrice }}</p> -->
+        <p><strong>Items:</strong></p>
+        <ul>
+            <li *ngFor="let item of data.items">
+                {{ item.description }} - {{ item.quantity }} st
+            </li>
+        </ul>
+    </div>
+</section>

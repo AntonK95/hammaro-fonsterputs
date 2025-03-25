@@ -1,0 +1,53 @@
+.mat-mdc-card {
+    background-color: white;
+    padding: 15px;
+    gap: 15px;
+    max-width: 340px;
+    height: 500px;
+}
+
+mat-card-content {
+    display: flex;
+}
+
+.textarea-wrapper {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+
+    textarea {
+        width: 265px;
+        height: 185px;
+        font-family: 'Roboto';
+        font-size: 16px;
+        font-weight: 400;
+        resize: none;
+        border-radius: 6px;
+    }
+}
+
+.contact-form-btn {
+    padding: .5rem 1rem;
+    background-color: var(--dark-blue);
+    border: none;
+    border-radius: 8px;
+    color: white;
+    font-size: medium;
+    font-weight: 500;
+    transition: all 0.3s;
+    cursor: pointer;
+    align-self: center;
+    transition: all 0.3s;
+    margin-top: 5px;
+}
+.contact-form-btn:hover {
+    scale: 1.2;
+    font-weight: 600;
+}
+.contact-form-btn:disabled {
+    background-color: gray;
+    scale: none;
+    cursor: not-allowed;
+}
+

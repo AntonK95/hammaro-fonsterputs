@@ -1,0 +1,53 @@
+.fc-day {
+  border-radius: 5px;
+}
+
+.fc-daygrid-day {
+  border-radius: 5px;
+}
+
+/* Ändra bakgrundsfärg på helger */
+.fc-day-sat,
+.fc-day-sun {
+  background-color: #e2dadb !important; /* Ljus röd */
+}
+
+/* Ändra bakgrundsfärg på dagens datum */
+.fc-day-today {
+  background-color: #d1ecf1 !important; /* Ljus blå */
+}
+
+/* Ändra färg på event */
+.fc-event {
+  /* background-color: #007bff !important;  Blå */
+  color: white !important; /* Vit text */
+  border-radius: 5px;
+  padding: 5px;
+}
+
+/* Styla titeln i kalendern */
+.fc-toolbar-title {
+  font-size: 20px;
+  font-weight: bold;
+  color: #333;
+  font-family: sans-serif;
+}
+
+.fc-event-main {
+
+  div {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    max-height: 30px;
+  }
+}
+
+.del-spec-btn {
+  border: none;
+  background-color: var(--alert-red);
+  color: white;
+  padding: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+}

@@ -1,0 +1,21 @@
+/* Lätt bokad (0 - 3.99 h) */
+.fc-event.low-booked {
+    background-color: #0fa36d !important; /* Ljusgrön */
+    border: none;
+    color: black;
+  }
+  
+  /* Medelhög belastning (4 - 6.99 h) */
+  .fc-event.medium-booked {
+    background-color: #ffd97d !important; /* Ljusgul */
+    border: none;
+    color: black;
+  }
+  
+  /* Fullbokad (7+ h) */
+  .fc-event.full-booked {
+    background-color: var(--alert-red) !important;
+    border: none;
+    color: white;
+  }
+ 

@@ -1,0 +1,56 @@
+.nav-wrapper {
+  background-color: var(--dark-blue);
+  color: #fff;
+  padding: 15px;
+  display: flex;
+  justify-content: space-between;
+  height: 8rem;
+  }
+
+  .align-self {
+    align-self: center;
+  }
+  
+  .nav-wrapper .brand-logo {
+    font-size: 1.5em;
+    color: white;
+    text-decoration: none;
+  }
+
+  .brand-logo {
+    height: 50px;
+    width: 50px;
+  }
+  
+  .nav-wrapper ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+  
+  .nav-wrapper ul li {
+    display: inline;
+    margin-left: 20px;
+  }
+  
+  .nav-wrapper ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+
+  .loginBtn {
+    padding: .5rem 1rem;
+    background-color: white;
+    border: none;
+    border-radius: 8px;
+    color: var(--dark-blue);
+    font-size: medium;
+    font-weight: 500;
+    transition: all 0.3s;
+  }
+
+  .loginBtn:hover {
+    scale: 1.2;
+    font-weight: 600;
+    cursor: pointer;
+  }
