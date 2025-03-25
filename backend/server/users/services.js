@@ -11,7 +11,7 @@ const router = express.Router();
 router.use(express.json());
 
 // Hämta alla användare
-router.get('/', async (req, res) => { 
+router.get('/', authenticate, authorize('admin'), async (req, res) => { 
   try {
     const snapshot = await db.collection('users').get();
     const users = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -24,7 +24,7 @@ router.get('/', async (req, res) => {
 });
 
 // Hämta en specifik användre
-router.get('/:id', async (req, res) => {
+router.get('/:id', authenticate, authorize('admin'), async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await db.collection('users').doc(id).get();
@@ -49,7 +49,6 @@ router.post('/register', validateUser, async (req, res) => {
   try {
     const { email, password, firstname, lastname, phone, street, postalCode, city, type } = req.body;
     
-    // Kanske inte behöver denna if sats då vi nu har validateUSer
     if (!email || !password || !firstname || !lastname || !phone || !street || !postalCode || !city || !type) {
       return res.status(400).json({ error: 'Alla fält måste fyllas i' });
     }
@@ -91,7 +90,6 @@ router.post('/', authenticate, authorize('admin'), validateUser, async (req, res
   try {
     const { email, password, firstname, lastname, phone, address, type, role } = req.body;
 
-    // Kanske inte behöver denna if sats då vi nu har validateUSer
     if (!email || !password || !firstname || !lastname || !phone || !address || !type || !role) {
       return res.status(400).json({ error: 'Alla fält måste fyllas i' });
     }
