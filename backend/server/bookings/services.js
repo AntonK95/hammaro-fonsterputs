@@ -37,7 +37,7 @@ router.get('/calendar', async (req, res) => {
 });
 
 // Hämta alla bokningar
-router.get('/', authenticate, authorize('admin', 'staff'), async (req, res) => { 
+router.get('/', async (req, res) => { 
   try {
     const snapshot = await db.collection('bookings').get();
     const bookings = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
@@ -50,7 +50,7 @@ router.get('/', authenticate, authorize('admin', 'staff'), async (req, res) => {
 });
 
 // Hämta en specifik bokning
-router.get('/:id', authenticate, authorize('admin', 'staff'), async (req, res) => {
+router.get('/:id', async (req, res) => {
   try {
     const { id } = req.params;
     const doc = await db.collection('bookings').doc(id).get();
