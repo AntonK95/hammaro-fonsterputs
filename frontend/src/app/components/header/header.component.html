@@ -1,15 +1,7 @@
-<nav>
-    <div class="nav-wrapper">
-      
-      <a href="#" class="brand-logo"><img src="assets/transLogo.png" alt="Logotyp"></a>
-      <ul id="nav-mobile" class="align-self">
-        <li *ngIf="!isUserLoggedIn"> <!-- Visa om användaren inte är inloggad -->
-          <button class="loginBtn" (click)="openLoginDialog()">Logga in</button>
-        </li>
-        <li *ngIf="isUserLoggedIn"> <!-- Visa om användaren är inloggad -->
-          <!-- <span>Välkommen {{ user.firstname }}!</span> -->
-          <button class="loginBtn" (click)="logout()">Logga ut</button>
-        </li>
-      </ul>
-    </div>
-  </nav>
+<div class="nav-wrapper">
+  <a href="#" class="brand-logo"><img src="assets/transLogo.png" alt="Logotyp"></a>
+  <div class="align-self">
+    <button *ngIf="!isUserLoggedIn" class="loginBtn" (click)="openLoginDialog()">Logga in</button>
+    <button *ngIf="isUserLoggedIn" class="loginBtn" (click)="logout()">Logga ut</button>
+  </div>
+</div>

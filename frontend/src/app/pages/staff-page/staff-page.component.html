@@ -7,97 +7,90 @@
     </app-calendar>
     <button class="confirmBookings-btn" (click)="confirmBookings()">Bekräfta bokningar</button>
     <button class="cancelPlacedBookings-btn" (click)="cancelPlacedBookings()">Avbryt placerade bokningar</button>
-  </section>  
-<section class="pending-list-wrapper">
-  
-  <div class="pending-list">
-    <div class="pending-list-header">
-      <h3>Ej schemalagda bokningar</h3>
-      <p class="pendingBookingsLength" *ngIf="pendingBookings.length > 0">{{ pendingBookings.length }}st.</p>
-    </div>
-    <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
-      <li *ngFor="let booking of pendingBookings; let i = index" 
-          class="draggable-booking" 
-          [attr.data-title]="booking.address.street"
-          [attr.data-id]="booking.id">
-  
-        <!-- Panel Header (Klickbar) -->
-        <div class="panel-header" (click)="booking.id && toggleBooking(booking.id)">
-          <div class="panel-header-info">
-            <span class="booking-name">{{ booking.firstname || 'Gäst' }} {{ booking.lastname || '' }}</span>
-            <span class="address">{{ booking.address.street }}</span>
-            <span class="postalCodeAndCity"> {{ booking.address.postalCode }} {{ booking.address.city }}</span>
+  </section>
+  <section class="pending-list-wrapper">
+
+    <div class="pending-list">
+      <div class="pending-list-header">
+        <h3>Ej schemalagda bokningar</h3>
+        <p class="pendingBookingsLength" *ngIf="pendingBookings.length > 0">{{ pendingBookings.length }}st.</p>
+      </div>
+      <ul id="external-events" class="booking-list" *ngIf="pendingBookings.length > 0; else noPendingBookings">
+        <li *ngFor="let booking of pendingBookings; let i = index" class="draggable-booking"
+          [attr.data-title]="booking.address.street" [attr.data-id]="booking.id">
+
+          <!-- Panel Header (Klickbar) -->
+          <div class="panel-header" (click)="booking.id && toggleBooking(booking.id)">
+            <div class="panel-header-info">
+              <span class="booking-name">{{ booking.firstname || 'Gäst' }} {{ booking.lastname || '' }}</span>
+              <span class="address">{{ booking.address.street }}</span>
+              <span class="postalCodeAndCity"> {{ booking.address.postalCode }} {{ booking.address.city }}</span>
+            </div>
+            <span class="toggle-icon" [class.expanded]="expandedId === booking.id">V</span>
           </div>
-          <span class="toggle-icon" [class.expanded]="expandedId === booking.id">V</span>
-        </div>
-        
-        <!-- Panel Innehåll -->
-        <div class="panel-content" [class.expanded]="expandedId === booking.id">
-          <div class="" *ngIf="editingId !== booking.id">
-            <button class="edit-btn booking" (click)="startEditing(booking)">Ändra bokning</button>
-            <!-- <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p> -->
-            <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
-            <p><strong>Email:</strong> {{ booking.email }}</p>
-            <p><strong>Tel:</strong> {{ booking.phone }}</p>
-            <p><strong>Önskat datum:</strong> {{ booking.requestedDate }}</p>
-            
-            <h4>Tjänster:</h4>
-            <ul>
-              <li *ngFor="let item of booking.items">
-                <p><strong>{{ item.serviceName }}</strong></p>
-                <p>Beskrivning: {{ item.description }}</p>
-                <p>Antal: {{ item.quantity }}st</p>
-                <p>Tid per enhet: {{ item.timePerUnit }} min</p>
-                <p>Pris: {{ item.price }} kr</p>
-              </li>
-            </ul>
-            
-            <p><strong>Notering:</strong> {{ booking.notes }}</p>
-            <p><strong>Status:</strong> {{ booking.status }}</p>
-            <p><strong>Total tid:</strong> {{ booking.totalDuration }} min</p>
-            <p><strong>Total pris:</strong> {{ booking.totalPrice }} sek</p>
-          </div>
-          <div class="" *ngIf="editingId === booking.id">
-            <button class="edit-btn save" (click)="saveChanges()">Spara</button>
-            <button class="edit-btn cancel" (click)="cancelEditing()">Avbryt</button>
-            <!-- <p><strong>Kund-ID:</strong> {{ booking.customerId }}</p> -->
-            <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
-            <p><strong>Email:</strong> {{ booking.email }}</p>
-            <p><strong>Tel:</strong> {{ booking.phone }}</p>
-            <p><strong>Önskat datum:</strong> {{ booking.requestedDate }}</p>
-            
-            <div *ngIf="editableBooking">
+
+          <!-- Panel Innehåll -->
+          <div class="panel-content" [class.expanded]="expandedId === booking.id">
+            <div class="" *ngIf="editingId !== booking.id">
+              <button class="edit-btn booking" (click)="startEditing(booking)">Ändra bokning</button>
+              <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
+              <p><strong>Email:</strong> {{ booking.email }}</p>
+              <p><strong>Tel:</strong> {{ booking.phone }}</p>
+              <p><strong>Önskat datum:</strong> {{ booking.requestedDate }}</p>
+
               <h4>Tjänster:</h4>
               <ul>
-                <li *ngFor="let item of editableBooking.items; let i = index">
-                  <!-- <div class="" *ngIf=""> -->
+                <li *ngFor="let item of booking.items">
+                  <p><strong>{{ item.serviceName }}</strong></p>
+                  <p>Beskrivning: {{ item.description }}</p>
+                  <p>Antal: {{ item.quantity }}st</p>
+                  <p>Tid per enhet: {{ item.timePerUnit }} min</p>
+                  <p>Pris: {{ item.price }} kr</p>
+                </li>
+              </ul>
+
+              <p><strong>Notering:</strong> {{ booking.notes }}</p>
+              <p><strong>Status:</strong> {{ booking.status }}</p>
+              <p><strong>Total tid:</strong> {{ booking.totalDuration }} min</p>
+              <p><strong>Total pris:</strong> {{ booking.totalPrice }} sek</p>
+            </div>
+            <div class="" *ngIf="editingId === booking.id">
+              <button class="edit-btn save" (click)="saveChanges()">Spara</button>
+              <button class="edit-btn cancel" (click)="cancelEditing()">Avbryt</button>
+              <p><strong>Skapad:</strong> {{ booking.createdAt }}</p>
+              <p><strong>Email:</strong> {{ booking.email }}</p>
+              <p><strong>Tel:</strong> {{ booking.phone }}</p>
+              <p><strong>Önskat datum:</strong> {{ booking.requestedDate }}</p>
+
+              <div *ngIf="editableBooking">
+                <h4>Tjänster:</h4>
+                <ul>
+                  <li *ngFor="let item of editableBooking.items; let i = index">
                     <p><strong>{{ item.serviceName }}</strong></p>
                     <p>Beskrivning: {{ item.description }}</p>
                     <input type="number" [(ngModel)]="editableBooking.items[i].quantity" min="1">
                     <p>Tid per enhet: {{ item.timePerUnit }} min</p>
                     <p>Pris: {{ item.price }} kr</p>
-                  <!-- </div> -->
-                </li>
-              </ul>
+                  </li>
+                </ul>
+              </div>
+
+              <p><strong>Notering:</strong><input type="text" *ngIf="editableBooking"
+                  [(ngModel)]="editableBooking.notes"></p>
+              <p><strong>Status:</strong> {{ booking.status }}</p>
+              <p><strong>Total tid:</strong> {{ calculateTotalDuration() }} min</p>
+              <p><strong>Total pris:</strong> {{ booking.totalPrice }} sek</p>
+
             </div>
-            
-            <p><strong>Notering:</strong><input type="text" *ngIf="editableBooking" [(ngModel)]="editableBooking.notes"></p>
-            <p><strong>Status:</strong> {{ booking.status }}</p>
-            <p><strong>Total tid:</strong> {{ calculateTotalDuration() }} min</p>
-            <p><strong>Total pris:</strong> {{ booking.totalPrice }} sek</p>
-
           </div>
-        </div>
-      </li>
-    </ul>
+        </li>
+      </ul>
+
+      <ng-template #noPendingBookings>
+        <p>Inga bokningar hittades.</p>
+      </ng-template>
+    </div>
+  </section>
 
 
-
-        <ng-template #noPendingBookings>
-          <p>Inga bokningar hittades.</p>
-        </ng-template>
-      </div>
-    </section>
-
-  
 </section>

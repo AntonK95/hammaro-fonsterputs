@@ -25,7 +25,7 @@ export class GetConfirmedBookingsComponent implements OnInit {
     try {
       this.bookingService.getConfirmedBookingsForCalendar().subscribe( data => {
         this.confirmedBookings = data;
-        console.log("Hämtade bekräftade bokningar: ", this.confirmedBookings);
+        // console.log("Hämtade bekräftade bokningar: ", this.confirmedBookings);
       });
     } catch (error) {
       console.error("Fel vid hämtning av bekräftade bokningar", error)

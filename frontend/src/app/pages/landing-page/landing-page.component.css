@@ -123,8 +123,8 @@
 @media screen and (max-width: 650px) {
     .about-section--hero {
         display: grid !important;
-        grid-template-columns: repeat(2, 1fr); /* Två kolumner för bilderna */
-        grid-template-rows: auto auto; /* Två rader: en för bilderna, en för texten */
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto auto;
         gap: 10px;
         text-align: center;
     }
@@ -137,12 +137,12 @@
 
     .image-wrapper:nth-child(1),
     .image-wrapper:nth-child(3) {
-        grid-column: span 1; /* Bilderna ska vara varsin kolumn */
-        grid-row: 1; /* Placera båda i första raden */
+        grid-column: span 1; 
+        grid-row: 1; 
     }
 
     .about-text {
-        grid-column: 1 / span 2; /* Låter texten breda ut sig under bilderna */
-        grid-row: 2; /* Placera texten på andra raden */
+        grid-column: 1 / span 2;
+        grid-row: 2;
     }
 }

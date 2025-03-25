@@ -1,6 +1,4 @@
 export interface Booking {
-  date: any;
-  name: any; // Bokningens namn?
   id?: string; // Databasens ID (kan vara null tills det sätts)
   firstname: string;
   lastname: string;
@@ -12,21 +10,21 @@ export interface Booking {
     city: string;
   };
   customerId?: string | null; // Kan vara null om ingen kund är inloggad
-  requestedDate: string; // YYYY-MM-DD eller ISO-format
+  requestedDate: string; 
   confirmedDate?: string | null; // Null tills det godkänns
   placedDate?: string;
-  items: BookingItem[]; // Array med produkter/tjänster
-  totalDuration: number; // Totalt antal minuter
-  totalPrice: number; // Totalt pris i valfri valuta
+  items: BookingItem[]; 
+  totalDuration: number; 
+  totalPrice?: number; 
   status: 'pending' | 'placed' | 'confirmed' | 'canceled'; // Status kan ändras
-  notes?: string; // Valfria anteckningar
-  createdAt: string; // Tidsstämpel när bokningen skapades
+  notes?: string; 
+  createdAt: string;
   }
 
   export interface BookingItem {
-    serviceName: string; // Namn på tjänsten/produkten
-    price?: number; // Pris
-    timePerUnit: number; // Tidsåtgång i minuter
+    serviceName: string; 
+    price?: number; 
+    timePerUnit: number; 
     description: string;
     quantity: number;
     quantityRange?: number;

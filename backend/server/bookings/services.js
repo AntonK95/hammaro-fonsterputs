@@ -12,7 +12,7 @@ router.use('/users', userRouter);
 router.use('/auth', authRouter);
 router.use(express.json());
 
-// **Hämta alla bekräftade bokningar (status: confirmed)**
+// Hämta alla bekräftade bokningar (status: confirmed)
 router.get('/calendar', async (req, res) => {
   try {
     // Hämta alla bokningar som är bekräftade/ har status confirmed
@@ -114,14 +114,14 @@ router.post('/', authenticate, async (req, res) => {
       phone,
       address,
       customerId: req.user ? req.user.uid : null, // Använd customerId från token eller sätt till null
-      requestedDate, // Kundens önskade datum
+      requestedDate, 
       confirmedDate: null, // Bekräftat datum sätts när personal godkänner
-      items, // Produkter/tjänster
-      totalDuration: calculateTotalDuration(items), // Totalt antal minuter för uppdraget
-      totalPrice: calculateTotalPrice(items), // Totalt pris
-      status: 'pending', // Default status
-      notes: notes || "", // Eventuella anteckningar
-      createdAt: new Date().toISOString() // Timestamp när bokningen skapades
+      items, 
+      totalDuration: calculateTotalDuration(items), 
+      totalPrice: calculateTotalPrice(items), 
+      status: 'pending', 
+      notes: notes || "", 
+      createdAt: new Date().toISOString() 
     };
 
     // Spara bokningen i Firestore

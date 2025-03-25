@@ -14,7 +14,7 @@
   
   /* Fullbokad (7+ h) */
   .fc-event.full-booked {
-    background-color: #ff6961 !important; /* Röd */
+    background-color: var(--alert-red) !important;
     border: none;
     color: white;
   }

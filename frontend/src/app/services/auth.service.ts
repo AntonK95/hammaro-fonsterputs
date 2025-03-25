@@ -15,7 +15,6 @@ export class AuthServiceService {
   login(credentials: { email: string; password: string }): Observable<any> {
     return this.http.post<any>(`${this.apiUrl}/login`, credentials).pipe(
       tap(response => {
-        console.log("Login response: ", response);
         localStorage.setItem('idToken', response.idToken);
         localStorage.setItem("user", JSON.stringify(response.user));
       })
@@ -26,8 +25,6 @@ export class AuthServiceService {
     return this.http.post<any>(`${this.regUserApiUrl}/users/register`, userData).pipe(
       tap(response => {
         console.log("Registreringssvar: ", response);
-        // localStorage.setItem('idToken', response.idToken);
-        // localStorage.setItem("user", JSON.stringify(response.user));
       })
     );
   }
