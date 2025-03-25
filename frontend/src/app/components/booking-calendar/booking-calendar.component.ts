@@ -6,7 +6,6 @@ import dayGridPlugin from '@fullcalendar/daygrid';
 import interactionPlugin from '@fullcalendar/interaction'
 import { Booking } from '../../models/booking.model';
 import { CommonModule } from '@angular/common';
-import { GetConfirmedBookingsComponent } from '../../services/get-confirmed-bookings/get-confirmed-bookings.component';
 
 @Component({
   selector: 'app-booking-calendar',
@@ -54,8 +53,8 @@ export class BookingCalendarComponent implements OnInit {
     const bookingsPerDay: { [key: string]: number } = {};
   
     this.confirmedBookings.forEach(booking => {
-      const date = booking.confirmedDate; // YYYY-MM-DD
-      const hours = booking.duration / 60; // Omvandla minuter till timmar
+      const date = booking.confirmedDate;
+      const hours = booking.duration / 60;
       const roundedHours = Math.ceil(hours * 4) / 4; 
 
       if (bookingsPerDay[date]) {
@@ -71,13 +70,13 @@ export class BookingCalendarComponent implements OnInit {
     let borderColor = '';
   
     if (totalHours >= 7) {
-      color = '#ff6961'; // Röd
-      borderColor = '#ff6961';
+      color = 'var(--alert-red)';
+      borderColor = 'var(--alert-red)';
     } else if (totalHours >= 4) {
-      color = '#ffd97d'; // Gul
+      color = '#ffd97d';
       borderColor = '#ffd97d'
     } else {
-      color = '#27d192'; // Grön
+      color = '#27d192';
       borderColor = '#27d192';
     }
   
@@ -93,7 +92,6 @@ export class BookingCalendarComponent implements OnInit {
   }
 
   handleDateClick(info: any) {
-    console.log("Full date info: ", info);
     this.dateSelected.emit(info.date);
     const day = new Date(info.date).getDay();
     if (day === 0 || day === 6) {

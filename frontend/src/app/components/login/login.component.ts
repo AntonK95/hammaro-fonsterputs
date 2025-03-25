@@ -65,7 +65,6 @@ export class LoginComponent implements OnInit {
 
   toggleMode() {
     this.isLoginMode = !this.isLoginMode;
-    console.log("toggleMode: ", this.isLoginMode);
   }
 
   togglePasswordVisibility() {
@@ -78,13 +77,11 @@ export class LoginComponent implements OnInit {
       
       this.authService.register(this.registerForm.value).subscribe(
         (response) => {
-          console.log("Registrerad: ", response);
-          // this.dialogRef.close();
+          // console.log("Registrerad: ", response);
           this.errorMessage = null;
           this.isLoginMode = true;
           
           this.loginForm.reset();
-          // this.cdRef.detectChanges(); // Försök att tvinga UI uppdatering
         },
         (error) => {
           console.log("Fel vid registrering: ", error);
@@ -94,25 +91,20 @@ export class LoginComponent implements OnInit {
     } else {
       this.errorMessage = "Vänligen fyll i alla fält korrekt."
     }
-    console.log("ChangeDetectorRef: ", this.cdRef);
   }
 
 
   onSubmit() {
     if (this.loginForm.valid) {
-      console.log("Inloggningsuppgifter:", this.loginForm.value);
+      // console.log("Inloggningsuppgifter:", this.loginForm.value);
       this.authService.login(this.loginForm.value).subscribe(
         (response) => {
-          console.log("Inloggad: ", response);
-          console.log("Angivet värde: ", this.loginForm.value);
           this.dialogRef.close();
           const userRole = response.user.role;
 
           if(userRole === 'staff' || userRole === 'admin') {
-            console.log("Navigating to staffpage");
             this.router.navigate(['/staff']);
           } else {
-            console.log("Navigating to landingpage");
             this.router.navigate(['/']);
           }
           this.loginForm.reset();

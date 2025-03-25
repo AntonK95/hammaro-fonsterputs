@@ -14,14 +14,14 @@ export class AuthGuard implements CanActivate {
     
     if (user) {
       if (user.role === 'staff' || user.role === 'admin') {
-        return true; // Tillåt åtkomst till staff-sidan
+        return true; 
       } else {
-        this.router.navigate(['/']); // Skicka vanliga användare till landingpage
+        this.router.navigate(['/']); 
         return false;
       }
     }
 
-    this.router.navigate(['/']); // Om ingen är inloggad, skicka till landingpage
+    this.router.navigate(['/']); 
     return false;
   }
 }

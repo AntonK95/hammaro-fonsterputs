@@ -3,7 +3,6 @@ import { BookingService } from '../../services/booking.service';
 import { Booking } from '../../models/booking.model';
 import { CommonModule } from '@angular/common';
 import { CalendarComponent } from "../../components/calendar/calendar.component";
-// import { GetConfirmedBookingsComponent } from "../../services/get-confirmed-bookings/get-confirmed-bookings.component";
 import { FormsModule } from '@angular/forms';
 
 @Component({
@@ -37,7 +36,6 @@ export class StaffPageComponent implements OnInit {
   startEditing(booking: Booking) {
     this.editingId = booking.id ?? null;
     this.editableBooking = JSON.parse(JSON.stringify(booking)); // Skapa en djup kopia av bokningen
-    // this.editableBooking = { ...booking, items: booking.items || [] }; // Skapa en kopia av bokningen
   }
 
   calculateTotalDuration(): number {
@@ -61,12 +59,10 @@ export class StaffPageComponent implements OnInit {
       }
   
       this.editableBooking.totalDuration = this.calculateTotalDuration();
-
       const updatedData: Partial<Booking> = { ...this.editableBooking };
   
       this.bookingService.updateBooking(this.editableBooking.id, updatedData).subscribe({
         next: (updatedBooking) => {
-          console.log("Bokningen uppdaterades:", updatedBooking);
   
           this.bookings = this.bookings.map(booking =>
             booking.id === updatedBooking.id ? { ...updatedBooking } : booking
@@ -91,15 +87,14 @@ export class StaffPageComponent implements OnInit {
     this.bookingService.getAllBookings().subscribe(bookings => {
       this.bookings = bookings;
       this.filterBookings();
-      console.log("Hämtade boknignar i staffpage: ", this.bookings);
     });
   }
 
   filterBookings(): void {
     this.confirmedBookings = this.bookings.filter(booking => booking.status === 'confirmed');
     this.pendingBookings = this.bookings.filter(booking => booking.status === 'pending');
-    console.log('Bekräftade bokningar: ', this.confirmedBookings);
-    console.log('Pending bokningar: ', this.pendingBookings);
+    // console.log('Bekräftade bokningar: ', this.confirmedBookings);
+    // console.log('Pending bokningar: ', this.pendingBookings);
   }
 
   onDateSelected(dateSelected: Date) {
@@ -110,8 +105,7 @@ export class StaffPageComponent implements OnInit {
     const booking = this.bookings.find(b => b.id === bookingId);
     if (booking) {
       booking.status = 'placed';
-      this.filterBookings(); // Filtrera om bokningarna
-      console.log('Bokning placerad i kalendern: ', booking);
+      this.filterBookings(); 
     } else {
       console.log('Bokning med id ' + bookingId + ' hittades inte i pendingBookings');
     }
@@ -156,8 +150,7 @@ export class StaffPageComponent implements OnInit {
     });
   
     this.calendarComponent.placedBookings = []; 
-    this.calendarComponent.updateCalendar(); 
-    console.log("placedBookings efter avbrytning:", this.calendarComponent.placedBookings);
+    this.calendarComponent.updateCalendar();
   }
   
 }

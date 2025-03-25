@@ -25,7 +25,7 @@ export class CalendarComponent implements OnInit {
   @Output() dateSelected = new EventEmitter<any>();
   @Output() bookingPlaced = new EventEmitter<string>();
   @Output() blockedDates = new EventEmitter<string[]>();
-  // pendingBookings: any[] = [];
+
   calendarOptions!: CalendarOptions;
   placedBookings: Booking[] = [];
   unBookableDates: string[] = [];
@@ -40,12 +40,7 @@ export class CalendarComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // console.log("Alla bokningar: ", this.bookings);
-    // console.log("pendingBookings till calendern: ", this.pendingBookings)
-    // const filteredEvents = this.getFilteredEvents();
-    // console.log("Filtrerade bokningar för kalendern: ", filteredEvents);
 
-    console.log("Blockerade datum: ", this.blockedDatesArray);
     // Konfigurera kalendern
     this.calendarOptions = {
       plugins: [dayGridPlugin, timeGridPlugin, interactionPlugin],
@@ -101,14 +96,10 @@ export class CalendarComponent implements OnInit {
           this.placedBookings.push(booking);
           this.pendingBookings = this.pendingBookings.filter(b => b.id !== bookingId);
           this.bookingPlaced.emit(bookingId);
-          // this.calendarOptions.events = this.getFilteredEvents();
-          console.log("placedBookings efter placering: ", this.placedBookings);
         }
       },
       // När en bokning FLYTTAS i kalendern
       eventDrop: (eventInfo: any) => {
-        console.log("Bokning flyttad:", eventInfo.event);
-        
         const bookingId = eventInfo.event.extendedProps.id;
         const booking = this.placedBookings.find(booking => booking.id === bookingId);
         
@@ -117,25 +108,19 @@ export class CalendarComponent implements OnInit {
           
           // Uppdatera kalendern med det nya datumet
           this.calendarOptions.events = this.getFilteredEvents();
-          console.log("Uppdaterade pendingBookings efter placering:", this.pendingBookings);
         } else {
           console.log("Bokning kunde inte hittas i pendingBookings");
         }
-        console.log("placedBookings efter flytt: ", this.placedBookings);
       },
       eventContent: (arg: any) => {
         const bookingId = arg.event.extendedProps.id;
         const title = arg.event.title;
     
-        // Skapa en knapp för att avbryta bokningen
         const cancelButton = document.createElement('button');
         cancelButton.className = 'del-spec-btn'
         cancelButton.textContent = 'X';
-        // cancelButton.style.marginLeft = '10px';
-        cancelButton.style.cursor = 'pointer';
         cancelButton.onclick = () => this.cancelSpecificBooking(bookingId);
     
-        // Skapa en container för händelseinnehållet
         const container = document.createElement('div');
         container.textContent = title;
         container.appendChild(cancelButton);
@@ -146,9 +131,8 @@ export class CalendarComponent implements OnInit {
       eventClick: (info) => this.handleEventClick(info),
       
     };
-    console.log("Blockerade datum: ", this.blockedDatesArray);
 
-    // Aktivera draggable om i browser
+    // Aktivera draggable
     if (isPlatformBrowser(this.platformID)) {
       this.enableDraggable();
     }
@@ -158,7 +142,6 @@ export class CalendarComponent implements OnInit {
   }
 
   getFilteredEvents() {
-    console.log("Bokningar innan filtrering: ", this.bookings);
     const events = this.bookings
       .filter(booking => booking.confirmedDate)
       .map(booking => ({
@@ -167,8 +150,7 @@ export class CalendarComponent implements OnInit {
         extendedProps: {
           ...booking
         }
-      }));
-    // Mappa placerade bokningar till evenemang
+    }));
     const placedEvents = this.placedBookings.map(booking => ({
       title: booking.address.street || 'Titel saknas',
       start: booking.placedDate || '',
@@ -177,7 +159,7 @@ export class CalendarComponent implements OnInit {
         ...booking
       }
     }));
-    console.log("Skapade kalenderhändelser: ", events, [...events, ...placedEvents]);
+    // console.log("Skapade kalenderhändelser: ", events, [...events, ...placedEvents]);
     return [...events, ...placedEvents];
   }
 
@@ -194,23 +176,20 @@ export class CalendarComponent implements OnInit {
     const bookingIndex = this.placedBookings.findIndex(booking => booking.id === bookingId);
   
     if (bookingIndex !== -1) {
-      // Uppdatera status till "pending"
       const booking = this.placedBookings[bookingIndex];
       booking.status = 'pending';
   
-      // Ta bort bokningen från placedBookings
       this.placedBookings.splice(bookingIndex, 1);
       this.pendingBookings.push(booking);
   
-      // Uppdatera kalendern
       this.updateCalendar();
-  
-      console.log(`Bokning med ID ${bookingId} har avbrutits och flyttats tillbaka till pending.`);
     } else {
       console.error(`Bokning med ID ${bookingId} kunde inte hittas i placedBookings.`);
     }
   }
 
+
+  // Detta fungerar inte men ligger kvar då det är en del av konfigurationen för kalendern.
   blockedDatesRange(info: any) {
     const startDate = new Date(info.start);
     const endDate = new Date(info.end);
@@ -228,7 +207,8 @@ export class CalendarComponent implements OnInit {
     // this.updateCalendar();
 
   }
-  // 🔹 Uppdatera kalendern så att blockerade datum visas
+  // Uppdatera kalendern så att blockerade datum visas
+  // Detta fungerar ju inte
   updateCalendar() {
     this.calendarOptions.eventSources = [
       {
@@ -240,7 +220,7 @@ export class CalendarComponent implements OnInit {
           start: date,
           color: 'grey',
           textColor: 'white',
-          display: 'background' // Gör att händelsen visas som en bakgrundsfärg
+          display: 'background' 
         }))
       }
     ];
@@ -309,20 +289,12 @@ export class CalendarComponent implements OnInit {
 
   enableDraggable() {
     let draggableEl = document.getElementById('external-events');
-    console.log("enableDraggable", draggableEl);
 
     if (draggableEl) {
       new Draggable(draggableEl, {
         itemSelector: '.draggable-booking',
         eventData: (eventEl: any) => {
-
-          console.log("Drar i bokning", { 
-            id: eventEl.getAttribute("data-id"),
-            title: eventEl.getAttribute("data-title") 
-          });
-
           return {
-
             id: eventEl.getAttribute("data-id"),
             title: eventEl.getAttribute("data-title"),
             start: new Date().toISOString().split('T')[0], // Default startdatum

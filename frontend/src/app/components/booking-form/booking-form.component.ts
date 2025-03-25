@@ -29,10 +29,9 @@ import { BookingConfirmationDialogComponent } from '../booking-confirmation-dial
 })
 export class BookingFormComponent implements OnInit {
   @Input() confirmedBookings: Booking[] = [];
-  @Output() newBooking = new EventEmitter<Booking>(); // Skickar bokningen till föräldern
+  @Output() newBooking = new EventEmitter<Booking>();
   @ViewChild(ProductListComponent) productListComponent!: ProductListComponent;
 
-  // @ViewChild(GetConfirmedBookingsComponent) getConfirmedBookingsComponent!: GetConfirmedBookingsComponent;
   bookingForm!: FormGroup;
   isExpanded = false;
   errorMessage: string | null = null;
@@ -56,10 +55,9 @@ export class BookingFormComponent implements OnInit {
         city: ['', Validators.required]
       }),
       date: ['', Validators.required], // Datum väljs manuellt
-      products: this.fb.array([], Validators.required), // Produktval
+      products: this.fb.array([], Validators.required),
       notes: [''],
     });
-    console.log("Confirmed bookings: ", this.confirmedBookings);
   }
 
   toggleForm() {
@@ -68,7 +66,6 @@ export class BookingFormComponent implements OnInit {
 
     if(this.isExpanded) {
       const user = this.authService.getUser();
-      // console.log("User from localStorage");
       if(user) {
         this.bookingForm.patchValue({
           firstname: user.firstname,
@@ -92,9 +89,6 @@ export class BookingFormComponent implements OnInit {
   
 
   onProductSelected(products: any[]): void {
-    console.log("Produkter mottagna i onProductSelected:", products);
-  
-    // Rensa befintliga produkter i formuläret
     this.products.clear();
   
     // Lägg till de nya produkterna i formuläret
@@ -107,14 +101,10 @@ export class BookingFormComponent implements OnInit {
         quantity: [product.quantity, Validators.required]
       }));
     });
-  
-    console.log("Produkter tillagda i bokningsformuläret:", this.products.value);
-    console.log("Formulärets giltighet:", this.bookingForm.valid);
   }
 
   onDateSelected(date: string) {
     this.bookingForm.patchValue({ date: date });
-    console.log("Valt datum i formuläret: ", this.bookingForm.value.date);
   }
 
   calculateTotalTimeOfBooking(): number {
@@ -130,9 +120,9 @@ export class BookingFormComponent implements OnInit {
     const bookingsPerDay: { [key: string]: number } = {};
 
     this.confirmedBookings.forEach(booking => {
-      const bookingDate = booking.confirmedDate; // YYYY-MM-DD
+      const bookingDate = booking.confirmedDate;
       if (!bookingDate) return;
-      const hours = booking.totalDuration / 60; // Omvandla minuter till timmar
+      const hours = booking.totalDuration / 60;
       const roundedHours = Math.ceil(hours * 4) / 4;
 
       if (bookingsPerDay[bookingDate]) {
@@ -169,20 +159,18 @@ export class BookingFormComponent implements OnInit {
         status: 'pending',
         createdAt: new Date().toISOString(),
       };
-      console.log("Skickar bokning via form: ", booking);
       // Kommentera ut nedan för att inte skicka till databasen / för felsökning
       this.bookingService.createBooking(booking).subscribe(
         (response) => {
           this.newBooking.emit(response); // Skicka bokningen vidare
           console.log('Skickad bokning:', response);
-          // Öppna dialogen med bokningsinformationen
           this.dialog.open(BookingConfirmationDialogComponent, {
-            data: response, // Skicka bokningsinformationen till dialogen
+            data: response,
           });
           this.isExpanded = false;
-          this.bookingForm.reset(); // Nollställ formuläret
-          this.productListComponent.resetSelectedProducts(); // Nollställ valda produkter
-          this.errorMessage = null; // Rensa felmeddelandet
+          this.bookingForm.reset(); 
+          this.productListComponent.resetSelectedProducts();
+          this.errorMessage = null;
         },
         (error: HttpErrorResponse) => {
           console.error('Error creating booking:', error);

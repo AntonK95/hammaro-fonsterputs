@@ -30,10 +30,7 @@ export class HeaderComponent {
     const dialogRef = this.dialog.open(LoginComponent, {
       width: '400px'
     });
-    console.log("Login dialog open:");
-
     dialogRef.afterClosed().subscribe(result => {
-      console.log('Login dialog closed');
       this.checkLoginStatus();
     });
   }
